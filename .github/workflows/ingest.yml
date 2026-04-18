@@ -39,6 +39,13 @@ jobs:
           METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
         run: pnpm tsx scripts/ingest.ts "${{ inputs.season-id }}" "${{ inputs.pdfUrl }}"
 
+      - name: Fetch album art
+        env:
+          DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
+          DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
+          METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
+        run: pnpm tsx scripts/fetch-art.ts "${{ inputs.season-id }}"
+
       - name: Validate JSON
         run: pnpm tsx scripts/validate.ts
 
