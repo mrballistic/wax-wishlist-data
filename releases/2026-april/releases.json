@@ -1,0 +1,57 @@
+[
+  {
+    "id": "2026-april-001",
+    "artist": "Azure Parallax",
+    "title": "Low Tide at Dawn",
+    "label": "Halcyon Pressing Co.",
+    "format": "LP, 180g, Translucent Blue",
+    "category": "Exclusive Release",
+    "description": "Debut reissue on translucent blue vinyl, limited to 2,000 copies.",
+    "discogsMasterId": 1048576,
+    "artFilename": "2026-april-001.jpg"
+  },
+  {
+    "id": "2026-april-002",
+    "artist": "Juniper Reyes Quartet",
+    "title": "Sketches from Marcy Ave.",
+    "label": "Northstar Jazz Works",
+    "format": "2LP, Gatefold, 45rpm",
+    "category": "Exclusive Release",
+    "description": "Previously unreleased live session cut at 45rpm across two discs.",
+    "discogsMasterId": null,
+    "artFilename": "2026-april-002.jpg"
+  },
+  {
+    "id": "2026-april-003",
+    "artist": "The Copperline Choir",
+    "title": "Hymnal for Empty Highways",
+    "label": "Pale Rider Records",
+    "format": "LP, Cream Vinyl",
+    "category": "Limited Run",
+    "description": "First vinyl pressing, cream-colored wax with letterpress sleeve.",
+    "discogsMasterId": 2048192,
+    "artFilename": "2026-april-003.jpg"
+  },
+  {
+    "id": "2026-april-004",
+    "artist": "NOVA/CAST",
+    "title": "Beacon EP",
+    "label": "Submarine Cable",
+    "format": "12\" EP, Clear with Red Splatter",
+    "category": "RSD First",
+    "description": "Four-track EP including two exclusive B-side remixes.",
+    "discogsMasterId": null,
+    "artFilename": "2026-april-004.jpg"
+  },
+  {
+    "id": "2026-april-005",
+    "artist": "Saoirse Doyle",
+    "title": "A Letter in the Long Grass",
+    "label": "Glasshouse Folk",
+    "format": "LP, Ecomix Recycled Vinyl",
+    "category": "Exclusive Release",
+    "description": "Folk songwriter's fifth album pressed on recycled ecomix vinyl.",
+    "discogsMasterId": 3145728,
+    "artFilename": "2026-april-005.jpg"
+  }
+]
