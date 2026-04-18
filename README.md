@@ -146,6 +146,42 @@ zero network calls.
 - **update-status.yml** — manual dispatch only. Runs `update-status.ts`,
   validates, and commits back to `main`.
 
+## Data Sources
+
+Album art and release metadata in this repository are assembled from
+several independent public sources, combined in a fallback cascade by
+the ingest pipeline. Neither this repository nor the consuming Wax
+Wishlist iOS app is affiliated with, endorsed by, or sponsored by any
+of the organizations below.
+
+| Tier | Source | Used for | Terms of Use |
+|---|---|---|---|
+| 1 | [Discogs API](https://www.discogs.com/developers) | Album art + master release IDs | [discogs.com/developers](https://www.discogs.com/developers) |
+| 2 | [MusicBrainz](https://musicbrainz.org/) + [Cover Art Archive](https://coverartarchive.org/) | Album art fallback when Discogs has no match | [MusicBrainz License](https://metabrainz.org/license) · [CAA Terms](https://coverartarchive.org/) |
+| 3 | `manual-art/` (hand-curated) | Maintainer-sourced overrides for specific releases — see [`manual-art/README.md`](manual-art/README.md) | — |
+| 4 | RSD release list PDF | Release metadata (artist, title, format, etc.), parsed locally | [Record Store Day](https://recordstoreday.com/) |
+
+The cascade tries sources in the order manual → Discogs → MusicBrainz
+per release and stops at the first hit; releases with no match in any
+tier ship with `artFilename: null` and the iOS app renders its
+placeholder. See [`docs/FEATURE_PRD_multi_source_art.md`](docs/FEATURE_PRD_multi_source_art.md)
+for the full specification.
+
+### Running the art cascade locally
+
+```sh
+# Actually fetch art (requires DISCOGS_TOKEN for tier 1; MusicBrainz
+# requires no auth but rate-limits to 1 req/sec).
+export DISCOGS_TOKEN=...
+pnpm tsx scripts/fetch-art.ts <season-id>
+
+# Dry-run: simulate the cascade without HTTP calls or file writes.
+pnpm tsx scripts/fetch-art.ts <season-id> --dry-run
+```
+
+The script prints a coverage summary to stdout at the end of every
+run (Tier 1/2/3/4 counts and overall coverage percentage).
+
 ## License
 
 See repository license metadata.
