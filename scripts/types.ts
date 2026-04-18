@@ -84,3 +84,28 @@ export const RawReleaseSchema = z
   })
   .strict()
 export type RawRelease = z.infer<typeof RawReleaseSchema>
+
+/**
+ * Multi-source album art cascade types (FR-F-003 in docs/FEATURE_PRD_multi_source_art.md).
+ *
+ * The cascade picks art per release in priority order:
+ *   tier 3 (`manual`) beats tier 1 (`discogs`) beats tier 2 (`musicbrainz`) beats tier 4 (`none`).
+ *
+ * Sources surface their result as {@link ArtLookupResult}. A successful lookup
+ * has a non-null `artFilename`; a miss has `artFilename: null` and the cascade
+ * continues to the next tier.
+ */
+export type ArtTier = 'manual' | 'discogs' | 'musicbrainz' | 'none'
+
+export interface ArtLookupResult {
+  releaseId: string
+  tier: ArtTier
+  /** Remote URL the art was fetched from. Null for manual and no-art results. */
+  sourceUrl: string | null
+  artFilename: string | null
+}
+
+export interface ArtSource {
+  name: ArtTier
+  lookup(release: RawRelease): Promise<ArtLookupResult | null>
+}
