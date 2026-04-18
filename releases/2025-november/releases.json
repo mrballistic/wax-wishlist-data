@@ -1,0 +1,46 @@
+[
+  {
+    "id": "2025-november-003",
+    "artist": "Cedar Lamplight",
+    "title": "Kerosene Winter",
+    "label": "Foxglove Tapes",
+    "format": "LP, Smoke Vinyl",
+    "category": "Limited Run",
+    "description": "Sixth studio album pressed on smoke-colored wax with hand-numbered jackets.",
+    "discogsMasterId": 4221337,
+    "artFilename": "2025-november-003.jpg"
+  },
+  {
+    "id": "2025-november-001",
+    "artist": "Fernwood Array",
+    "title": "Short Waves",
+    "label": "Pine Needle Records",
+    "format": "10\" EP, Moss Green",
+    "category": "RSD First",
+    "description": "Five-track EP on moss-green vinyl, first physical release from the duo.",
+    "discogsMasterId": null,
+    "artFilename": null
+  },
+  {
+    "id": "2025-november-004",
+    "artist": "Maren Vos",
+    "title": "Houseguest, a Ghost",
+    "label": "Small Harbor Co.",
+    "format": "LP, Gatefold, Cream Vinyl",
+    "category": "Exclusive Release",
+    "description": "Chamber-folk debut with etched B-side and gatefold sleeve.",
+    "discogsMasterId": null,
+    "artFilename": "2025-november-004.jpg"
+  },
+  {
+    "id": "2025-november-002",
+    "artist": "Staticwave Bureau",
+    "title": "Night Bus Transmissions",
+    "label": "Orbital Echo",
+    "format": "2LP, Blue/Yellow Split",
+    "category": "Exclusive Release",
+    "description": "Instrumental electronic collective's live radio broadcasts, split-color double LP.",
+    "discogsMasterId": 5129712,
+    "artFilename": null
+  }
+]

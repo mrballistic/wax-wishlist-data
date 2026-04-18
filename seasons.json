@@ -3,8 +3,24 @@
     "id": "2026-april",
     "label": "April Drop 2026",
     "date": "2026-04-18",
-    "status": "upcoming",
+    "status": "active",
     "releasesUrl": "https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/main/releases/2026-april/releases.json",
     "artBaseUrl": "https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/main/releases/2026-april/art/"
+  },
+  {
+    "id": "2025-november",
+    "label": "Black Friday Drop 2025",
+    "date": "2025-11-28",
+    "status": "past",
+    "releasesUrl": "https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/main/releases/2025-november/releases.json",
+    "artBaseUrl": "https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/main/releases/2025-november/art/"
+  },
+  {
+    "id": "2025-april",
+    "label": "April Drop 2025",
+    "date": "2025-04-19",
+    "status": "past",
+    "releasesUrl": "https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/main/releases/2025-april/releases.json",
+    "artBaseUrl": "https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/main/releases/2025-april/art/"
   }
 ]
