@@ -22,8 +22,14 @@ module.exports = {
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
+        project: './tsconfig.json',
       },
-      node: true,
+      node: {
+        extensions: ['.ts', '.js', '.json'],
+      },
+    },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts'],
     },
   },
   rules: {

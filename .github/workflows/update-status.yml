@@ -1,0 +1,55 @@
+name: update-status
+
+on:
+  workflow_dispatch:
+    inputs:
+      season-id:
+        description: 'Season id (e.g. 2026-april)'
+        required: true
+        type: string
+      newStatus:
+        description: 'New status'
+        required: true
+        type: choice
+        options:
+          - upcoming
+          - active
+          - past
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Update season status
+        run: pnpm tsx scripts/update-status.ts "${{ inputs.season-id }}" "${{ inputs.newStatus }}"
+
+      - name: Validate JSON
+        run: pnpm tsx scripts/validate.ts
+
+      - name: Commit updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add current.json seasons.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: ${{ inputs.season-id }} -> ${{ inputs.newStatus }}"
+            git push origin main
+          fi
