@@ -11,6 +11,14 @@ on:
         description: 'HTTPS URL to the RSD release list PDF'
         required: true
         type: string
+      date:
+        description: 'Season date (yyyy-MM-dd). Required to auto-register.'
+        required: true
+        type: string
+      label:
+        description: 'Human label (optional). Defaults to e.g. "April Drop 2027".'
+        required: false
+        type: string
 
 jobs:
   ingest:
@@ -46,6 +54,14 @@ jobs:
           METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
         run: pnpm tsx scripts/fetch-art.ts "${{ inputs.season-id }}"
 
+      - name: Register season (announce to clients)
+        run: |
+          if [ -n "${{ inputs.label }}" ]; then
+            pnpm tsx scripts/register-season.ts "${{ inputs.season-id }}" "${{ inputs.date }}" --label="${{ inputs.label }}"
+          else
+            pnpm tsx scripts/register-season.ts "${{ inputs.season-id }}" "${{ inputs.date }}"
+          fi
+
       - name: Validate JSON
         run: pnpm tsx scripts/validate.ts
 
@@ -56,7 +72,17 @@ jobs:
           git add current.json seasons.json releases/
           if git diff --staged --quiet; then
             echo "No changes to commit."
-          else
-            git commit -m "chore: ingest ${{ inputs.season-id }}"
-            git push origin main
+            exit 0
           fi
+          git commit -m "chore: ingest ${{ inputs.season-id }}"
+          # Retry a few times to survive concurrent pushes (e.g. someone merging
+          # to main while this long-running job was staging art downloads).
+          for attempt in 1 2 3 4 5; do
+            if git push origin main; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); rebasing onto latest main..."
+            git pull --rebase origin main
+          done
+          echo "Exhausted push retries." >&2
+          exit 1
