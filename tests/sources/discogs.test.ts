@@ -21,8 +21,14 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe('discogs source', () => {
-  it('returns no-match when no auth token is configured', async () => {
+  it('returns no-match when auth credentials are missing', async () => {
     const src = createDiscogsSource({})
+    const res = await src.lookup(SAMPLE_RELEASE)
+    expect(res).toBeNull()
+  })
+
+  it('returns no-match when only one half of the key/secret pair is set', async () => {
+    const src = createDiscogsSource({ consumerKey: 'k' })
     const res = await src.lookup(SAMPLE_RELEASE)
     expect(res).toBeNull()
   })
@@ -43,7 +49,7 @@ describe('discogs source', () => {
       ),
     )
 
-    const src = createDiscogsSource({ token: 'test-token' })
+    const src = createDiscogsSource({ consumerKey: 'k', consumerSecret: 's' })
     const res = await src.lookup(SAMPLE_RELEASE)
     expect(res).not.toBeNull()
     expect(res?.tier).toBe('discogs')
@@ -61,7 +67,7 @@ describe('discogs source', () => {
       ),
     )
 
-    const src = createDiscogsSource({ token: 't' })
+    const src = createDiscogsSource({ consumerKey: 'k', consumerSecret: 's' })
     const res = await src.lookup(SAMPLE_RELEASE)
     expect(res?.sourceUrl).toBe('https://img.discogs.com/t.jpg')
   })
@@ -72,7 +78,7 @@ describe('discogs source', () => {
         HttpResponse.json({ results: [] }),
       ),
     )
-    const src = createDiscogsSource({ token: 't' })
+    const src = createDiscogsSource({ consumerKey: 'k', consumerSecret: 's' })
     const res = await src.lookup(SAMPLE_RELEASE)
     expect(res).toBeNull()
   })
@@ -83,7 +89,7 @@ describe('discogs source', () => {
         HttpResponse.json({ error: 'boom' }, { status: 500 }),
       ),
     )
-    const src = createDiscogsSource({ token: 't' })
+    const src = createDiscogsSource({ consumerKey: 'k', consumerSecret: 's' })
     const res = await src.lookup(SAMPLE_RELEASE)
     expect(res).toBeNull()
   })
@@ -94,7 +100,7 @@ describe('discogs source', () => {
         HttpResponse.json({ results: [{ master_id: 1 }] }),
       ),
     )
-    const src = createDiscogsSource({ token: 't' })
+    const src = createDiscogsSource({ consumerKey: 'k', consumerSecret: 's' })
     const res = await src.lookup(SAMPLE_RELEASE)
     expect(res).toBeNull()
   })
@@ -111,9 +117,9 @@ describe('discogs source', () => {
         })
       }),
     )
-    const src = createDiscogsSource({ token: 'mytok' })
+    const src = createDiscogsSource({ consumerKey: 'mykey', consumerSecret: 'mysecret' })
     await src.lookup(SAMPLE_RELEASE)
-    expect(capturedAuth).toBe('Discogs token=mytok')
+    expect(capturedAuth).toBe('Discogs key=mykey, secret=mysecret')
     expect(capturedUA).toContain('wax-wishlist-data')
   })
 })

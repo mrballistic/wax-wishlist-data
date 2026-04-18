@@ -18,7 +18,8 @@ interface DiscogsSearchResponse {
 
 async function lookup(
   release: RawRelease,
-  token: string,
+  consumerKey: string,
+  consumerSecret: string,
 ): Promise<{ discogsMasterId: number | null }> {
   const url = new URL(DISCOGS_SEARCH_URL)
   url.searchParams.set('artist', release.artist)
@@ -28,7 +29,7 @@ async function lookup(
 
   const res = await fetch(url, {
     headers: {
-      Authorization: `Discogs token=${token}`,
+      Authorization: `Discogs key=${consumerKey}, secret=${consumerSecret}`,
       'User-Agent': 'wax-wishlist-data/0.1 (+https://github.com/mrballistic/wax-wishlist-data)',
     },
   })
@@ -45,21 +46,23 @@ async function lookup(
 
 /**
  * Enrich raw releases with Discogs master IDs. Completely optional:
- * if `DISCOGS_TOKEN` is not set, returns a best-effort mapping with
- * `discogsMasterId: null` and `artFilename: null`. Callers then either
- * ship the null or fill it in manually.
+ * if either `DISCOGS_CONSUMER_KEY` or `DISCOGS_CONSUMER_SECRET` is unset, the
+ * enricher returns a best-effort mapping with `discogsMasterId: null` and
+ * `artFilename: null`. Callers then either ship the null or fill it in
+ * via the art cascade's MusicBrainz / manual tiers.
  */
 export async function enrichDiscogs(releases: RawRelease[]): Promise<Release[]> {
-  const token = process.env['DISCOGS_TOKEN']
+  const consumerKey = process.env['DISCOGS_CONSUMER_KEY']
+  const consumerSecret = process.env['DISCOGS_CONSUMER_SECRET']
   const enriched: Release[] = []
 
   for (const raw of releases) {
-    if (!token) {
+    if (!consumerKey || !consumerSecret) {
       enriched.push({ ...raw, discogsMasterId: null, artFilename: null })
       continue
     }
     try {
-      const { discogsMasterId } = await lookup(raw, token)
+      const { discogsMasterId } = await lookup(raw, consumerKey, consumerSecret)
       enriched.push({ ...raw, discogsMasterId, artFilename: `${raw.id}.jpg` })
     } catch {
       enriched.push({ ...raw, discogsMasterId: null, artFilename: null })

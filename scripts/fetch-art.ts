@@ -49,8 +49,12 @@ export interface CascadeOptions {
   artDir: string
   /** Path to the `manual-art/` directory. */
   manualArtDir: string
-  /** Discogs API token (optional). */
-  discogsToken?: string | undefined
+  /** Discogs application consumer key (optional; paired with {@link discogsConsumerSecret}). */
+  discogsConsumerKey?: string | undefined
+  /** Discogs application consumer secret (optional; paired with {@link discogsConsumerKey}). */
+  discogsConsumerSecret?: string | undefined
+  /** MetaBrainz Supporter / commercial access token (optional). */
+  metabrainzAccessToken?: string | undefined
   /** Skip HTTP + filesystem writes; only simulate the cascade. */
   dryRun?: boolean
   /** Override the four tier sources (for tests). */
@@ -74,12 +78,20 @@ export interface CascadeSummary {
 }
 
 export function buildDefaultSources(
-  options: Pick<CascadeOptions, 'manualArtDir' | 'discogsToken'>,
+  options: Pick<
+    CascadeOptions,
+    'manualArtDir' | 'discogsConsumerKey' | 'discogsConsumerSecret' | 'metabrainzAccessToken'
+  >,
 ): { manual: ArtSource; discogs: ArtSource; musicbrainz: ArtSource } {
   return {
     manual: createManualSource({ manualArtDir: options.manualArtDir }),
-    discogs: createDiscogsSource({ token: options.discogsToken }),
-    musicbrainz: createMusicBrainzSource(),
+    discogs: createDiscogsSource({
+      consumerKey: options.discogsConsumerKey,
+      consumerSecret: options.discogsConsumerSecret,
+    }),
+    musicbrainz: createMusicBrainzSource({
+      accessToken: options.metabrainzAccessToken,
+    }),
   }
 }
 
@@ -274,7 +286,9 @@ async function cliMain(): Promise<void> {
   const summary = await runArtCascade(releases, {
     artDir,
     manualArtDir,
-    discogsToken: process.env['DISCOGS_TOKEN'],
+    discogsConsumerKey: process.env['DISCOGS_CONSUMER_KEY'],
+    discogsConsumerSecret: process.env['DISCOGS_CONSUMER_SECRET'],
+    metabrainzAccessToken: process.env['METABRAINZ_ACCESS_TOKEN'],
     dryRun,
   })
 

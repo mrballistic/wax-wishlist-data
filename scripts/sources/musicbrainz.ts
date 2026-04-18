@@ -31,6 +31,18 @@ interface MBSearchResponse {
 }
 
 export interface MusicBrainzSourceOptions {
+  /**
+   * MetaBrainz Supporter / commercial access token. Optional.
+   * When present, sent as `Authorization: Token <token>` on every MB request.
+   * The 1 req/sec sleep (FR-F-010) is kept regardless so behavior is
+   * identical whether the token is present or missing.
+   *
+   * NOTE (non-commercial Supporter tier): until the app's annual gross revenue
+   * crosses MetaBrainz's commercial threshold ($500/year as of 2026), this
+   * token is valid for non-commercial use. Upgrade required before the
+   * threshold is crossed.
+   */
+  accessToken?: string | undefined
   /** Inject fetch for tests. */
   fetchImpl?: typeof fetch
   /** Inject sleep for tests (bypasses real timers). */
@@ -60,18 +72,22 @@ export function createMusicBrainzSource(
 ): ArtSource {
   const fetchImpl = options.fetchImpl ?? fetch
   const sleep = options.sleepImpl ?? defaultSleep
+  const { accessToken } = options
 
   async function requestMbWithRetry(url: URL): Promise<Response | null> {
+    const headers: Record<string, string> = {
+      'User-Agent': MUSICBRAINZ_USER_AGENT,
+      Accept: 'application/json',
+    }
+    if (accessToken) {
+      headers['Authorization'] = `Token ${accessToken}`
+    }
+
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
       await sleep(RATE_LIMIT_MS)
       let res: Response
       try {
-        res = await fetchImpl(url, {
-          headers: {
-            'User-Agent': MUSICBRAINZ_USER_AGENT,
-            Accept: 'application/json',
-          },
-        })
+        res = await fetchImpl(url, { headers })
       } catch {
         if (attempt === MAX_RETRIES) return null
         await sleep(BASE_BACKOFF_MS * 2 ** attempt)

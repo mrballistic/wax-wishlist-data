@@ -48,7 +48,12 @@ async function main(): Promise<void> {
   console.log(`Parsed ${raw.length} raw releases`)
 
   const releases = await enrichDiscogs(raw)
-  console.log(`Enriched ${releases.length} releases (Discogs token ${process.env['DISCOGS_TOKEN'] ? 'set' : 'absent'})`)
+  const discogsConfigured = Boolean(
+    process.env['DISCOGS_CONSUMER_KEY'] && process.env['DISCOGS_CONSUMER_SECRET'],
+  )
+  console.log(
+    `Enriched ${releases.length} releases (Discogs auth ${discogsConfigured ? 'set' : 'absent'})`,
+  )
 
   const releasesPath = resolve(REPO_ROOT, 'releases', seasonId, 'releases.json')
   await writeReleases(releasesPath, releases)

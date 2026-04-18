@@ -16,14 +16,21 @@ interface DiscogsSearchResponse {
 }
 
 export interface DiscogsSourceOptions {
-  /** Auth token. If absent, the source short-circuits to no-match. */
-  token?: string | undefined
+  /** Discogs application consumer key. Paired with {@link consumerSecret}. */
+  consumerKey?: string | undefined
+  /** Discogs application consumer secret. Paired with {@link consumerKey}. */
+  consumerSecret?: string | undefined
   /** Override the fetch implementation (for tests). */
   fetchImpl?: typeof fetch
 }
 
 /**
  * Tier 1 source: Discogs Search API.
+ *
+ * Authenticated with Discogs Auth (key+secret pair) — the simpler of the two
+ * Discogs auth modes, and the only one that works for a headless CI runner
+ * (no user redirect for the 3-legged OAuth flow). If either credential is
+ * missing, the source short-circuits to no-match.
  *
  * Looks up the release by artist + title, takes the first hit, and uses its
  * `cover_image` URL as the art source. The cascade orchestrator is responsible
@@ -32,12 +39,12 @@ export interface DiscogsSourceOptions {
  */
 export function createDiscogsSource(options: DiscogsSourceOptions = {}): ArtSource {
   const fetchImpl = options.fetchImpl ?? fetch
-  const { token } = options
+  const { consumerKey, consumerSecret } = options
 
   return {
     name: 'discogs',
     async lookup(release: RawRelease): Promise<ArtLookupResult | null> {
-      if (!token) return null
+      if (!consumerKey || !consumerSecret) return null
 
       const url = new URL(DISCOGS_SEARCH_URL)
       url.searchParams.set('artist', release.artist)
@@ -49,7 +56,7 @@ export function createDiscogsSource(options: DiscogsSourceOptions = {}): ArtSour
       try {
         res = await fetchImpl(url, {
           headers: {
-            Authorization: `Discogs token=${token}`,
+            Authorization: `Discogs key=${consumerKey}, secret=${consumerSecret}`,
             'User-Agent': USER_AGENT,
           },
         })

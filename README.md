@@ -94,8 +94,11 @@ pnpm format               # prettier --write .
 ### Ingest a new season from a PDF
 
 ```sh
-# Optional for Discogs master-id lookups; omit to leave null
-export DISCOGS_TOKEN=...
+# Optional for Discogs master-id lookups; omit both to leave discogsMasterId null.
+# Obtain a key/secret pair by registering an application at
+# https://www.discogs.com/settings/developers
+export DISCOGS_CONSUMER_KEY=...
+export DISCOGS_CONSUMER_SECRET=...
 
 pnpm tsx scripts/ingest.ts <season-id> <pdfUrl-or-local-path>
 ```
@@ -170,9 +173,16 @@ for the full specification.
 ### Running the art cascade locally
 
 ```sh
-# Actually fetch art (requires DISCOGS_TOKEN for tier 1; MusicBrainz
-# requires no auth but rate-limits to 1 req/sec).
-export DISCOGS_TOKEN=...
+# Actually fetch art.
+#   Tier 1 (Discogs) requires a consumer key/secret pair; omit both to skip tier 1.
+#   Tier 2 (MusicBrainz + Cover Art Archive): the access token is optional —
+#     the endpoint works anonymously with only the User-Agent, but a MetaBrainz
+#     Supporter / commercial token grants higher rate ceilings and is currently
+#     valid only for non-commercial use (see LICENSE compliance in CLAUDE.md).
+# Either source independently no-ops when its credentials are absent.
+export DISCOGS_CONSUMER_KEY=...
+export DISCOGS_CONSUMER_SECRET=...
+export METABRAINZ_ACCESS_TOKEN=...   # optional
 pnpm tsx scripts/fetch-art.ts <season-id>
 
 # Dry-run: simulate the cascade without HTTP calls or file writes.
