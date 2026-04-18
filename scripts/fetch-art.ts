@@ -133,8 +133,14 @@ export async function runArtCascade(
   const results: ArtLookupResult[] = []
 
   const seenReleaseIds = new Set<string>()
+  const total = releases.length
+  const pad = String(total).length
 
-  for (const release of releases) {
+  for (let i = 0; i < total; i++) {
+    const release = releases[i]
+    if (!release) continue
+    const n = String(i + 1).padStart(pad, ' ')
+    const label = `${release.artist} – ${release.title}`
     seenReleaseIds.add(release.id)
 
     // Order: manual (always wins), then discogs, then musicbrainz.
@@ -157,6 +163,7 @@ export async function runArtCascade(
       }
       results.push(noArt)
       counts.none += 1
+      console.log(`[${n}/${total}] ${label} → no art (tier 4)`)
       continue
     }
 
@@ -206,6 +213,13 @@ export async function runArtCascade(
 
     results.push(hit)
     counts[hit.tier] += 1
+    const tierLabel =
+      hit.tier === 'discogs'
+        ? 'tier 1 discogs'
+        : hit.tier === 'musicbrainz'
+          ? 'tier 2 musicbrainz'
+          : 'tier 3 manual'
+    console.log(`[${n}/${total}] ${label} → ${tierLabel} (${hit.artFilename})`)
   }
 
   // FR-F-015: warn on orphan manual files that never matched a release id.

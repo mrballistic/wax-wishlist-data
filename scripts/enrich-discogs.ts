@@ -55,19 +55,46 @@ export async function enrichDiscogs(releases: RawRelease[]): Promise<Release[]> 
   const consumerKey = process.env['DISCOGS_CONSUMER_KEY']
   const consumerSecret = process.env['DISCOGS_CONSUMER_SECRET']
   const enriched: Release[] = []
+  const total = releases.length
+  const pad = String(total).length
 
-  for (const raw of releases) {
+  let hits = 0
+  let misses = 0
+  let errors = 0
+
+  for (let i = 0; i < total; i++) {
+    const raw = releases[i]
+    if (!raw) continue
+    const n = String(i + 1).padStart(pad, ' ')
+    const label = `${raw.artist} – ${raw.title}`
+
     if (!consumerKey || !consumerSecret) {
       enriched.push({ ...raw, discogsMasterId: null, artFilename: null })
+      console.log(`[${n}/${total}] ${label} → skipped (no Discogs auth)`)
       continue
     }
     try {
       const { discogsMasterId } = await lookup(raw, consumerKey, consumerSecret)
       enriched.push({ ...raw, discogsMasterId, artFilename: `${raw.id}.jpg` })
-    } catch {
+      if (discogsMasterId != null) {
+        hits += 1
+        console.log(`[${n}/${total}] ${label} → master=${discogsMasterId}`)
+      } else {
+        misses += 1
+        console.log(`[${n}/${total}] ${label} → no match`)
+      }
+    } catch (err) {
+      errors += 1
       enriched.push({ ...raw, discogsMasterId: null, artFilename: null })
+      console.log(`[${n}/${total}] ${label} → error: ${(err as Error).message}`)
     }
     await sleep(RATE_LIMIT_MS)
+  }
+
+  if (consumerKey && consumerSecret) {
+    console.log(
+      `Discogs enrichment: ${hits} hits, ${misses} no-match, ${errors} errors / ${total} total`,
+    )
   }
 
   return enriched
