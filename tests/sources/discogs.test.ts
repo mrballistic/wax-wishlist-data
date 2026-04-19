@@ -105,6 +105,46 @@ describe('discogs source', () => {
     expect(res).toBeNull()
   })
 
+  it('retries once with an edition suffix stripped when the first search misses', async () => {
+    const capturedTitles: string[] = []
+    server.use(
+      http.get('https://api.discogs.com/database/search', ({ request }) => {
+        const url = new URL(request.url)
+        const title = url.searchParams.get('release_title') ?? ''
+        capturedTitles.push(title)
+        // First search ("…Deluxe Edition") misses; retry with the bare
+        // title ("Low Tide at Dawn") returns a hit.
+        if (title.toLowerCase().includes('deluxe')) {
+          return HttpResponse.json({ results: [] })
+        }
+        return HttpResponse.json({
+          results: [{ cover_image: 'https://img.discogs.com/bare.jpg' }],
+        })
+      }),
+    )
+
+    const decorated: RawRelease = { ...SAMPLE_RELEASE, title: 'Low Tide at Dawn (Deluxe Edition)' }
+    const src = createDiscogsSource({ consumerKey: 'k', consumerSecret: 's' })
+    const res = await src.lookup(decorated)
+    expect(res?.sourceUrl).toBe('https://img.discogs.com/bare.jpg')
+    expect(capturedTitles).toEqual(['Low Tide at Dawn (Deluxe Edition)', 'Low Tide at Dawn'])
+  })
+
+  it('does not retry when the title has no strippable suffix', async () => {
+    let calls = 0
+    server.use(
+      http.get('https://api.discogs.com/database/search', () => {
+        calls += 1
+        return HttpResponse.json({ results: [] })
+      }),
+    )
+
+    const src = createDiscogsSource({ consumerKey: 'k', consumerSecret: 's' })
+    const res = await src.lookup(SAMPLE_RELEASE)
+    expect(res).toBeNull()
+    expect(calls).toBe(1)
+  })
+
   it('sends the auth and user-agent headers on the lookup request', async () => {
     let capturedAuth: string | null = null
     let capturedUA: string | null = null

@@ -22,9 +22,7 @@ describe('parsePdf — real RSD PDF fixtures', () => {
     expect(releases.length).toBeGreaterThanOrEqual(340)
 
     const categories = new Set(releases.map((r) => r.category))
-    expect(categories).toEqual(
-      new Set(['Exclusive Release', 'RSD First', 'Limited Run']),
-    )
+    expect(categories).toEqual(new Set(['exclusive', 'rsd-first', 'small-run']))
 
     for (const r of releases) {
       expect(r.artist.length).toBeGreaterThan(0)
@@ -52,7 +50,7 @@ describe('parsePdf — real RSD PDF fixtures', () => {
     expect(aha).toBeDefined()
     expect(aha?.label).toBe('Rhino')
     expect(aha?.format).toBe('2 x LP')
-    expect(aha?.category).toBe('Exclusive Release')
+    expect(aha?.category).toBe('exclusive')
 
     // Salvaged via splitLabelFormat: original row fused "Fuzze-Flex RecordsLP".
     const soul = find('Collective Soul', 'Touch and Go')
@@ -79,5 +77,19 @@ describe('parsePdf — real RSD PDF fixtures', () => {
     const releases = await parsePdf(pdf)
     const ids = new Set(releases.map((r) => r.id))
     expect(ids.size).toBe(releases.length)
+  })
+
+  it('dedupes byte-identical rows on the full product tuple', async () => {
+    const pdf = await loadFixture('2026-april.pdf')
+    const releases = await parsePdf(pdf)
+    // No two releases in the same season should share (artist, title,
+    // format, label, category). Distinct formats of the same title —
+    // like Jeff Buckley's "Live À L'Olympia" in 2xLP and CD — survive
+    // dedup because they differ on `format`.
+    const tuples = releases.map((r) =>
+      [r.artist, r.title, r.format, r.label, r.category].join('|'),
+    )
+    const uniqueTuples = new Set(tuples)
+    expect(uniqueTuples.size).toBe(tuples.length)
   })
 })

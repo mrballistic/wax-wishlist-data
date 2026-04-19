@@ -5,7 +5,7 @@
     "title": "We Are Not Live",
     "label": "Charly Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "13th-floor-elevators-we-are-not-live.jpg"
@@ -16,7 +16,7 @@
     "title": "Analogue 20th Anniversary Deluxe Edition",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "a-ha-analogue-20th-anniversary-deluxe-edition.jpg"
@@ -27,7 +27,7 @@
     "title": "That's Him",
     "label": "Craft Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 270045,
     "artFilename": "abbey-lincoln-thats-him.jpg"
@@ -38,7 +38,7 @@
     "title": "They're All Gonna Laugh At You!",
     "label": "Warner Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 399478,
     "artFilename": "adam-sandler-theyre-all-gonna-laugh-at-you.jpg"
@@ -49,7 +49,7 @@
     "title": "Live At Revolution Hall",
     "label": "4AD",
     "format": "3 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 3840189,
     "artFilename": "adrianne-lenker-live-at-revolution-hall.jpg"
@@ -60,7 +60,7 @@
     "title": "New Wave B-Sides",
     "label": "Rhino",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "against-me-new-wave-b-sides.jpg"
@@ -71,7 +71,7 @@
     "title": "At the Jazz Showcase: Live in Chicago",
     "label": "Resonance Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ahmad-jamal-at-the-jazz-showcase-live-in-chicago.jpg"
@@ -82,7 +82,7 @@
     "title": "AIR Moon Safari - The Athens Concert",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "air-air-moon-safari-the-athens-concert.jpg"
@@ -93,7 +93,7 @@
     "title": "Dear Children of Our Children, I Knew / Cremisan",
     "label": "International Anthem Recording Co.",
     "format": "12\" EP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "alabaster-deplume-dear-children-of-our-children-i-knew-cremisan.jpg"
@@ -104,7 +104,7 @@
     "title": "No Parole From Rock 'N' Roll",
     "label": "Culture Factory",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 70796,
     "artFilename": "alcatrazz-no-parole-from-rock-n-roll.jpg"
@@ -115,7 +115,7 @@
     "title": "The Revenge Of Alice Cooper - Limited Picture Disc",
     "label": "earMUSIC",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "alice-cooper-the-revenge-of-alice-cooper-limited-picture-disc.jpg"
@@ -126,7 +126,7 @@
     "title": "Fool's Gold (RSD 2026 Exclusive 7\")",
     "label": "Photo Finish Records",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "all-time-low-fools-gold-rsd-2026-exclusive-7.jpg"
@@ -137,7 +137,7 @@
     "title": "Hand Me Downs",
     "label": "Warner Records",
     "format": "12\" EP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "amble-hand-me-downs.jpg"
@@ -148,7 +148,7 @@
     "title": "Malibu: 10 Year Anniversary 7\" Box Set",
     "label": "Obe/Apeshit",
     "format": "7\" Box Set",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "anderson-paak-malibu-10-year-anniversary-7-box-set.jpg"
@@ -159,7 +159,7 @@
     "title": "RONIN: CYBERPUNK 2077",
     "label": "Materia Collective",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "angel-of-man-ronin-cyberpunk-2077.jpg"
@@ -170,7 +170,7 @@
     "title": "Villerville",
     "label": "Bong Load Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "april-march-villerville.jpg"
@@ -181,7 +181,7 @@
     "title": "Wicked: One Wonderful Night (Live) – The Soundtrack",
     "label": "Republic",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 4195770,
     "artFilename": "ariana-grande-cynthia-erivo-wicked-one-wonderful-night-live-the-soundtrack.jpg"
@@ -192,7 +192,7 @@
     "title": "The Seduction of Claude Debussy",
     "label": "Demon Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4065,
     "artFilename": "art-of-noise-the-seduction-of-claude-debussy.jpg"
@@ -203,7 +203,7 @@
     "title": "Live At The O2 Arena - Highlights",
     "label": "Capitol Records",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "babymetal-live-at-the-o2-arena-highlights.jpg"
@@ -214,7 +214,7 @@
     "title": "Live",
     "label": "Org Music",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 25160,
     "artFilename": "bad-brains-live.jpg"
@@ -225,7 +225,7 @@
     "title": "A Fleet of Bats: Early Demos",
     "label": "BMG",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bat-for-lashes-a-fleet-of-bats-early-demos.jpg"
@@ -236,7 +236,7 @@
     "title": "Detroit",
     "label": "G.O.O.D. Music/Def Jam",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 541265,
     "artFilename": "big-sean-detroit.jpg"
@@ -247,7 +247,7 @@
     "title": "At The BBC: The Complete 1965 London Sets",
     "label": "Elemental Music Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bill-evans-at-the-bbc-the-complete-1965-london-sets.jpg"
@@ -258,7 +258,7 @@
     "title": "Tell The Truth - Deluxe",
     "label": "Flatiron Recordings",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "billy-squier-tell-the-truth-deluxe.jpg"
@@ -269,7 +269,7 @@
     "title": "tiny desk",
     "label": "Reprise",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "billy-strings-tiny-desk.jpg"
@@ -280,7 +280,7 @@
     "title": "Up Here Zoetrope Picture Disc",
     "label": "Demon Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bluey-up-here-zoetrope-picture-disc.jpg"
@@ -291,7 +291,7 @@
     "title": "Live at the Budokan",
     "label": "Parlophone/Warner",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 866118,
     "artFilename": "blur-live-at-the-budokan.jpg"
@@ -302,7 +302,7 @@
     "title": "Love-In: The Chariot Records Recordings",
     "label": "Omnivore Recordings",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bob-brady-and-the-con-chords-love-in-the-chariot-records-recordings.jpg"
@@ -313,7 +313,7 @@
     "title": "Body Of Song (20th Anniversary Expanded Edition)",
     "label": "Yep Roc Records",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bob-mould-body-of-song-20th-anniversary-expanded-edition.jpg"
@@ -324,7 +324,7 @@
     "title": "Live At Easy Street Records Vol II",
     "label": "Lost Highway",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199580,
     "artFilename": "brandi-carlile-live-at-easy-street-records-vol-ii.jpg"
@@ -335,7 +335,7 @@
     "title": "Imagination",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 116622,
     "artFilename": "brian-wilson-imagination.jpg"
@@ -346,7 +346,7 @@
     "title": "On Tour",
     "label": "Oglio Entertainment",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 401611,
     "artFilename": "brian-wilson-on-tour.jpg"
@@ -357,7 +357,7 @@
     "title": "Lo-files",
     "label": "Columbia Records",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bring-me-the-horizon-lo-files.jpg"
@@ -368,7 +368,7 @@
     "title": "Transformer",
     "label": "Culture Factory",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bruce-kulick-from-kiss-transformer.jpg"
@@ -379,7 +379,7 @@
     "title": "Transformer",
     "label": "Culture Factory",
     "format": "CD",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bruce-kulick-from-kiss-transformer-2.jpg"
@@ -390,7 +390,7 @@
     "title": "Live From Asbury Park 2024",
     "label": "Legacy Recordings",
     "format": "5 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bruce-springsteen-live-from-asbury-park-2024.jpg"
@@ -401,7 +401,7 @@
     "title": "Feels Good To Me",
     "label": "Culture Factory",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 199409,
     "artFilename": "bruford-feels-good-to-me.jpg"
@@ -412,7 +412,7 @@
     "title": "Collaborations",
     "label": "Atlantic",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199298,
     "artFilename": "bruno-mars-collaborations.jpg"
@@ -423,7 +423,7 @@
     "title": "Tough Town",
     "label": "Bad Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "bryan-adams-tough-town.jpg"
@@ -434,7 +434,7 @@
     "title": "Pinnacle",
     "label": "Time Traveler Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 286850,
     "artFilename": "buster-williams-pinnacle.jpg"
@@ -445,7 +445,7 @@
     "title": "Caamp 10th Anniversary Edition",
     "label": "Caamp, LLC",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "caamp-caamp-10th-anniversary-edition.jpg"
@@ -456,7 +456,7 @@
     "title": "Killa Season",
     "label": "Nature Sounds",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 104766,
     "artFilename": "camron-killa-season.jpg"
@@ -467,7 +467,7 @@
     "title": "Tusk",
     "label": "Cooking Vinyl",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 201710,
     "artFilename": "camper-van-beethoven-tusk.jpg"
@@ -478,7 +478,7 @@
     "title": "Lick My Decals Off, Baby (Deluxe Edition)",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "captain-beefheart-the-magic-band-lick-my-decals-off-baby-deluxe-edition.jpg"
@@ -489,7 +489,7 @@
     "title": "Disco Darling",
     "label": "School Boy/Interscope Records",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199277,
     "artFilename": "carly-rae-jepsen-disco-darling.jpg"
@@ -500,7 +500,7 @@
     "title": "Naughty",
     "label": "Get On Down",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 109437,
     "artFilename": "chaka-khan-naughty.jpg"
@@ -511,7 +511,7 @@
     "title": "Right Now...And Then",
     "label": "Strata-East Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "charles-tolliver-all-stars-right-now-and-then.jpg"
@@ -522,7 +522,7 @@
     "title": "party 4 u",
     "label": "Atlantic",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "charli-xcx-party-4-u.jpg"
@@ -533,7 +533,7 @@
     "title": "Primeval Blues, Rags, And Gospel Songs",
     "label": "Shanachie Entertainment",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "charlie-patton-primeval-blues-rags-and-gospel-songs.jpg"
@@ -544,7 +544,7 @@
     "title": "Live in Japan 1987 (Fukui, Vol. 1)",
     "label": "SOLID / Spin This Now!",
     "format": "LP Import",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "chet-baker-live-in-japan-1987-fukui-vol-1.jpg"
@@ -555,7 +555,7 @@
     "title": "Live in Japan 1987 (Fukui, Vol. 2)",
     "label": "SOLID / Spin This Now!",
     "format": "LP Import",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "chet-baker-live-in-japan-1987-fukui-vol-2.jpg"
@@ -566,7 +566,7 @@
     "title": "Sinister OST",
     "label": "Haxan",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "christopher-young-sinister-ost.jpg"
@@ -577,7 +577,7 @@
     "title": "Touch and Go",
     "label": "Fuzze-Flex Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "collective-soul-touch-and-go.jpg"
@@ -588,7 +588,7 @@
     "title": "Live At Webster Hall, New York",
     "label": "Capitol Records",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "corinne-bailey-rae-live-at-webster-hall-new-york.jpg"
@@ -599,7 +599,7 @@
     "title": "Cory Wong And The Green Screen Band",
     "label": "Cory Wong",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1245968,
     "artFilename": "cory-wong-cory-wong-and-the-green-screen-band.jpg"
@@ -610,7 +610,7 @@
     "title": "Wheels Of Fire: Live At The Fillmore Auditorium & Winterland Ballroom",
     "label": "UMR/Polydor",
     "format": "3 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "cream-wheels-of-fire-live-at-the-fillmore-auditorium-winterland-ballroom.jpg"
@@ -621,7 +621,7 @@
     "title": "The Solo Albums",
     "label": "Rhino",
     "format": "4 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "crosby-stills-nash-the-solo-albums.jpg"
@@ -632,7 +632,7 @@
     "title": "El Subliminoso (REMASTERED, EXPANDED, 30TH ANNIVERSARY)",
     "label": "Real Gone Music",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "dada-el-subliminoso-remastered-expanded-30th-anniversary.jpg"
@@ -643,7 +643,7 @@
     "title": "Were \"The Watchtowers\"",
     "label": "Yep Roc Records",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "dallas-good-richard-reed-parry-were-the-watchtowers.jpg"
@@ -654,7 +654,7 @@
     "title": "Grown Up",
     "label": "Reservoir Recordings",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 491668,
     "artFilename": "danny-brown-grown-up.jpg"
@@ -665,7 +665,7 @@
     "title": "Excerpts From Outside",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "david-bowie-excerpts-from-outside.jpg"
@@ -676,7 +676,7 @@
     "title": "Hallo Spaceboy",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 51515,
     "artFilename": "david-bowie-hallo-spaceboy.jpg"
@@ -687,7 +687,7 @@
     "title": "The Youthquake Tour",
     "label": "Demon Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199733,
     "artFilename": "dead-or-alive-the-youthquake-tour.jpg"
@@ -698,7 +698,7 @@
     "title": "KEXP Sessions",
     "label": "Atlantic",
     "format": "12\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "deafheaven-kexp-sessions.jpg"
@@ -709,7 +709,7 @@
     "title": "Hellooo / Radio Alice",
     "label": "Giant Music",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "deb-never-hellooo-radio-alice.jpg"
@@ -720,7 +720,7 @@
     "title": "Slang",
     "label": "UMR / Mercury (Virgin)",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 195704,
     "artFilename": "def-leppard-slang.jpg"
@@ -731,7 +731,7 @@
     "title": "Frequency",
     "label": "Island",
     "format": "7\" Vinyl",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "demi-lovato-frequency.jpg"
@@ -742,7 +742,7 @@
     "title": "How Do You Feel About Getting Married?",
     "label": "Warner Records",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "dijon-how-do-you-feel-about-getting-married.jpg"
@@ -753,7 +753,7 @@
     "title": "Live in Hollywood 1991 - The Green Mind Tour",
     "label": "Cherry Red",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "dinosaur-jr-live-in-hollywood-1991-the-green-mind-tour.jpg"
@@ -764,7 +764,7 @@
     "title": "The Rescue",
     "label": "Demon Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "doctor-who-the-rescue.jpg"
@@ -775,7 +775,7 @@
     "title": "Happy Nowhere (30th Anniversary Deluxe Edition)",
     "label": "Sony Music / Licensed by Fugitive Recording",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "dogs-eye-view-happy-nowhere-30th-anniversary-deluxe-edition.jpg"
@@ -786,7 +786,7 @@
     "title": "Blue Lake",
     "label": "Charly Records",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 172929,
     "artFilename": "don-cherry-blue-lake.jpg"
@@ -797,7 +797,7 @@
     "title": "Not A Greatest Hits Vol II (Sea Blue Vinyl)",
     "label": "Meant Well Inc.",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "donovan-woods-not-a-greatest-hits-vol-ii-sea-blue-vinyl.jpg"
@@ -808,7 +808,7 @@
     "title": "No Country For Old Men",
     "label": "Org Music",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "dope-john-densmore-chuck-d-no-country-for-old-men.jpg"
@@ -819,7 +819,7 @@
     "title": "Get Demented",
     "label": "Demented Punk",
     "format": "12\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "dr-demento-get-demented.jpg"
@@ -830,7 +830,7 @@
     "title": "Oil City Confidential Soundtrack",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "dr-feelgood-oil-city-confidential-soundtrack.jpg"
@@ -841,7 +841,7 @@
     "title": "Drum Corpse Volume 1: Resistance Drums",
     "label": "Skinsuit Communications",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "drum-corpse-drum-corpse-volume-1-resistance-drums.jpg"
@@ -852,7 +852,7 @@
     "title": "1996 Remixes 1999",
     "label": "Rhino",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "electronic-1996-remixes-1999.jpg"
@@ -863,7 +863,7 @@
     "title": "Positiva Presents: Elton John - The Remixes",
     "label": "UMR/EMI",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "elton-john-positiva-presents-elton-john-the-remixes.jpg"
@@ -874,7 +874,7 @@
     "title": "Lead Poison: 10th Anniversary",
     "label": "Coalmine Records",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "elzhi-lead-poison-10th-anniversary.jpg"
@@ -885,7 +885,7 @@
     "title": "Walking On A Dream (Collectors Edition)",
     "label": "Capitol Records",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "empire-of-the-sun-walking-on-a-dream-collectors-edition.jpg"
@@ -896,7 +896,7 @@
     "title": "EV3",
     "label": "Real Gone Music",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 115329,
     "artFilename": "en-vogue-ev3.jpg"
@@ -907,7 +907,7 @@
     "title": "Nearly Daffodils / Nearly Daffodils (Matt Maltese Rework)",
     "label": "UMR/Island",
     "format": "7\" Vinyl",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "english-teacher-nearly-daffodils-nearly-daffodils-matt-maltese-rework.jpg"
@@ -918,7 +918,7 @@
     "title": "Inbred",
     "label": "Daughters of Cain",
     "format": "12\" EP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 2328325,
     "artFilename": "ethel-cain-inbred.jpg"
@@ -929,7 +929,7 @@
     "title": "A Gift From Euphoria",
     "label": "Jackpot Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 87233,
     "artFilename": "euphoria-a-gift-from-euphoria.jpg"
@@ -940,7 +940,7 @@
     "title": "Digimortal (REMASTERED, EXPANDED, 25TH ANNIVERSARY)",
     "label": "Real Gone Music",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "fear-factory-digimortal-remastered-expanded-25th-anniversary.jpg"
@@ -951,7 +951,7 @@
     "title": "Boogie On Your Head!",
     "label": "Propeller Sound Recordings",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "flat-duo-jets-boogie-on-your-head.jpg"
@@ -962,7 +962,7 @@
     "title": "1983",
     "label": "Brainfeeder",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 39636,
     "artFilename": "flying-lotus-1983.jpg"
@@ -973,7 +973,7 @@
     "title": "Baypath Road",
     "label": "Y&T Music",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "for-squirrels-baypath-road.jpg"
@@ -984,7 +984,7 @@
     "title": "Foreigner 4 Live Tour 1981-82",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "foreigner-foreigner-4-live-tour-1981-82.jpg"
@@ -995,7 +995,7 @@
     "title": "Françoise Hardy In English",
     "label": "Omnivore Recordings",
     "format": "LP + 7\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1249035,
     "artFilename": "francoise-hardy-francoise-hardy-in-english.jpg"
@@ -1006,7 +1006,7 @@
     "title": "Radio One Sessions 1982-1983",
     "label": "UMR/ZTT",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "frankie-goes-to-hollywood-radio-one-sessions-1982-1983.jpg"
@@ -1017,7 +1017,7 @@
     "title": "Feelin' Alright: The Complete 1975 Nancy Pulsations Concert",
     "label": "Elemental Music Records",
     "format": "3 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "freddie-king-feelin-alright-the-complete-1975-nancy-pulsations-concert.jpg"
@@ -1028,7 +1028,7 @@
     "title": "Showcase",
     "label": "Observer / Prestige Elite",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 371985,
     "artFilename": "freddie-mcgregor-showcase.jpg"
@@ -1039,7 +1039,7 @@
     "title": "FREEMAN",
     "label": "Partisan",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 286621,
     "artFilename": "freeman-freeman.jpg"
@@ -1050,7 +1050,7 @@
     "title": "A-Meow-Zing Music!",
     "label": "Republic",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "gabbys-dollhouse-a-meow-zing-music.jpg"
@@ -1061,7 +1061,7 @@
     "title": "Live From KCRW Morning Becomes Eclectic",
     "label": "Cosmica Artists",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "gaby-moreno-live-from-kcrw-morning-becomes-eclectic.jpg"
@@ -1072,7 +1072,7 @@
     "title": "Dark Horse Zoetrope LP",
     "label": "Dark Horse",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "george-harrison-dark-horse-zoetrope-lp.jpg"
@@ -1083,7 +1083,7 @@
     "title": "Extra Texture Zoetrope LP",
     "label": "Dark Horse",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "george-harrison-extra-texture-zoetrope-lp.jpg"
@@ -1094,7 +1094,7 @@
     "title": "Cold Hard Truth",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 967545,
     "artFilename": "george-jones-cold-hard-truth.jpg"
@@ -1105,7 +1105,7 @@
     "title": "Live in Europe",
     "label": "Karma Chief",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4197312,
     "artFilename": "ghost-funk-orchestra-live-in-europe.jpg"
@@ -1116,7 +1116,7 @@
     "title": "Swagism",
     "label": "Mixto Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1406261,
     "artFilename": "ghost-note-swagism.jpg"
@@ -1127,7 +1127,7 @@
     "title": "Live From VEVO DSCVR",
     "label": "Island",
     "format": "7\" Vinyl",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "gigi-perez-live-from-vevo-dscvr.jpg"
@@ -1138,7 +1138,7 @@
     "title": "Reflections",
     "label": "Culture Factory",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 7702,
     "artFilename": "gil-scott-heron-reflections.jpg"
@@ -1149,7 +1149,7 @@
     "title": "Reflections",
     "label": "Culture Factory",
     "format": "CD",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 7702,
     "artFilename": "gil-scott-heron-reflections-2.jpg"
@@ -1160,7 +1160,7 @@
     "title": "Dog Days",
     "label": "Southern Lord",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 210813,
     "artFilename": "goatsnake-dog-days.jpg"
@@ -1171,7 +1171,7 @@
     "title": "The Singles Collection 1975 - 1979",
     "label": "Cinevox",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "goblin-the-singles-collection-1975-1979.jpg"
@@ -1182,7 +1182,7 @@
     "title": "Flying Teapot",
     "label": "Charly Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 27681,
     "artFilename": "gong-flying-teapot.jpg"
@@ -1193,7 +1193,7 @@
     "title": "Can We Hang Out Sometime?",
     "label": "AMPED",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 4185756,
     "artFilename": "good-kid-can-we-hang-out-sometime.jpg"
@@ -1204,7 +1204,7 @@
     "title": "Best Of",
     "label": "Yabasta Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1074377,
     "artFilename": "gotan-project-best-of.jpg"
@@ -1215,7 +1215,7 @@
     "title": "Boston Music Hall, Boston, MA 6/11/76",
     "label": "Rhino",
     "format": "5 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "grateful-dead-boston-music-hall-boston-ma-6-11-76.jpg"
@@ -1226,7 +1226,7 @@
     "title": "On A Back Porch, Vol. 3",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "grateful-dead-on-a-back-porch-vol-3.jpg"
@@ -1237,7 +1237,7 @@
     "title": "Relationships",
     "label": "Columbia Records",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199550,
     "artFilename": "haim-relationships.jpg"
@@ -1248,7 +1248,7 @@
     "title": "Hello Kitty & Friends - Hello Kitty (RSD Exclusive) - Handmade By Robots",
     "label": "Handmade by Robots",
     "format": "Vinyl Figure",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "hello-kitty-hello-kitty-friends-hello-kitty-rsd-exclusive-handmade-by-robots.jpg"
@@ -1259,7 +1259,7 @@
     "title": "going…going…GONE!",
     "label": "Good Luck Have Fun Records, LLC",
     "format": "12\" EP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 3382717,
     "artFilename": "hemlocke-springs-going-going-gone.jpg"
@@ -1270,7 +1270,7 @@
     "title": "(Mine)",
     "label": "Atlantic",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199511,
     "artFilename": "hilary-duff-mine.jpg"
@@ -1281,7 +1281,7 @@
     "title": "Live in London 1980",
     "label": "Demon Records",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ian-dury-the-blockheads-live-in-london-1980.jpg"
@@ -1292,7 +1292,7 @@
     "title": "Changin' Times",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 691041,
     "artFilename": "ike-white-changin-times.jpg"
@@ -1303,7 +1303,7 @@
     "title": "The Way I Should (30th Anniversary)",
     "label": "Yep Roc Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "iris-dement-the-way-i-should-30th-anniversary.jpg"
@@ -1314,7 +1314,7 @@
     "title": "Hold On To The Light",
     "label": "Republic",
     "format": "7\" Vinyl",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "jack-johnson-hermanos-gutierrez-hold-on-to-the-light.jpg"
@@ -1325,7 +1325,7 @@
     "title": "Jackson C Frank",
     "label": "BMG",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 127204,
     "artFilename": "jackson-c-frank-jackson-c-frank.jpg"
@@ -1336,7 +1336,7 @@
     "title": "Jade To The Max",
     "label": "Get On Down",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 152544,
     "artFilename": "jade-jade-to-the-max.jpg"
@@ -1347,7 +1347,7 @@
     "title": "These Are Soulful Days",
     "label": "Tao Forms",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "james-brandon-lewis-these-are-soulful-days.jpg"
@@ -1358,7 +1358,7 @@
     "title": "Gold Soundz: A Jazz Tribute To Pavement",
     "label": "Modern Harmonic",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "james-carter-cyrus-chestnut-ali-jackson-reginald-veal-gold-soundz-a-jazz-tribute-to-pavement.jpg"
@@ -1369,7 +1369,7 @@
     "title": "Live À L'Olympia",
     "label": "Legacy Recordings",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 81032,
     "artFilename": "jeff-buckley-live-a-lolympia.jpg"
@@ -1380,7 +1380,7 @@
     "title": "Live À L'Olympia",
     "label": "Legacy Recordings",
     "format": "CD",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 81032,
     "artFilename": "jeff-buckley-live-a-lolympia-2.jpg"
@@ -1391,7 +1391,7 @@
     "title": "Reflections (50th Anniversary)",
     "label": "Round Records/ATO Records",
     "format": "3 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "jerry-garcia-reflections-50th-anniversary.jpg"
@@ -1402,7 +1402,7 @@
     "title": "Navajo Rug (35th Anniversary)",
     "label": "Jerry Jeff Walker",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "jerry-jeff-walker-navajo-rug-35th-anniversary.jpg"
@@ -1413,7 +1413,7 @@
     "title": "Trip",
     "label": "Def Jam",
     "format": "2 x LP Picture Disc",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1259162,
     "artFilename": "jhene-aiko-trip.jpg"
@@ -1424,7 +1424,7 @@
     "title": "Live At The Ritz NYC 1981",
     "label": "Blackheart Records",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "joan-jett-and-the-blackhearts-live-at-the-ritz-nyc-1981.jpg"
@@ -1435,7 +1435,7 @@
     "title": "Consonance: Live at the Jazz Showcase",
     "label": "Resonance Records",
     "format": "3 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "joe-henderson-consonance-live-at-the-jazz-showcase.jpg"
@@ -1446,7 +1446,7 @@
     "title": "Global A Go-Go",
     "label": "Dark Horse",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 153397,
     "artFilename": "joe-strummer-the-mescaleros-global-a-go-go.jpg"
@@ -1457,7 +1457,7 @@
     "title": "France 1965: The Complete Concerts",
     "label": "Charly Records",
     "format": "4 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "john-coltrane-quartet-france-1965-the-complete-concerts.jpg"
@@ -1468,7 +1468,7 @@
     "title": "To Only Record Water for Ten Days",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 9322,
     "artFilename": "john-frusciante-to-only-record-water-for-ten-days.jpg"
@@ -1479,7 +1479,7 @@
     "title": "Love Meditation Mixes",
     "label": "UMR",
     "format": "3 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "john-lennon-love-meditation-mixes.jpg"
@@ -1490,7 +1490,7 @@
     "title": "Music From Abandoned Heights",
     "label": "Impex Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "john-mclaughlin-music-from-abandoned-heights.jpg"
@@ -1501,7 +1501,7 @@
     "title": "BBC Sessions",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199544,
     "artFilename": "john-prine-bbc-sessions.jpg"
@@ -1512,7 +1512,7 @@
     "title": "Found Dogs",
     "label": "Oh Boy Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "john-prine-found-dogs.jpg"
@@ -1523,7 +1523,7 @@
     "title": "Here Comes The Groom (Deluxe)",
     "label": "Blind Owl",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "john-wesley-harding-here-comes-the-groom-deluxe.jpg"
@@ -1534,7 +1534,7 @@
     "title": "Pistol Swing & Claim Dedications Discography",
     "label": "Southern Lord",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "johnboy-pistol-swing-claim-dedications-discography.jpg"
@@ -1545,7 +1545,7 @@
     "title": "TRUE",
     "label": "Frontiers",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 3578488,
     "artFilename": "jon-anderson-the-band-geeks-true.jpg"
@@ -1556,7 +1556,7 @@
     "title": "For The Roses",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 47751,
     "artFilename": "joni-mitchell-for-the-roses.jpg"
@@ -1567,7 +1567,7 @@
     "title": "Live in Los Angeles '90",
     "label": "Legacy Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "judas-priest-live-in-los-angeles-90.jpg"
@@ -1578,7 +1578,7 @@
     "title": "Saturday Teenage Kick (Remastered, Expanded)",
     "label": "Real Gone Music",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "junkie-xl-saturday-teenage-kick-remastered-expanded.jpg"
@@ -1589,7 +1589,7 @@
     "title": "Quality Control: 25th Anniversary Edition",
     "label": "Get On Down",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "jurassic-5-quality-control-25th-anniversary-edition.jpg"
@@ -1600,7 +1600,7 @@
     "title": "Yeehaw Sessions",
     "label": "Republic",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "kaitlin-butts-yeehaw-sessions.jpg"
@@ -1611,7 +1611,7 @@
     "title": "Touch / Gabriela - Tour Arrangements & Acapella Versions",
     "label": "HYBE x Geffen",
     "format": "12\" EP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "katseye-touch-gabriela-tour-arrangements-acapella-versions.jpg"
@@ -1622,7 +1622,7 @@
     "title": "AIN'T NO DAMN WAY",
     "label": "RCA",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 3980134,
     "artFilename": "kaytranada-aint-no-damn-way.jpg"
@@ -1633,7 +1633,7 @@
     "title": "White Gloves ii / M. Blanc",
     "label": "Dead Oceans",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "khruangbin-white-gloves-ii-m-blanc.jpg"
@@ -1644,7 +1644,7 @@
     "title": "Live - Penn State University 29 June 1974",
     "label": "Dgm",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "king-crimson-live-penn-state-university-29-june-1974.jpg"
@@ -1655,7 +1655,7 @@
     "title": "Big Fig Wasp",
     "label": "Having Fun",
     "format": "12\" Shaped Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "king-gizzard-the-lizard-wizard-big-fig-wasp.jpg"
@@ -1666,7 +1666,7 @@
     "title": "A Special KISS Tour Album",
     "label": "Mercury Records",
     "format": "12\" EP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "kiss-a-special-kiss-tour-album.jpg"
@@ -1677,7 +1677,7 @@
     "title": "Remixes Bundle",
     "label": "Omnivore Recordings",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "klaus-nomi-remixes-bundle.jpg"
@@ -1688,7 +1688,7 @@
     "title": "Crying Laughing Loving Lying Expanded Edition",
     "label": "Demon Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "labi-siffre-crying-laughing-loving-lying-expanded-edition.jpg"
@@ -1699,7 +1699,7 @@
     "title": "A Matter of Time: Live at Madison Square Garden",
     "label": "AWAL/Vingolf Recordings",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "laufey-a-matter-of-time-live-at-madison-square-garden.jpg"
@@ -1710,7 +1710,7 @@
     "title": "Laura Marling - Live At Albert Hall, Manchester",
     "label": "Chrysalis",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "laura-marling-laura-marling-live-at-albert-hall-manchester.jpg"
@@ -1721,7 +1721,7 @@
     "title": "Creator",
     "label": "TAANG!",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 14107,
     "artFilename": "lemonheads-creator.jpg"
@@ -1732,7 +1732,7 @@
     "title": "Makeda Remix",
     "label": "Rhino",
     "format": "12\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 154016,
     "artFilename": "les-nubians-makeda-remix.jpg"
@@ -1743,7 +1743,7 @@
     "title": "Ja-Gan",
     "label": "BMG",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 816934,
     "artFilename": "leslie-butler-ja-gan.jpg"
@@ -1754,7 +1754,7 @@
     "title": "crybaby (10 Year Anniversary RSD Edition)",
     "label": "AWAL",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "lil-peep-crybaby-10-year-anniversary-rsd-edition.jpg"
@@ -1765,7 +1765,7 @@
     "title": "Little Feat (Deluxe Edition)",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "little-feat-little-feat-deluxe-edition.jpg"
@@ -1776,7 +1776,7 @@
     "title": "The Gathering",
     "label": "Legendary Music, Llc",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 225018,
     "artFilename": "living-legends-the-gathering.jpg"
@@ -1787,7 +1787,7 @@
     "title": "Coming Up At The BBC",
     "label": "Demon Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "london-suede-coming-up-at-the-bbc.jpg"
@@ -1798,7 +1798,7 @@
     "title": "Look Outside Your Window",
     "label": "LOYW",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "look-outside-your-window-look-outside-your-window.jpg"
@@ -1809,7 +1809,7 @@
     "title": "Planting Tomatoes",
     "label": "Geffen Records",
     "format": "7\" Vinyl",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "lucy-dacus-planting-tomatoes.jpg"
@@ -1820,7 +1820,7 @@
     "title": "We Can Be Worster",
     "label": "Manic Merch",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "lunachicks-we-can-be-worster.jpg"
@@ -1831,7 +1831,7 @@
     "title": "Ma Rainey's Black Bottom",
     "label": "Shanachie Entertainment",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 894872,
     "artFilename": "ma-rainey-ma-raineys-black-bottom.jpg"
@@ -1842,7 +1842,7 @@
     "title": "The Confessions Tour - Live From London",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "madonna-the-confessions-tour-live-from-london.jpg"
@@ -1853,7 +1853,7 @@
     "title": "Stardust & Starlight: Live at the Jazz Showcase",
     "label": "Resonance Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "mal-waldron-stardust-starlight-live-at-the-jazz-showcase.jpg"
@@ -1864,7 +1864,7 @@
     "title": "Dream A Little Dream (Expanded Edition)",
     "label": "Geffen Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "mama-cass-dream-a-little-dream-expanded-edition.jpg"
@@ -1875,7 +1875,7 @@
     "title": "Panicked",
     "label": "800 Pound Gorilla Records",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "marc-maron-panicked.jpg"
@@ -1886,7 +1886,7 @@
     "title": "All The Roadrunning",
     "label": "Mercury",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 513096,
     "artFilename": "mark-knopfler-emmylou-harris-all-the-roadrunning.jpg"
@@ -1897,7 +1897,7 @@
     "title": "Bubblegum (Original Draft)",
     "label": "Beggars Banquet",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "mark-lanegan-bubblegum-original-draft.jpg"
@@ -1908,7 +1908,7 @@
     "title": "Brujeria",
     "label": "Craft Recordings/Concord",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "markolino-dimond-brujeria.jpg"
@@ -1919,7 +1919,7 @@
     "title": "The Bootleg Sounds of Marshall Crenshaw: 1984-87",
     "label": "Yep Roc Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "marshall-crenshaw-the-bootleg-sounds-of-marshall-crenshaw-1984-87.jpg"
@@ -1930,7 +1930,7 @@
     "title": "All Of Me",
     "label": "Universal Music Japan",
     "format": "2 x LP Import",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 602176,
     "artFilename": "masayoshi-takanaka-all-of-me.jpg"
@@ -1941,7 +1941,7 @@
     "title": "On Guitar",
     "label": "Victor Entertainment",
     "format": "LP Import",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1050166,
     "artFilename": "masayoshi-takanaka-on-guitar.jpg"
@@ -1952,7 +1952,7 @@
     "title": "Visions",
     "label": "Epitaph Records",
     "format": "7\" Vinyl",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "matchbook-romance-visions.jpg"
@@ -1963,7 +1963,7 @@
     "title": "Tales Told By Dead Friends",
     "label": "Craft Recordings",
     "format": "10\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 631067,
     "artFilename": "mayday-parade-tales-told-by-dead-friends.jpg"
@@ -1974,7 +1974,7 @@
     "title": "Welcome To My Dream (35Th Anniversary Expanded Edition)",
     "label": "Nettwerk",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "mc-900-ft-jesus-welcome-to-my-dream-35th-anniversary-expanded-edition.jpg"
@@ -1985,7 +1985,7 @@
     "title": "The Seeker",
     "label": "Red Records",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "mccoy-tyner-the-seeker.jpg"
@@ -1996,7 +1996,7 @@
     "title": "Hidden Treasures",
     "label": "Capitol/UMe",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 32945,
     "artFilename": "megadeth-hidden-treasures.jpg"
@@ -2007,7 +2007,7 @@
     "title": "Urami Bushi",
     "label": "Teichiku Entertainment / TOYOKASEI",
     "format": "12\" EP Import",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "meiko-kaji-urami-bushi.jpg"
@@ -2018,7 +2018,7 @@
     "title": "Hot",
     "label": "UMR/Virgin",
     "format": "LP Picture Disc",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 92214,
     "artFilename": "melanie-b-hot.jpg"
@@ -2029,7 +2029,7 @@
     "title": "Catch Thirtythree : Remastered Anniversary Edition",
     "label": "Reigning Phoenix Music",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "meshuggah-catch-thirtythree-remastered-anniversary-edition.jpg"
@@ -2040,7 +2040,7 @@
     "title": "Destroy Erase Improve: Remastered Anniversary Edition",
     "label": "Reigning Phoenix Music",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "meshuggah-destroy-erase-improve-remastered-anniversary-edition.jpg"
@@ -2051,7 +2051,7 @@
     "title": "Best Of Live MSG – 1980 – 1984",
     "label": "Chrysalis",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "michael-schenker-group-best-of-live-msg-1980-1984.jpg"
@@ -2062,7 +2062,7 @@
     "title": "Feel Free",
     "label": "Twenty First Century Recording Company",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "mike-peters-of-the-alarm-feel-free.jpg"
@@ -2073,7 +2073,7 @@
     "title": "The New Sounds (Mono 10\")",
     "label": "Craft Recordings",
     "format": "10\" LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "miles-davis-the-new-sounds-mono-10.jpg"
@@ -2084,7 +2084,7 @@
     "title": "Famous Monsters",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 8092,
     "artFilename": "misfits-famous-monsters.jpg"
@@ -2095,7 +2095,7 @@
     "title": "Welcome To My Blue Sky (The Heart Charm)",
     "label": "Polyvinyl",
     "format": "12\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "momma-welcome-to-my-blue-sky-the-heart-charm.jpg"
@@ -2106,7 +2106,7 @@
     "title": "Live Wire EP (45th Anniversary)",
     "label": "BMG",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "motley-crue-live-wire-ep-45th-anniversary.jpg"
@@ -2117,7 +2117,7 @@
     "title": "On Parole Steve Wilson Remix",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "motorhead-on-parole-steve-wilson-remix.jpg"
@@ -2128,7 +2128,7 @@
     "title": "The Lost Tapes, Vol. 7 (Lemmy's 50th Birthday, Live in West Hollywood, 1995)",
     "label": "BMG",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4099870,
     "artFilename": "motorhead-the-lost-tapes-vol-7-lemmys-50th-birthday-live-in-west-hollywood-1995.jpg"
@@ -2139,7 +2139,7 @@
     "title": "Muscle Museum",
     "label": "Warner Records",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 101596,
     "artFilename": "muse-muscle-museum.jpg"
@@ -2150,7 +2150,7 @@
     "title": "Muse",
     "label": "Warner Records",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 264288,
     "artFilename": "muse-muse.jpg"
@@ -2161,7 +2161,7 @@
     "title": "Mutemath",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 143244,
     "artFilename": "mutemath-mutemath.jpg"
@@ -2172,7 +2172,7 @@
     "title": "Sinister Whisperz - The Wax Trax! Remixes",
     "label": "Wax Trax! Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "my-life-with-the-thrill-kill-kult-sinister-whisperz-the-wax-trax-remixes.jpg"
@@ -2183,7 +2183,7 @@
     "title": "The Live Album",
     "label": "Reprise",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "neil-young-the-chrome-hearts-the-live-album.jpg"
@@ -2194,7 +2194,7 @@
     "title": "Cool Boys",
     "label": "Anti-",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "neko-case-cool-boys.jpg"
@@ -2205,7 +2205,7 @@
     "title": "One Day It Will Please Us To Remember Even This",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 13204,
     "artFilename": "new-york-dolls-one-day-it-will-please-us-to-remember-even-this.jpg"
@@ -2216,7 +2216,7 @@
     "title": "Gate Crash '78",
     "label": "Now-Again Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ngozi-family-gate-crash-78.jpg"
@@ -2227,7 +2227,7 @@
     "title": "Flicker Featuring The RTE Concert Orchestra (Live)",
     "label": "Capitol Records",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "niall-horan-flicker-featuring-the-rte-concert-orchestra-live.jpg"
@@ -2238,7 +2238,7 @@
     "title": "SAGES",
     "label": "Verve",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "olafur-arnalds-loreen-sages.jpg"
@@ -2249,7 +2249,7 @@
     "title": "BBC Radio 1 Live Lounge",
     "label": "Island",
     "format": "7\" Vinyl",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "olivia-dean-bbc-radio-1-live-lounge.jpg"
@@ -2260,7 +2260,7 @@
     "title": "Archive Vol. 1 (1981-1990)",
     "label": "UMR/Virgin (Polydor Label Group)",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "orchestral-manoeuvres-in-the-dark-archive-vol-1-1981-1990.jpg"
@@ -2271,7 +2271,7 @@
     "title": "Ozzy Osbourne - Handmade By Robots",
     "label": "Handmade by Robots",
     "format": "Vinyl Figure",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ozzy-osbourne-ozzy-osbourne-handmade-by-robots.jpg"
@@ -2282,7 +2282,7 @@
     "title": "Graveyard/Lucky Charm",
     "label": "Domino Record Co.",
     "format": "7\" Vinyl",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "panda-bear-sonic-boom-graveyard-lucky-charm.jpg"
@@ -2293,7 +2293,7 @@
     "title": "Paper Route Illuminati",
     "label": "Paper Route Empire",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "paper-route-illuminati-paper-route-illuminati.jpg"
@@ -2304,7 +2304,7 @@
     "title": "All We Know is Falling (Deluxe)",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "paramore-all-we-know-is-falling-deluxe.jpg"
@@ -2315,7 +2315,7 @@
     "title": "When Your Garden’s Overgrown / Boy About Town (Weller at the BBC Vol. 2)",
     "label": "Parlophone/Warner",
     "format": "7\" Vinyl",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "paul-weller-when-your-gardens-overgrown-boy-about-town-weller-at-the-bbc-vol-2.jpg"
@@ -2326,7 +2326,7 @@
     "title": "Perfect Sound Forever",
     "label": "Matador",
     "format": "10\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1743979,
     "artFilename": "pavement-perfect-sound-forever.jpg"
@@ -2337,7 +2337,7 @@
     "title": "No Lube So Rude",
     "label": "Kill Rock Stars",
     "format": "Picture Disc LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 4135879,
     "artFilename": "peaches-no-lube-so-rude.jpg"
@@ -2348,7 +2348,7 @@
     "title": "Give'n It",
     "label": "LAW Records",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 4199565,
     "artFilename": "pepper-given-it.jpg"
@@ -2359,7 +2359,7 @@
     "title": "Sledgehammer",
     "label": "Real World",
     "format": "12\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 483508,
     "artFilename": "peter-gabriel-sledgehammer.jpg"
@@ -2370,7 +2370,7 @@
     "title": "Alphabetical",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 16906,
     "artFilename": "phoenix-alphabetical.jpg"
@@ -2381,7 +2381,7 @@
     "title": "United",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 16891,
     "artFilename": "phoenix-united.jpg"
@@ -2392,7 +2392,7 @@
     "title": "Tigallerro",
     "label": "The Foreign Exchange Music",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 4189875,
     "artFilename": "phonte-eric-roberson-tigallerro.jpg"
@@ -2403,7 +2403,7 @@
     "title": "Live From the Los Angeles Sports Arena, April 26th, 1975",
     "label": "Legacy Recordings",
     "format": "4 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199133,
     "artFilename": "pink-floyd-live-from-the-los-angeles-sports-arena-april-26th-1975.jpg"
@@ -2414,7 +2414,7 @@
     "title": "Live From the Los Angeles Sports Arena, April 26th, 1975",
     "label": "Legacy Recordings",
     "format": "2 x CD",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199133,
     "artFilename": "pink-floyd-live-from-the-los-angeles-sports-arena-april-26th-1975-2.jpg"
@@ -2425,7 +2425,7 @@
     "title": "Girl Like Me",
     "label": "Atlantic",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199100,
     "artFilename": "pink-pantheress-girl-like-me.jpg"
@@ -2436,7 +2436,7 @@
     "title": "Live in Newport",
     "label": "Demon Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 342968,
     "artFilename": "pixies-live-in-newport.jpg"
@@ -2447,7 +2447,7 @@
     "title": "Hall of Fame",
     "label": "Legacy Recordings",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 2182783,
     "artFilename": "polo-g-hall-of-fame.jpg"
@@ -2458,7 +2458,7 @@
     "title": "We Lost The Skyline",
     "label": "Transmission",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 63511,
     "artFilename": "porcupine-tree-we-lost-the-skyline.jpg"
@@ -2469,7 +2469,7 @@
     "title": "1987 EPs",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "primal-scream-1987-eps.jpg"
@@ -2480,7 +2480,7 @@
     "title": "THE BLUE BEAT LABEL Presents PRINCE BUSTER ON TOUR",
     "label": "The Blue Beat Label",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "prince-buster-the-blue-beat-label-presents-prince-buster-on-tour.jpg"
@@ -2491,7 +2491,7 @@
     "title": "Mardi Gras in Baton Rouge",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 867211,
     "artFilename": "professor-longhair-mardi-gras-in-baton-rouge.jpg"
@@ -2502,7 +2502,7 @@
     "title": "Normal Isn't (Live)",
     "label": "BMG",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "puscifer-normal-isnt-live.jpg"
@@ -2513,7 +2513,7 @@
     "title": "Canyon Trilogy",
     "label": "BMG",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 641178,
     "artFilename": "r-carlos-nakai-canyon-trilogy.jpg"
@@ -2524,7 +2524,7 @@
     "title": "Live In San Francisco",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1240279,
     "artFilename": "ramones-live-in-san-francisco.jpg"
@@ -2535,7 +2535,7 @@
     "title": "Ray Charles Live",
     "label": "Tangerine Records",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 209414,
     "artFilename": "ray-charles-ray-charles-live.jpg"
@@ -2546,7 +2546,7 @@
     "title": "Live From Koln 1976",
     "label": "Demon Records",
     "format": "3 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ritchie-blackmores-rainbow-live-from-koln-1976.jpg"
@@ -2557,7 +2557,7 @@
     "title": "Saving Grace: All That Glitters… with Suzi Dian",
     "label": "Nonesuch",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "robert-plant-saving-grace-all-that-glitters-with-suzi-dian.jpg"
@@ -2568,7 +2568,7 @@
     "title": "Alternate Atlantic Crossing",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "rod-stewart-alternate-atlantic-crossing.jpg"
@@ -2579,7 +2579,7 @@
     "title": "Live '81 -'85",
     "label": "Liberation Hall",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "romeo-void-live-81-85.jpg"
@@ -2590,7 +2590,7 @@
     "title": "Daddy Bug",
     "label": "Nature Sounds",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 127406,
     "artFilename": "roy-ayers-daddy-bug.jpg"
@@ -2601,7 +2601,7 @@
     "title": "Bern",
     "label": "Time Traveler Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "roy-hargrove-bern.jpg"
@@ -2612,7 +2612,7 @@
     "title": "Hate Myself",
     "label": "Giant Music",
     "format": "12\" EP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ruel-hate-myself.jpg"
@@ -2623,7 +2623,7 @@
     "title": "The Necessary Cosmic Frenzy",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "runt-w-todd-rundgren-the-necessary-cosmic-frenzy.jpg"
@@ -2634,7 +2634,7 @@
     "title": "End of Asia",
     "label": "Gearbox",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ryuichi-sakamoto-featuring-danceries-end-of-asia.jpg"
@@ -2645,7 +2645,7 @@
     "title": "Bobby Digital Presents: The Juice Crew",
     "label": "36 Chambers LLC/DNA Music/Hitmaker Distr",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "rza-juice-crew-bobby-digital-presents-the-juice-crew.jpg"
@@ -2656,7 +2656,7 @@
     "title": "The Man with the Iron Fists (Original Motion Picture Soundtrack)",
     "label": "36 Chambers/RuffnationEnt/WAX Records/",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "rza-various-artists-the-man-with-the-iron-fists-original-motion-picture-soundtrack.jpg"
@@ -2667,7 +2667,7 @@
     "title": "Live",
     "label": "Scott Weiland",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "scott-weiland-live.jpg"
@@ -2678,7 +2678,7 @@
     "title": "Droplets",
     "label": "Interscope",
     "format": "12\" EP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "selena-gomez-droplets.jpg"
@@ -2689,7 +2689,7 @@
     "title": "The End of the World: The Navy Hoedown Sessions",
     "label": "Country Rewind",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "skeeter-davis-the-end-of-the-world-the-navy-hoedown-sessions.jpg"
@@ -2700,7 +2700,7 @@
     "title": "Caramel",
     "label": "RCA",
     "format": "12\" Vinyl",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "sleep-token-caramel.jpg"
@@ -2711,7 +2711,7 @@
     "title": "untitled (albini rough mixes)",
     "label": "Touch and Go Records",
     "format": "12\"",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "slint-untitled-albini-rough-mixes.jpg"
@@ -2722,7 +2722,7 @@
     "title": "Live at GroundUP Music Festival",
     "label": "GroundUP Music",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "snarky-puppy-live-at-groundup-music-festival.jpg"
@@ -2733,7 +2733,7 @@
     "title": "Sound Signal Serenades",
     "label": "Transmit Sound/Thirty Tigers",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "son-volt-sound-signal-serenades.jpg"
@@ -2744,7 +2744,7 @@
     "title": "Diamond Seas",
     "label": "Geffen",
     "format": "12\" Vinyl",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "sonic-youth-diamond-seas.jpg"
@@ -2755,7 +2755,7 @@
     "title": "Read My Lips (25th Anniversary Edition)",
     "label": "UMR/Polydor",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "sophie-ellis-bextor-read-my-lips-25th-anniversary-edition.jpg"
@@ -2766,7 +2766,7 @@
     "title": "POWER POP! American Power Pop For The Now Generation 1977-81",
     "label": "Soul Jazz Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "soul-jazz-records-presents-power-pop-american-power-pop-for-the-now-generation-1977-81.jpg"
@@ -2777,7 +2777,7 @@
     "title": "Studio One Sound",
     "label": "Soul Jazz Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "soul-jazz-records-presents-studio-one-sound.jpg"
@@ -2788,7 +2788,7 @@
     "title": "Live at The Hordern Pavilion (Sydney, NSW) 2025",
     "label": "Concord Records",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "spacey-jane-live-at-the-hordern-pavilion-sydney-nsw-2025.jpg"
@@ -2799,7 +2799,7 @@
     "title": "Roasted Right: Expanded Edition",
     "label": "Modern Harmonic",
     "format": "12\" EP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "squirrel-nut-zippers-roasted-right-expanded-edition.jpg"
@@ -2810,7 +2810,7 @@
     "title": "Milestones",
     "label": "Jackpot Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 333273,
     "artFilename": "src-milestones.jpg"
@@ -2821,7 +2821,7 @@
     "title": "St Germain - Remixes",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "st-germain-st-germain-remixes.jpg"
@@ -2832,7 +2832,7 @@
     "title": "St. Cecilia - The Elektra Recordings",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "stalk-forest-group-st-cecilia-the-elektra-recordings.jpg"
@@ -2843,7 +2843,7 @@
     "title": "Starcrawler Sings Elvis Presley",
     "label": "Starcrawler Music",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "starcrawler-starcrawler-sings-elvis-presley.jpg"
@@ -2854,7 +2854,7 @@
     "title": "Alive in America",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 278340,
     "artFilename": "steely-dan-alive-in-america.jpg"
@@ -2865,7 +2865,7 @@
     "title": "The Rhythmatist",
     "label": "Demon Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1525611,
     "artFilename": "stewart-copeland-the-rhythmatist.jpg"
@@ -2876,7 +2876,7 @@
     "title": "Live at Rolling Rock 2001",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199520,
     "artFilename": "stone-temple-pilots-live-at-rolling-rock-2001.jpg"
@@ -2887,7 +2887,7 @@
     "title": "Rumble In Brixton (Live)",
     "label": "Surfdog",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "stray-cats-rumble-in-brixton-live.jpg"
@@ -2898,7 +2898,7 @@
     "title": "File Under Easy Listening - The Singles Collection",
     "label": "BMG",
     "format": "3 x 12\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "sugar-file-under-easy-listening-the-singles-collection.jpg"
@@ -2909,7 +2909,7 @@
     "title": "Swamp Dogg Gets His Pool Painted",
     "label": "Joyful Noise Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "swamp-dogg-swamp-dogg-gets-his-pool-painted.jpg"
@@ -2920,7 +2920,7 @@
     "title": "Songs from \"Marc\"",
     "label": "Demon Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "t-rex-songs-from-marc.jpg"
@@ -2931,7 +2931,7 @@
     "title": "The CBS/Columbia Demos",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "talking-heads-the-cbs-columbia-demos.jpg"
@@ -2942,7 +2942,7 @@
     "title": "Hung Up On You",
     "label": "Nettwerk",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "tate-mcrae-hung-up-on-you.jpg"
@@ -2953,7 +2953,7 @@
     "title": "Elizabeth Taylor 7\" Vinyl Single",
     "label": "Taylor Swift/Republic Records",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "taylor-swift-elizabeth-taylor-7-vinyl-single.jpg"
@@ -2964,7 +2964,7 @@
     "title": "Words of Wisdom and Hope",
     "label": "Merge Records",
     "format": "LP + 7\" Single",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 95504,
     "artFilename": "teenage-fanclub-jad-fair-words-of-wisdom-and-hope.jpg"
@@ -2975,7 +2975,7 @@
     "title": "Rare Blasts: Studio Outtakes And Movie Music 1979-1985",
     "label": "Liberation Hall",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-blasters-rare-blasts-studio-outtakes-and-movie-music-1979-1985.jpg"
@@ -2986,7 +2986,7 @@
     "title": "All In The Mind (The Expanded Edition)",
     "label": "Music On Vinyl",
     "format": "2 x LP Import",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-bucketheads-all-in-the-mind-the-expanded-edition.jpg"
@@ -2997,7 +2997,7 @@
     "title": "Heartbeat City Live",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-cars-heartbeat-city-live.jpg"
@@ -3008,7 +3008,7 @@
     "title": "Weapon of Choice",
     "label": "Cooking Vinyl",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 437472,
     "artFilename": "the-cult-weapon-of-choice.jpg"
@@ -3019,7 +3019,7 @@
     "title": "Acoustic Hits",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1168895,
     "artFilename": "the-cure-acoustic-hits.jpg"
@@ -3030,7 +3030,7 @@
     "title": "Greatest Hits",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1121503,
     "artFilename": "the-cure-greatest-hits.jpg"
@@ -3041,7 +3041,7 @@
     "title": "One Way Ticket To Birmingham (Live at the NEC)",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-darkness-one-way-ticket-to-birmingham-live-at-the-nec.jpg"
@@ -3052,7 +3052,7 @@
     "title": "Cycles Per Second: US Tour 2024",
     "label": "Propeller Sound Recordings",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-dbs-cycles-per-second-us-tour-2024.jpg"
@@ -3063,7 +3063,7 @@
     "title": "Strange Days 1967: A Work In Progress, Part 2",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-doors-strange-days-1967-a-work-in-progress-part-2.jpg"
@@ -3074,7 +3074,7 @@
     "title": "Sketches for Medicine Show",
     "label": "Fire Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-dream-syndicate-sketches-for-medicine-show.jpg"
@@ -3085,7 +3085,7 @@
     "title": "Etcetera",
     "label": "Sub Pop",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4199448,
     "artFilename": "the-gits-etcetera.jpg"
@@ -3096,7 +3096,7 @@
     "title": "2 Meter Sessions",
     "label": "Charly Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-jayhawks-2-meter-sessions.jpg"
@@ -3107,7 +3107,7 @@
     "title": "Some Candy Talking EP",
     "label": "Third Man Records",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-jesus-and-mary-chain-some-candy-talking-ep.jpg"
@@ -3118,7 +3118,7 @@
     "title": "The Scythe (Live From The Pyre)",
     "label": "Island",
     "format": "7\" Vinyl",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-last-dinner-party-the-scythe-live-from-the-pyre.jpg"
@@ -3129,7 +3129,7 @@
     "title": "Buzzkill",
     "label": "Label 51",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-locustz-buzzkill.jpg"
@@ -3140,7 +3140,7 @@
     "title": "From Zorch With Love: The Very Best Of The Meteors 1981-1997",
     "label": "Culture Factory",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-meteors-from-zorch-with-love-the-very-best-of-the-meteors-1981-1997.jpg"
@@ -3151,7 +3151,7 @@
     "title": "Strike Back (Volume 2)",
     "label": "Kartel/Bulletproof",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-mighty-rootsmen-strike-back-volume-2.jpg"
@@ -3162,7 +3162,7 @@
     "title": "The Modern Lovers",
     "label": "BMG",
     "format": "LP Picture Disc",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 6689,
     "artFilename": "the-modern-lovers-the-modern-lovers.jpg"
@@ -3173,7 +3173,7 @@
     "title": "People Get Ready (25th Anniversary)",
     "label": "Yep Roc Records",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-mooney-suzuki-people-get-ready-25th-anniversary.jpg"
@@ -3184,7 +3184,7 @@
     "title": "Live At Fort Apache",
     "label": "Omnivore Recordings",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-muffs-live-at-fort-apache.jpg"
@@ -3195,7 +3195,7 @@
     "title": "Raw Power: Live At The Spectrum, Philadelphia",
     "label": "Rhino",
     "format": "3 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-power-station-raw-power-live-at-the-spectrum-philadelphia.jpg"
@@ -3206,7 +3206,7 @@
     "title": "The Radha Krsna Temple",
     "label": "Dark Horse",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-radha-krsna-temple-london-the-radha-krsna-temple.jpg"
@@ -3217,7 +3217,7 @@
     "title": "Big Hits (HIGH TIDE & GREEN GRASS) - Japanese Edition",
     "label": "ABKCO Music & Records, Inc.",
     "format": "LP Import",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-rolling-stones-big-hits-high-tide-green-grass-japanese-edition.jpg"
@@ -3228,7 +3228,7 @@
     "title": "Get Off of My Cloud",
     "label": "ABKCO Music & Records, Inc.",
     "format": "3\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1022236,
     "artFilename": "the-rolling-stones-get-off-of-my-cloud.jpg"
@@ -3239,7 +3239,7 @@
     "title": "Have You Seen Your Mother, Baby, Standing in the Shadow?",
     "label": "ABKCO Music & Records, Inc.",
     "format": "3\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 52791,
     "artFilename": "the-rolling-stones-have-you-seen-your-mother-baby-standing-in-the-shadow.jpg"
@@ -3250,7 +3250,7 @@
     "title": "Heart of Stone",
     "label": "ABKCO Music & Records, Inc.",
     "format": "3\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 269627,
     "artFilename": "the-rolling-stones-heart-of-stone.jpg"
@@ -3261,7 +3261,7 @@
     "title": "Honky Tonk Women",
     "label": "ABKCO Music & Records, Inc.",
     "format": "3\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1062308,
     "artFilename": "the-rolling-stones-honky-tonk-women.jpg"
@@ -3272,7 +3272,7 @@
     "title": "Mother's Little Helper",
     "label": "ABKCO Music & Records, Inc.",
     "format": "3\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 1098112,
     "artFilename": "the-rolling-stones-mothers-little-helper.jpg"
@@ -3283,7 +3283,7 @@
     "title": "Play With Fire",
     "label": "ABKCO Music & Records, Inc.",
     "format": "3\" Single",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 3638853,
     "artFilename": "the-rolling-stones-play-with-fire.jpg"
@@ -3294,7 +3294,7 @@
     "title": "The Rolling Stones RSD3 Mini-Turntable",
     "label": "ABKCO Music & Records, Inc.",
     "format": "3\" Turntable Package",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-rolling-stones-the-rolling-stones-rsd3-mini-turntable.jpg"
@@ -3305,7 +3305,7 @@
     "title": "First And Last and Always \"The Japanese Edition\"",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-sisters-of-mercy-first-and-last-and-always-the-japanese-edition.jpg"
@@ -3316,7 +3316,7 @@
     "title": "Rarities",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 134283,
     "artFilename": "the-stranglers-rarities.jpg"
@@ -3327,7 +3327,7 @@
     "title": "Three Songs",
     "label": "Kemado",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "the-sword-three-songs.jpg"
@@ -3338,7 +3338,7 @@
     "title": "Here Come The Tears",
     "label": "Craft Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 135422,
     "artFilename": "the-tears-here-come-the-tears.jpg"
@@ -3349,7 +3349,7 @@
     "title": "Ready To Fly",
     "label": "Schoolkids Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 513089,
     "artFilename": "the-verlaines-ready-to-fly.jpg"
@@ -3360,7 +3360,7 @@
     "title": "Nite Flights",
     "label": "Legacy Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 119779,
     "artFilename": "the-walker-brothers-nite-flights.jpg"
@@ -3371,7 +3371,7 @@
     "title": "A Quick One",
     "label": "UMR/Polydor",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": 68496,
     "artFilename": "the-who-a-quick-one.jpg"
@@ -3382,7 +3382,7 @@
     "title": "Culture of Fear",
     "label": "Thievery Corporation",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 348069,
     "artFilename": "thievery-corporation-culture-of-fear.jpg"
@@ -3393,7 +3393,7 @@
     "title": "Live in Cleveland 1976",
     "label": "UMR/Vertigo",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "thin-lizzy-live-in-cleveland-1976.jpg"
@@ -3404,7 +3404,7 @@
     "title": "Rarities & First Drafts",
     "label": "Rhino",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "third-eye-blind-rarities-first-drafts.jpg"
@@ -3415,7 +3415,7 @@
     "title": "July 16, 1978 - Paradise Theater, Boston, MA",
     "label": "UMe",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 4197894,
     "artFilename": "tom-petty-the-heartbreakers-july-16-1978-paradise-theater-boston-ma.jpg"
@@ -3426,7 +3426,7 @@
     "title": "MTV Unplugged",
     "label": "Legacy Recordings",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 345389,
     "artFilename": "tony-bennett-mtv-unplugged.jpg"
@@ -3437,7 +3437,7 @@
     "title": "The Night in Question: French Exit Outtakes",
     "label": "Blissful Serenity Industries, LLC",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 3698739,
     "artFilename": "tv-girl-the-night-in-question-french-exit-outtakes.jpg"
@@ -3448,7 +3448,7 @@
     "title": "Live From Dinosaur World",
     "label": "RCA",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "tyler-childers-live-from-dinosaur-world.jpg"
@@ -3459,7 +3459,7 @@
     "title": "Feel Jah Spirit: U-Roy Meets The Aggrovators",
     "label": "Sound System",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "u-roy-feel-jah-spirit-u-roy-meets-the-aggrovators.jpg"
@@ -3470,7 +3470,7 @@
     "title": "The Re-Mixes",
     "label": "Chrysalis",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ultravox-the-re-mixes.jpg"
@@ -3481,7 +3481,7 @@
     "title": "Live in New Haven, CT 1986",
     "label": "Rhino",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "van-halen-live-in-new-haven-ct-1986.jpg"
@@ -3492,7 +3492,7 @@
     "title": "Jazz Dispensary: Magia Brasileira",
     "label": "Craft Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-jazz-dispensary-magia-brasileira.jpg"
@@ -3503,7 +3503,7 @@
     "title": "Just Tell Me You Love Me: A Tribute To Fleetwood Mac",
     "label": "Craft Recordings",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-just-tell-me-you-love-me-a-tribute-to-fleetwood-mac.jpg"
@@ -3514,7 +3514,7 @@
     "title": "KPop Demon Hunters (Soundtrack from the Netflix Film) - HUNTR/X Edition",
     "label": "Republic",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-kpop-demon-hunters-soundtrack-from-the-netflix-film-huntr-x-edition.jpg"
@@ -3525,7 +3525,7 @@
     "title": "KPop Demon Hunters (Soundtrack from the Netflix Film) - Saja Boys Edition",
     "label": "Republic",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-kpop-demon-hunters-soundtrack-from-the-netflix-film-saja-boys-edition.jpg"
@@ -3536,7 +3536,7 @@
     "title": "Metal Machine Music: Power To Consume Vol. 2",
     "label": "Legacy Recordings",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-metal-machine-music-power-to-consume-vol-2.jpg"
@@ -3547,7 +3547,7 @@
     "title": "My Soul Is Lost: Unknown & Forgotten Rural American Musicians",
     "label": "Jalopy Records",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-my-soul-is-lost-unknown-forgotten-rural-american-musicians.jpg"
@@ -3558,7 +3558,7 @@
     "title": "Operation Irie",
     "label": "LAW Records",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-operation-irie.jpg"
@@ -3569,7 +3569,7 @@
     "title": "Panama Latin Treasures",
     "label": "Tamayo Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-panama-latin-treasures.jpg"
@@ -3580,7 +3580,7 @@
     "title": "Rock And Roll Doctor: Lowell George Tribute",
     "label": "Omnivore Recordings",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-rock-and-roll-doctor-lowell-george-tribute.jpg"
@@ -3591,7 +3591,7 @@
     "title": "Salad Days: Music From The Documentary Film",
     "label": "Hello Goodbye Records",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-salad-days-music-from-the-documentary-film.jpg"
@@ -3602,7 +3602,7 @@
     "title": "Stax: Killer B's",
     "label": "Craft Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-stax-killer-bs.jpg"
@@ -3613,7 +3613,7 @@
     "title": "The Westbound Sound: Single Minded (Westbound Records Curated by RSD, Vol. 3)",
     "label": "Org Music",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-the-westbound-sound-single-minded-westbound-records-curated-by-rsd-vol-3.jpg"
@@ -3624,7 +3624,7 @@
     "title": "You'll Never Eat Fast Food Again",
     "label": "Drive-Thru Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-youll-never-eat-fast-food-again.jpg"
@@ -3635,7 +3635,7 @@
     "title": "Cuban 45 Boxset Curated By Dj Koco Aka Shimokita",
     "label": "Mr. Bongo",
     "format": "5 x 7\" Box Set",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-dj-koco-cuban-45-boxset-curated-by-dj-koco-aka-shimokita.jpg"
@@ -3646,7 +3646,7 @@
     "title": "Video Game LoFi: Sleepy Pokémon Beats",
     "label": "Curaga Records",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-from-curaga-records-and-chill-ghost-records-video-game-lofi-sleepy-pokemon-beats.jpg"
@@ -3657,7 +3657,7 @@
     "title": "UNDERTALE (10-Year Anniversary Remixes)",
     "label": "Monstercat, Firaga Records",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "various-artists-from-monstercat-and-firaga-records-undertale-10-year-anniversary-remixes.jpg"
@@ -3668,7 +3668,7 @@
     "title": "It's Arbor Day, Charlie Brown / Charlie Brown's All Stars! (Original Soundtrack Recordings)",
     "label": "Lee Mendelson Film Productions",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "vince-guaraldi-its-arbor-day-charlie-brown-charlie-browns-all-stars-original-soundtrack-recordings.jpg"
@@ -3679,7 +3679,7 @@
     "title": "The Blind Leading The Naked",
     "label": "Craft Recordings",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 36170,
     "artFilename": "violent-femmes-the-blind-leading-the-naked.jpg"
@@ -3690,7 +3690,7 @@
     "title": "What's Heaven Without You / Swallowtail",
     "label": "Republic",
     "format": "7\" Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "violet-grohl-whats-heaven-without-you-swallowtail.jpg"
@@ -3701,7 +3701,7 @@
     "title": "The Balladeer meets the Dukes of Hazzard",
     "label": "Son of Jessi/Thirty Tigers",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "waylon-jennings-the-waylors-the-balladeer-meets-the-dukes-of-hazzard.jpg"
@@ -3712,7 +3712,7 @@
     "title": "Europe \"90\"",
     "label": "Rhino",
     "format": "3 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ween-europe-90.jpg"
@@ -3723,7 +3723,7 @@
     "title": "1192",
     "label": "Ernest Jenning Record Co.",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "weezer-1192.jpg"
@@ -3734,7 +3734,7 @@
     "title": "A Tribute to Pharoah Sanders",
     "label": "Org Music",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "wendell-harrison-tribe-a-tribute-to-pharoah-sanders.jpg"
@@ -3745,7 +3745,7 @@
     "title": "Read & Burn 03",
     "label": "Pinkflag",
     "format": "LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": 189420,
     "artFilename": "wire-read-burn-03.jpg"
@@ -3756,7 +3756,7 @@
     "title": "If Not Winter - The Demos/Live Version",
     "label": "Music Soup/Interscope Records",
     "format": "12\" EP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "wisp-if-not-winter-the-demos-live-version.jpg"
@@ -3767,7 +3767,7 @@
     "title": "Khalifa (10th Anniversary)",
     "label": "Real Gone Music",
     "format": "LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "wiz-khalifa-khalifa-10th-anniversary.jpg"
@@ -3778,7 +3778,7 @@
     "title": "Wolf Alice - Spotify Live Room",
     "label": "RCA",
     "format": "7\" Vinyl",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "wolf-alice-wolf-alice-spotify-live-room.jpg"
@@ -3789,7 +3789,7 @@
     "title": "Peel Sessions",
     "label": "4AD",
     "format": "2 x LP",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "xmal-deutschland-peel-sessions.jpg"
@@ -3800,7 +3800,7 @@
     "title": "Live Boots - Live At Emerald City 1981",
     "label": "Ape House",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "xtc-live-boots-live-at-emerald-city-1981.jpg"
@@ -3811,7 +3811,7 @@
     "title": "Restless",
     "label": "Loud Records",
     "format": "2 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 61109,
     "artFilename": "xzibit-restless.jpg"
@@ -3822,7 +3822,7 @@
     "title": "Tales From Topographic Tours",
     "label": "Rhino",
     "format": "3 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "yes-tales-from-topographic-tours.jpg"
@@ -3833,7 +3833,7 @@
     "title": "Alight Upon the Lake: Live at the Jazz Showcase",
     "label": "Resonance Records",
     "format": "3 x LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "yusef-lateef-alight-upon-the-lake-live-at-the-jazz-showcase.jpg"
@@ -3844,7 +3844,7 @@
     "title": "Superunit: Maximum Implosion",
     "label": "SKiN GRAFT Records",
     "format": "2 x LP",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "zeni-geva-steve-albini-superunit-maximum-implosion.jpg"
@@ -3855,7 +3855,7 @@
     "title": "Never Say Never",
     "label": "WakeOne",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": 3964154,
     "artFilename": "zerobaseone-never-say-never.jpg"
@@ -3866,7 +3866,7 @@
     "title": "Brightside",
     "label": "Tuff Gong Worldwide",
     "format": "LP",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ziggy-marley-brightside.jpg"
@@ -3877,7 +3877,7 @@
     "title": "Brightside",
     "label": "Tuff Gong Worldwide",
     "format": "CD",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "",
     "discogsMasterId": null,
     "artFilename": "ziggy-marley-brightside-2.jpg"

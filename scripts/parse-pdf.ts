@@ -30,13 +30,15 @@ const ROW_Y_TOLERANCE = 2
  *   E = Exclusive Release
  *   L = Limited Run / Regional Focus Release
  *   F = RSD First Release
- * Map these to the longer human-readable strings already used in the
- * seeded data (see releases/2025-april/releases.json etc.).
+ * Emit machine-readable slugs; the iOS app's `Release.Category` enum
+ * maps these back to display strings ("Exclusive", "Small Run", "RSD
+ * First"). Keeping the wire format as slugs keeps the display copy in
+ * the client where it belongs.
  */
 const CATEGORY_MAP: Record<string, string> = {
-  E: 'Exclusive Release',
-  L: 'Limited Run',
-  F: 'RSD First',
+  E: 'exclusive',
+  L: 'small-run',
+  F: 'rsd-first',
 }
 
 interface TextFragment {
@@ -194,6 +196,12 @@ export async function parsePdf(pdfBuffer: Buffer): Promise<RawRelease[]> {
 
   const releases: RawRelease[] = []
   const seenIds = new Map<string, number>()
+  // Dedup on the full product tuple (artist + title + format + label +
+  // category). Byte-identical rows are rare (usually a PDF parser hiccup
+  // extracting the same row twice); different formats of the same title
+  // — e.g. Jeff Buckley "Live À L'Olympia" as 2xLP and CD — intentionally
+  // differ on `format` so they survive dedup as distinct products.
+  const seenTuples = new Set<string>()
 
   for (let p = 1; p <= doc.numPages; p++) {
     const page = await doc.getPage(p)
@@ -204,6 +212,10 @@ export async function parsePdf(pdfBuffer: Buffer): Promise<RawRelease[]> {
       .map((it) => ({ x: it.transform[4], y: it.transform[5], s: it.str }))
 
     for (const row of extractRowsFromPage(fragments)) {
+      const tupleKey = [row.artist, row.title, row.format, row.label, row.category].join('|')
+      if (seenTuples.has(tupleKey)) continue
+      seenTuples.add(tupleKey)
+
       const baseSlug = slugify(`${row.artist} ${row.title}`)
       if (!baseSlug) continue
       const count = (seenIds.get(baseSlug) ?? 0) + 1

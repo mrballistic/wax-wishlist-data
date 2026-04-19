@@ -5,7 +5,7 @@
     "title": "Letters to No One",
     "label": "Hollow Ridge",
     "format": "LP, 180g Black",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "Americana duo's third album, first time on vinyl, 180-gram pressing.",
     "discogsMasterId": null,
     "artFilename": "2025-april-002.jpg"
@@ -16,7 +16,7 @@
     "title": "Music for Quiet Rooms",
     "label": "Dust Light Editions",
     "format": "2LP, Clear Vinyl",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "Modern classical ensemble's double LP, remastered from original tapes.",
     "discogsMasterId": 3872145,
     "artFilename": null
@@ -27,7 +27,7 @@
     "title": "Threadbare",
     "label": "Meridian Sound",
     "format": "LP, Pink Marble",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "Acclaimed neo-soul debut on pink marble vinyl with alternate cover art.",
     "discogsMasterId": 2561344,
     "artFilename": "2025-april-001.jpg"
@@ -38,7 +38,7 @@
     "title": "Fernroom",
     "label": "Greenhouse Audio",
     "format": "LP, Gatefold, Forest Green",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "Ambient electronics project's first physical release, gatefold forest-green LP.",
     "discogsMasterId": null,
     "artFilename": null
@@ -49,7 +49,7 @@
     "title": "Crossings",
     "label": "Switchback Records",
     "format": "LP, Clear with Black Swirl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "Indie rock trio's sophomore LP with bonus live-in-studio tracks.",
     "discogsMasterId": 6410987,
     "artFilename": null

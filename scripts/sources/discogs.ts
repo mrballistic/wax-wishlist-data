@@ -1,3 +1,4 @@
+import { stripEditionSuffix } from '../title-variants.js'
 import type { ArtLookupResult, ArtSource, RawRelease } from '../types.js'
 
 const DISCOGS_SEARCH_URL = 'https://api.discogs.com/database/search'
@@ -41,36 +42,54 @@ export function createDiscogsSource(options: DiscogsSourceOptions = {}): ArtSour
   const fetchImpl = options.fetchImpl ?? fetch
   const { consumerKey, consumerSecret } = options
 
+  async function searchForHit(
+    artist: string,
+    title: string,
+  ): Promise<DiscogsSearchHit | null> {
+    const url = new URL(DISCOGS_SEARCH_URL)
+    url.searchParams.set('artist', artist)
+    url.searchParams.set('release_title', title)
+    url.searchParams.set('type', 'master')
+    url.searchParams.set('per_page', '1')
+
+    let res: Response
+    try {
+      res = await fetchImpl(url, {
+        headers: {
+          Authorization: `Discogs key=${consumerKey}, secret=${consumerSecret}`,
+          'User-Agent': USER_AGENT,
+        },
+      })
+    } catch {
+      return null
+    }
+
+    if (!res.ok) return null
+
+    const body = (await res.json()) as DiscogsSearchResponse
+    return body.results?.[0] ?? null
+  }
+
   return {
     name: 'discogs',
     async lookup(release: RawRelease): Promise<ArtLookupResult | null> {
       if (!consumerKey || !consumerSecret) return null
 
-      const url = new URL(DISCOGS_SEARCH_URL)
-      url.searchParams.set('artist', release.artist)
-      url.searchParams.set('release_title', release.title)
-      url.searchParams.set('type', 'master')
-      url.searchParams.set('per_page', '1')
+      let hit = await searchForHit(release.artist, release.title)
 
-      let res: Response
-      try {
-        res = await fetchImpl(url, {
-          headers: {
-            Authorization: `Discogs key=${consumerKey}, secret=${consumerSecret}`,
-            'User-Agent': USER_AGENT,
-          },
-        })
-      } catch {
-        return null
+      // On miss, retry once with an edition suffix stripped off the title
+      // ("Album (Deluxe Edition)" → "Album"). Many master records are
+      // filed under the bare title; the decorated forms are release-level.
+      if (!hit || !(hit.cover_image ?? hit.thumb)) {
+        const stripped = stripEditionSuffix(release.title)
+        if (stripped) {
+          hit = await searchForHit(release.artist, stripped)
+        }
       }
 
-      if (!res.ok) return null
+      if (!hit) return null
 
-      const body = (await res.json()) as DiscogsSearchResponse
-      const first = body.results?.[0]
-      if (!first) return null
-
-      const coverUrl = first.cover_image ?? first.thumb ?? null
+      const coverUrl = hit.cover_image ?? hit.thumb ?? null
       if (!coverUrl) return null
 
       return {

@@ -1,3 +1,4 @@
+import { stripEditionSuffix } from './title-variants.js'
 import type { RawRelease, Release } from './types.js'
 
 const DISCOGS_SEARCH_URL = 'https://api.discogs.com/database/search'
@@ -16,14 +17,15 @@ interface DiscogsSearchResponse {
   results?: DiscogsSearchHit[]
 }
 
-async function lookup(
-  release: RawRelease,
+async function searchMasterId(
+  artist: string,
+  title: string,
   consumerKey: string,
   consumerSecret: string,
-): Promise<{ discogsMasterId: number | null }> {
+): Promise<number | null> {
   const url = new URL(DISCOGS_SEARCH_URL)
-  url.searchParams.set('artist', release.artist)
-  url.searchParams.set('release_title', release.title)
+  url.searchParams.set('artist', artist)
+  url.searchParams.set('release_title', title)
   url.searchParams.set('type', 'master')
   url.searchParams.set('per_page', '1')
 
@@ -34,14 +36,32 @@ async function lookup(
     },
   })
 
-  if (!res.ok) {
-    return { discogsMasterId: null }
-  }
+  if (!res.ok) return null
 
   const body = (await res.json()) as DiscogsSearchResponse
   const first = body.results?.[0]
-  const masterId = first?.master_id ?? first?.id ?? null
-  return { discogsMasterId: masterId ?? null }
+  return first?.master_id ?? first?.id ?? null
+}
+
+async function lookup(
+  release: RawRelease,
+  consumerKey: string,
+  consumerSecret: string,
+): Promise<{ discogsMasterId: number | null }> {
+  let masterId = await searchMasterId(release.artist, release.title, consumerKey, consumerSecret)
+
+  // Retry once with edition suffix stripped — recovers many Deluxe /
+  // Anniversary / Remastered variants that miss on the decorated title.
+  // Pay the second rate-limit tick to stay under Discogs's ceiling.
+  if (masterId == null) {
+    const stripped = stripEditionSuffix(release.title)
+    if (stripped) {
+      await sleep(RATE_LIMIT_MS)
+      masterId = await searchMasterId(release.artist, stripped, consumerKey, consumerSecret)
+    }
+  }
+
+  return { discogsMasterId: masterId }
 }
 
 /**

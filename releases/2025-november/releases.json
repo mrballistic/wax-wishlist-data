@@ -5,7 +5,7 @@
     "title": "Kerosene Winter",
     "label": "Foxglove Tapes",
     "format": "LP, Smoke Vinyl",
-    "category": "Limited Run",
+    "category": "small-run",
     "description": "Sixth studio album pressed on smoke-colored wax with hand-numbered jackets.",
     "discogsMasterId": 4221337,
     "artFilename": "2025-november-003.jpg"
@@ -16,7 +16,7 @@
     "title": "Short Waves",
     "label": "Pine Needle Records",
     "format": "10\" EP, Moss Green",
-    "category": "RSD First",
+    "category": "rsd-first",
     "description": "Five-track EP on moss-green vinyl, first physical release from the duo.",
     "discogsMasterId": null,
     "artFilename": null
@@ -27,7 +27,7 @@
     "title": "Houseguest, a Ghost",
     "label": "Small Harbor Co.",
     "format": "LP, Gatefold, Cream Vinyl",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "Chamber-folk debut with etched B-side and gatefold sleeve.",
     "discogsMasterId": null,
     "artFilename": "2025-november-004.jpg"
@@ -38,7 +38,7 @@
     "title": "Night Bus Transmissions",
     "label": "Orbital Echo",
     "format": "2LP, Blue/Yellow Split",
-    "category": "Exclusive Release",
+    "category": "exclusive",
     "description": "Instrumental electronic collective's live radio broadcasts, split-color double LP.",
     "discogsMasterId": 5129712,
     "artFilename": null
