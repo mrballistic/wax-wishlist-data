@@ -1,3 +1,8 @@
+---
+title: Privacy Policy — Wax Wishlist
+permalink: /privacy/
+---
+
 # Privacy Policy — Wax Wishlist
 
 _Last updated: April 19, 2026_
@@ -37,4 +42,4 @@ If this policy changes, the "Last updated" date above will change and the update
 
 ## Contact
 
-Questions? Email **todd.greco@slalom.com**.
+Questions? Email **mrballistic@gmail.com**.

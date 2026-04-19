@@ -1,0 +1,14 @@
+title: Wax Wishlist
+description: Public data and legal pages for the Wax Wishlist iOS app.
+theme: jekyll-theme-minimal
+
+exclude:
+  - node_modules
+  - scripts
+  - tests
+  - releases
+  - package.json
+  - pnpm-lock.yaml
+  - tsconfig.json
+  - eslint.config.js
+  - vitest.config.ts
