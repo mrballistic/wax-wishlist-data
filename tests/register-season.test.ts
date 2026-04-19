@@ -24,6 +24,7 @@ interface SeasonShape {
   status: string
   releasesUrl: string
   artBaseUrl: string
+  contentUpdatedAt?: string
 }
 
 describe('registerSeason', () => {
@@ -70,6 +71,7 @@ describe('registerSeason', () => {
       '2027-04-17',
       undefined,
       repo,
+      () => '2027-03-01T00:00:00.000Z',
     )
     expect(promotedToCurrent).toBe(true)
     expect(registered.label).toBe('April Drop 2027')
@@ -78,9 +80,12 @@ describe('registerSeason', () => {
 
     const current = await readJson<SeasonShape>(join(repo, 'current.json'))
     expect(current.id).toBe('2027-april')
+    expect(current.contentUpdatedAt).toBe('2027-03-01T00:00:00.000Z')
 
     const seasons = await readJson<SeasonShape[]>(join(repo, 'seasons.json'))
     expect(seasons.map((s) => s.id)).toEqual(['2027-april', '2026-april', '2025-april'])
+    // seasons.json entries stay lean — no contentUpdatedAt leak.
+    expect(seasons[0]?.contentUpdatedAt).toBeUndefined()
   })
 
   it('derives "Black Friday Drop" for November seasons', async () => {
@@ -140,5 +145,38 @@ describe('registerSeason', () => {
       '2025-november',
       '2025-april',
     ])
+  })
+
+  it('bumps current.json when re-registering the already-current season', async () => {
+    // Same id, same date — a pure re-ingest. Should refresh current.json so
+    // iOS clients pick up the new release list even though id/status match.
+    const { promotedToCurrent } = await registerSeason(
+      '2026-april',
+      '2026-04-18',
+      undefined,
+      repo,
+      () => '2026-04-18T17:30:00.000Z',
+    )
+    expect(promotedToCurrent).toBe(true)
+
+    const current = await readJson<SeasonShape>(join(repo, 'current.json'))
+    expect(current.id).toBe('2026-april')
+    expect(current.contentUpdatedAt).toBe('2026-04-18T17:30:00.000Z')
+    // Re-ingesting must not reset a prior 'active' status back to 'upcoming'.
+    expect(current.status).toBe('active')
+  })
+
+  it('does not touch current.json when re-registering an older non-current season', async () => {
+    const before = await readJson<SeasonShape>(join(repo, 'current.json'))
+    const { promotedToCurrent } = await registerSeason(
+      '2025-april',
+      '2025-04-19',
+      undefined,
+      repo,
+      () => '2099-01-01T00:00:00.000Z',
+    )
+    expect(promotedToCurrent).toBe(false)
+    const after = await readJson<SeasonShape>(join(repo, 'current.json'))
+    expect(after).toEqual(before)
   })
 })

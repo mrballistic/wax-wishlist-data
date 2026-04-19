@@ -10,6 +10,12 @@ export type SeasonStatus = z.infer<typeof SeasonStatusSchema>
 /**
  * Matches Swift `CurrentSeasonDTO` in WaxWishlist/Sources/DataContract/DTOs.swift.
  * All fields required; camelCase preserved.
+ *
+ * `contentUpdatedAt` is an ISO-8601 timestamp stamped every time the release
+ * list for the current season is regenerated (e.g. a re-ingest that adds art
+ * coverage). iOS clients compare it against their local copy and refetch
+ * `releasesUrl` when the remote timestamp is newer. Optional on the wire for
+ * backwards compatibility with clients that predate the field.
  */
 export const CurrentSeasonSchema = z
   .object({
@@ -21,6 +27,7 @@ export const CurrentSeasonSchema = z
     status: SeasonStatusSchema,
     releasesUrl: z.string().url(),
     artBaseUrl: z.string().url(),
+    contentUpdatedAt: z.string().datetime({ offset: true }).optional(),
   })
   .strict()
 export type CurrentSeason = z.infer<typeof CurrentSeasonSchema>

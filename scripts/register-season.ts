@@ -98,8 +98,15 @@ function parseArgs(argv: string[]): Args | null {
  *
  *   1. `seasons.json` — upserted by id and kept sorted newest-first.
  *   2. `current.json` — promoted to point at this season **iff** the new date
- *      is strictly later than the existing `current.json.date`. Re-ingesting
- *      an older season is therefore a safe no-op at the top level.
+ *      is strictly later than the existing `current.json.date` **or** the
+ *      season being registered is the same one `current.json` already points
+ *      at (a re-ingest of the active season). Registering an older season
+ *      never touches `current.json`.
+ *
+ * On every write to `current.json` we stamp a fresh `contentUpdatedAt`. iOS
+ * clients use that timestamp as the refresh signal: if it moves forward, the
+ * client refetches `releasesUrl` even when id/status haven't changed, picking
+ * up things like newly-enriched art coverage.
  *
  * Status defaults to `upcoming` for new entries and is preserved when updating
  * an existing entry (the `update-status` workflow is the single source of
@@ -110,6 +117,7 @@ export async function registerSeason(
   date: string,
   labelOverride?: string,
   repoRoot: string = resolve(process.cwd()),
+  now: () => string = () => new Date().toISOString(),
 ): Promise<{ registered: Season; promotedToCurrent: boolean }> {
   const label = labelOverride ?? deriveLabel(seasonId)
   if (!label) {
@@ -136,9 +144,10 @@ export async function registerSeason(
   await writeSeasons(resolve(repoRoot, 'seasons.json'), next)
 
   const current = await loadCurrent(repoRoot)
+  const shouldUpdateCurrent = date > current.date || seasonId === current.id
   let promoted = false
-  if (date > current.date) {
-    const currentEntry: CurrentSeason = { ...entry }
+  if (shouldUpdateCurrent) {
+    const currentEntry: CurrentSeason = { ...entry, contentUpdatedAt: now() }
     await writeCurrent(resolve(repoRoot, 'current.json'), currentEntry)
     promoted = true
   }
