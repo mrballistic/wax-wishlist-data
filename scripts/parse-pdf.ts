@@ -4,26 +4,28 @@ import type { TextItem } from 'pdfjs-dist/types/src/display/api.js'
 import { type RawRelease, RawReleaseSchema } from './types.js'
 
 /**
- * Approximate X-coordinates of the five columns in the standard
- * Record Store Day release list PDF layout. Observed consistent across
- * the 2025 and 2026 April drops; revisit if a future season's PDF
- * uses a different grid.
+ * Column names for the standard Record Store Day release list PDF layout:
+ * a category letter (E/L/F), then artist/title/label/format.
+ *
+ * The X-coordinates aren't constant across PDFs — the April 2025, April 2026,
+ * and Black Friday 2025 drops all use the same 5-column structure but with
+ * different absolute X values (the whole grid is shifted by ~10–25pt between
+ * drops). We auto-detect the grid from the document's own data rows rather
+ * than hard-coding coordinates that need revisiting every season.
  */
-const COLUMNS = {
-  category: 41,
-  artist: 55,
-  title: 211,
-  label: 431,
-  format: 509,
-} as const
+const COLUMN_NAMES = ['category', 'artist', 'title', 'label', 'format'] as const
 
-type ColumnName = keyof typeof COLUMNS
+type ColumnName = (typeof COLUMN_NAMES)[number]
+type ColumnGrid = Record<ColumnName, number>
 
 /** Tolerance (pt) for snapping a text item to the nearest column. */
 const COL_SNAP_TOLERANCE = 30
 
 /** Tolerance (pt) for clustering text items into the same row. */
 const ROW_Y_TOLERANCE = 2
+
+/** Minimum number of well-formed reference rows needed to trust the detected grid. */
+const MIN_REFERENCE_ROWS = 3
 
 /**
  * RSD uses single-letter category codes in column 1:
@@ -83,14 +85,14 @@ function splitLabelFormat(label: string): { label: string; format: string } | nu
 }
 
 /**
- * Extract structured rows from a single page's text items.
- * Returns only rows that begin with a recognized category code (E/L/F).
+ * Group text fragments into rows by Y-coordinate. Fragments on the same line
+ * (within `ROW_Y_TOLERANCE`) end up in the same row. Rows are returned in
+ * top-to-bottom, left-to-right order.
  */
-function extractRowsFromPage(items: TextFragment[]): ParsedRow[] {
-  items.sort((a, b) => b.y - a.y || a.x - b.x)
-
+function groupIntoRows(items: TextFragment[]): TextFragment[][] {
+  const sorted = [...items].sort((a, b) => b.y - a.y || a.x - b.x)
   const rows: TextFragment[][] = []
-  for (const frag of items) {
+  for (const frag of sorted) {
     const last = rows[rows.length - 1]
     if (last && Math.abs((last[0]?.y ?? frag.y) - frag.y) < ROW_Y_TOLERANCE) {
       last.push(frag)
@@ -98,12 +100,68 @@ function extractRowsFromPage(items: TextFragment[]): ParsedRow[] {
       rows.push([frag])
     }
   }
+  return rows
+}
+
+function median(xs: number[]): number {
+  const sorted = [...xs].sort((a, b) => a - b)
+  const mid = Math.floor(sorted.length / 2)
+  return sorted.length % 2 === 0
+    ? ((sorted[mid - 1] ?? 0) + (sorted[mid] ?? 0)) / 2
+    : (sorted[mid] ?? 0)
+}
+
+/**
+ * Auto-detect the five column X-coordinates from the document's data rows.
+ *
+ * A "reference row" is a row whose first fragment is exactly a category code
+ * (E / L / F) and which has exactly five fragments. Rows meeting those
+ * criteria are guaranteed to be well-formed data rows — for each column we
+ * take the median X across all reference rows. That survives occasional
+ * malformed rows and yields a tight grid even if the document mixes layouts.
+ */
+function detectColumnGrid(allRows: TextFragment[][]): ColumnGrid | null {
+  const referenceXs: number[][] = [[], [], [], [], []]
+  for (const row of allRows) {
+    if (row.length !== 5) continue
+    const first = row[0]
+    if (!first) continue
+    const cat = first.s.trim()
+    if (!(cat in CATEGORY_MAP)) continue
+    const sorted = [...row].sort((a, b) => a.x - b.x)
+    for (let i = 0; i < 5; i++) {
+      const xs = referenceXs[i]
+      const frag = sorted[i]
+      if (xs && frag) xs.push(frag.x)
+    }
+  }
+
+  const counts = referenceXs.map((xs) => xs.length)
+  if (Math.min(...counts) < MIN_REFERENCE_ROWS) return null
+
+  const medians = referenceXs.map((xs) => median(xs))
+  return {
+    category: medians[0] ?? 0,
+    artist: medians[1] ?? 0,
+    title: medians[2] ?? 0,
+    label: medians[3] ?? 0,
+    format: medians[4] ?? 0,
+  }
+}
+
+/**
+ * Extract structured rows from a page's text items using a previously
+ * detected column grid. Only rows that begin with a recognized category
+ * code (E/L/F) near the category column are emitted.
+ */
+function extractRowsFromPage(items: TextFragment[], grid: ColumnGrid): ParsedRow[] {
+  const rows = groupIntoRows(items)
 
   const out: ParsedRow[] = []
   for (const row of rows) {
     const first = row[0]
     if (!first) continue
-    if (Math.abs(first.x - COLUMNS.category) > 10) continue
+    if (Math.abs(first.x - grid.category) > 10) continue
     const cat = first.s.trim()
     const categoryLabel = CATEGORY_MAP[cat]
     if (!categoryLabel) continue
@@ -120,8 +178,8 @@ function extractRowsFromPage(items: TextFragment[]): ParsedRow[] {
       if (frag === first) continue
       let bestCol: ColumnName | null = null
       let bestDist = Infinity
-      for (const [name, col] of Object.entries(COLUMNS) as [ColumnName, number][]) {
-        const d = Math.abs(frag.x - col)
+      for (const name of COLUMN_NAMES) {
+        const d = Math.abs(frag.x - grid[name])
         if (d <= COL_SNAP_TOLERANCE && d < bestDist) {
           bestCol = name
           bestDist = d
@@ -194,6 +252,29 @@ export async function parsePdf(pdfBuffer: Buffer): Promise<RawRelease[]> {
   const data = new Uint8Array(pdfBuffer)
   const doc = await getDocument({ data, verbosity: 0 }).promise
 
+  // First pass: collect all fragments and their row groupings across every
+  // page so we can detect the column grid from the document's own data.
+  const pages: TextFragment[][] = []
+  const allRows: TextFragment[][] = []
+  for (let p = 1; p <= doc.numPages; p++) {
+    const page = await doc.getPage(p)
+    const content = await page.getTextContent()
+    const fragments: TextFragment[] = content.items
+      .filter((it): it is TextItem => 'str' in it && it.str.trim().length > 0)
+      .map((it) => ({ x: it.transform[4], y: it.transform[5], s: it.str }))
+    pages.push(fragments)
+    allRows.push(...groupIntoRows(fragments))
+  }
+
+  const grid = detectColumnGrid(allRows)
+  if (!grid) {
+    throw new Error(
+      `Could not detect a 5-column grid from the PDF: fewer than ${MIN_REFERENCE_ROWS} ` +
+        `well-formed data rows (E/L/F + 4 fields) were found. The layout may have ` +
+        `changed — inspect the PDF's text positions and extend parse-pdf.ts.`,
+    )
+  }
+
   const releases: RawRelease[] = []
   const seenIds = new Map<string, number>()
   // Dedup on the full product tuple (artist + title + format + label +
@@ -203,15 +284,8 @@ export async function parsePdf(pdfBuffer: Buffer): Promise<RawRelease[]> {
   // differ on `format` so they survive dedup as distinct products.
   const seenTuples = new Set<string>()
 
-  for (let p = 1; p <= doc.numPages; p++) {
-    const page = await doc.getPage(p)
-    const content = await page.getTextContent()
-
-    const fragments: TextFragment[] = content.items
-      .filter((it): it is TextItem => 'str' in it && it.str.trim().length > 0)
-      .map((it) => ({ x: it.transform[4], y: it.transform[5], s: it.str }))
-
-    for (const row of extractRowsFromPage(fragments)) {
+  for (const fragments of pages) {
+    for (const row of extractRowsFromPage(fragments, grid)) {
       const tupleKey = [row.artist, row.title, row.format, row.label, row.category].join('|')
       if (seenTuples.has(tupleKey)) continue
       seenTuples.add(tupleKey)
