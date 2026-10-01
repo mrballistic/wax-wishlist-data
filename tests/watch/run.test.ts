@@ -141,6 +141,56 @@ describe('runWatch', () => {
     expect(parser.extract).toHaveBeenCalledTimes(1)
   })
 
+  it('falls back to an older list when the newest candidate is not a list', async () => {
+    const pledge = obj('2026/RSD Black Friday 2026/RSD_BF26_Pledge_Form.pdf', '"91ed9e01"', '2026-10-28T18:00:00.000Z')
+    const parser = extractor('parser', async () => novemberRows)
+    vi.mocked(parser.extract).mockImplementation(async (pdf: Buffer) => {
+      if (pdf.toString() === pledge.key) throw new Error('Could not detect a 5-column grid')
+      return novemberRows
+    })
+    const gemini = extractor('gemini', async () => [])
+    const d = deps([APRIL, BF, pledge], [parser, gemini], {
+      fetchPdf: vi.fn(async (key: string) => Buffer.from(key)),
+    })
+    const out = await runWatch(opts(), d)
+    expect(out).toEqual(
+      expect.arrayContaining([
+        { key: pledge.key, seasonId: null, outcome: 'not-a-list', extractor: null },
+        { key: BF_KEY, seasonId: '2026-november', outcome: 'published', extractor: 'parser' },
+      ]),
+    )
+    expect(out).toHaveLength(2)
+    expect(d.publish).toHaveBeenCalledTimes(1)
+    expect(d.issues.ensure).not.toHaveBeenCalled()
+  })
+
+  it('keeps going after a publish failure and rejects at the end', async () => {
+    const april27 = obj('2027/RSD 2027/2027_RSD_PUBLIC_PDF.pdf', '"27272727"', '2026-10-15T00:00:00.000Z')
+    const calendar = JSON.parse(await readFile(join(repo, 'calendar.json'), 'utf8'))
+    await writeFile(join(repo, 'calendar.json'), JSON.stringify({ ...calendar, '2027': '2027-04-17' }))
+    const publish = vi.fn(async (input: { seasonId: string }) => {
+      if (input.seasonId === '2026-november') throw new Error('Discogs exploded')
+    })
+    const parser = extractor('parser', async () => novemberRows)
+    vi.mocked(parser.extract).mockImplementation(async (pdf: Buffer) =>
+      pdf.toString() === april27.key ? aprilRows : novemberRows,
+    )
+    const d = deps([APRIL, BF, april27], [parser], {
+      publish,
+      fetchPdf: vi.fn(async (key: string) => Buffer.from(key)),
+    })
+    await expect(runWatch(opts(), d)).rejects.toThrow(/2026-november/)
+    expect(publish).toHaveBeenCalledTimes(2)
+    expect(publish).toHaveBeenCalledWith(expect.objectContaining({ seasonId: '2027-april' }))
+    expect(d.issues.ensure).toHaveBeenCalledWith(
+      'watch-rsd: could not publish 2026-november (bf26bf26)',
+      expect.stringContaining('Discogs exploded'),
+    )
+    const onDisk = await sourcesOnDisk()
+    expect(onDisk.find((s) => s.key === BF_KEY)?.outcome).toBe('failed')
+    expect(onDisk.find((s) => s.key === april27.key)?.outcome).toBe('published')
+  })
+
   it('pending key older than the published copy is superseded', async () => {
     const stale = obj('2026/old/2026_RSD_PUBLIC_PDF.pdf', '"57a1e000"', '2026-03-01T00:00:00.000Z')
     const parser = extractor('parser', async () => aprilRows)

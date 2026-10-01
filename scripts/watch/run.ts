@@ -53,9 +53,26 @@ export interface WatchOutcome {
 const message = (err: unknown): string => (err instanceof Error ? err.message : JSON.stringify(err))
 
 /**
- * One watcher run: list the bucket, find new/revised/failed PDFs, pick one
- * per season, run the cascade, and publish or file an issue. All side
- * effects go through `deps`.
+ * Thrown at the end of a run in which a gate-passed list failed to publish.
+ * The run still processed every other season and committed its state first;
+ * `outcomes` carries the full table so the CLI can still report it.
+ */
+export class WatchPublishError extends Error {
+  override name = 'WatchPublishError'
+  constructor(
+    readonly failures: { seasonId: string; key: string; error: string }[],
+    readonly outcomes: WatchOutcome[],
+  ) {
+    super(`Publishing failed for ${failures.map((f) => `${f.seasonId} (${f.key}): ${f.error}`).join('; ')}`)
+  }
+}
+
+/**
+ * One watcher run: list the bucket, find new/revised/failed PDFs, try each
+ * season's candidates newest-first until one publishes or fails (skipping
+ * not-a-list PDFs), and publish or file an issue. All side effects go
+ * through `deps`. Rejects with `WatchPublishError` after the state commit if
+ * any publish step threw.
  */
 export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<WatchOutcome[]> {
   const live = !opts.dryRun
@@ -87,6 +104,7 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
   const calendar = await loadCalendar(resolve(opts.repoRoot, 'calendar.json'))
   const outcomes: WatchOutcome[] = []
   let stateChanged = false
+  const publishFailures: { seasonId: string; key: string; error: string }[] = []
 
   const record = (
     obj: BucketObject,
@@ -110,24 +128,23 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
     stateChanged = true
   }
 
-  const processKey = async (obj: BucketObject, seasonId: string): Promise<void> => {
-    const fail = async (body: string): Promise<void> => {
+  const processKey = async (obj: BucketObject, seasonId: string): Promise<SourceOutcome> => {
+    const fail = async (body: string): Promise<SourceOutcome> => {
       record(obj, seasonId, 'failed', null)
       if (live) await deps.issues.ensure(failureIssueTitle(seasonId, obj.etag), `Source: \`${obj.key}\`\n\n${body}`)
+      return 'failed'
     }
 
     const date = seasonDate(seasonId, calendar)
     if (!date) {
-      await fail(`No date for ${seasonId}: add the year's April date to calendar.json. The watcher retries daily.`)
-      return
+      return fail(`No date for ${seasonId}: add the year's April date to calendar.json. The watcher retries daily.`)
     }
 
     let pdf: Buffer
     try {
       pdf = await deps.fetchPdf(obj.key)
     } catch (err) {
-      await fail(`Downloading the PDF failed: ${message(err)}`)
-      return
+      return fail(`Downloading the PDF failed: ${message(err)}`)
     }
     const pdfText = await deps.pdfText(pdf).catch((err: unknown) => {
       deps.log(`pdf text layer failed for ${obj.key}: ${message(err)}`)
@@ -148,7 +165,7 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
       record(obj, seasonId, 'published', result.extractor)
       if (!live) {
         deps.log(`[dry-run] would publish ${seasonId}: ${result.releases.length} releases via ${result.extractor}`)
-        return
+        return 'published'
       }
       try {
         await deps.publish({ repoRoot: opts.repoRoot, seasonId, date, releases: result.releases })
@@ -163,22 +180,31 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
           `Published ${sha ? `in ${sha}` : '(no file changes)'} from \`${obj.key}\` via ${result.extractor}.`,
         )
       } catch (err) {
-        await deps.issues.ensure(
-          failureIssueTitle(seasonId, obj.etag),
-          `Source: \`${obj.key}\`\n\nThe list passed the gate but publishing failed: ${message(err)}\n\n${result.report}`,
-        )
-        throw err
+        // Keep going with the other seasons; the run rejects at the end.
+        deps.log(`publishing ${seasonId} from ${obj.key} failed: ${message(err)}`)
+        publishFailures.push({ seasonId, key: obj.key, error: message(err) })
+        record(obj, seasonId, 'failed', null)
+        try {
+          await deps.issues.ensure(
+            failureIssueTitle(seasonId, obj.etag),
+            `Source: \`${obj.key}\`\n\nThe list passed the gate but publishing failed: ${message(err)}\n\n${result.report}`,
+          )
+        } catch (issueErr) {
+          // Don't let a GitHub hiccup mask the publish error.
+          deps.log(`opening the failure issue for ${seasonId} also failed: ${message(issueErr)}`)
+        }
+        return 'failed'
       }
-      return
+      return 'published'
     }
 
     // Pledge forms, logo packs and the like: no list in the name, the parser
     // found nothing, and an LLM actually looked and found no valid list.
     if (!hasListSignal(obj.key) && !result.parserFoundRows && result.llmRan) {
       record(obj, null, 'not-a-list', null)
-      return
+      return 'not-a-list'
     }
-    await fail(result.report)
+    return fail(result.report)
   }
 
   const bySeason = new Map<string, BucketObject[]>()
@@ -201,15 +227,26 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
       .map((s) => s.lastModified)
       .sort()
       .at(-1)
-    const newest = [...candidates].sort((a, b) => b.lastModified.localeCompare(a.lastModified))[0]
-    const winner = newest && (!newestPublished || newest.lastModified > newestPublished) ? newest : undefined
-    for (const obj of candidates) if (obj !== winner) record(obj, seasonId, 'superseded', null)
-    if (winner) await processKey(winner, seasonId)
+    // Newest first. A not-a-list PDF (a pledge form uploaded after the real
+    // list) must not bury the list, so fall through to the next older one;
+    // stop at the first that publishes or fails. Everything after that, and
+    // anything not newer than the published copy, is superseded.
+    const ordered = [...candidates].sort((a, b) => b.lastModified.localeCompare(a.lastModified))
+    let settled = false
+    for (const obj of ordered) {
+      const eligible = !newestPublished || obj.lastModified > newestPublished
+      if (settled || !eligible) {
+        record(obj, seasonId, 'superseded', null)
+        continue
+      }
+      if ((await processKey(obj, seasonId)) !== 'not-a-list') settled = true
+    }
   }
 
   if (live && stateChanged) {
     await saveSources(opts.sourcesPath, sources)
     await deps.git.commitAndPush('chore: watch-rsd state', ['sources.json'])
   }
+  if (publishFailures.length > 0) throw new WatchPublishError(publishFailures, outcomes)
   return outcomes
 }
