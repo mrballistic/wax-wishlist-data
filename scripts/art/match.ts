@@ -86,7 +86,8 @@ export function scoreCandidate(release: RawRelease, candidate: ArtCandidate, art
   if (rTitle.size === 0) return 0
 
   if (candidate.artist !== undefined && candidate.title !== undefined) {
-    const a = rArtist.size ? shared(tokens(candidate.artist), rArtist) / rArtist.size : 0
+    const cArtist = tokens(candidate.artist)
+    const a = rArtist.size ? shared(cArtist, rArtist) / Math.max(cArtist.size, rArtist.size) : 0
     const t = shared(tokens(candidate.title), rTitle) / rTitle.size
     return 0.4 * a + 0.6 * t
   }
@@ -103,14 +104,15 @@ export function scoreCandidate(release: RawRelease, candidate: ArtCandidate, art
   }
   // 2. Artist only, covering at least half the artist: trusted only when unambiguous.
   if (subset(f, rArtist) && f.size >= halfArtist) {
-    return artistReleaseCount === 1 ? MATCH.artistOnlyUnique : MATCH.artistOnlyShared
+    return artistReleaseCount === 1 && f.size === rArtist.size ? MATCH.artistOnlyUnique : MATCH.artistOnlyShared
   }
   // 4. Partial artist (e.g. "gilmour.jpg"): a suggestion at most.
   if (subset(f, rArtist)) return MATCH.partialArtist
   // 3. Title only: must cover every title token to be acceptable.
   if (artistHit === 0 && titleHit >= 1) {
     const score = titleHit / rTitle.size
-    return titleHit === rTitle.size ? score : Math.min(score, MATCH.titlePartialCap)
+    const leftover = [...f].filter((t) => !rArtist.has(t) && !rTitle.has(t))
+    return titleHit === rTitle.size && leftover.length === 0 ? score : Math.min(score, MATCH.titlePartialCap)
   }
   return 0
 }
@@ -158,6 +160,14 @@ export function matchReleases(releases: RawRelease[], candidates: ArtCandidate[]
     } else if (ranked.length > 0) {
       result.suggestions.set(r.id, ranked.slice(0, MATCH.maxSuggestions))
     }
+  }
+
+  // An image that fits another release in the season at least as well belongs to that one.
+  for (const [id, c] of [...result.accepted]) {
+    const owned = season.some(
+      (o) => baseId(o.id) !== baseId(id) && scoreCandidate(o, c, artistCounts.get(artistKey(o.artist)) ?? 1) >= c.score - EPS,
+    )
+    if (owned) demote(result, id)
   }
 
   // One image, one release (except -2/-3 format variants of one title).

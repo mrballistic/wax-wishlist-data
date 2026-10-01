@@ -90,8 +90,40 @@ describe('matchReleases', () => {
     const c = rel('other-album', 'Other', 'Album')
     const img = site('Band', 'Album', 5)
     expect(matchReleases([a, b], [img], [a, b]).accepted.size).toBe(2)
-    const conflicted = matchReleases([a, c], [site('Band Other', 'Album', 6)], [a, c])
-    expect(conflicted.accepted.size).toBe(0)
+    // Two different releases that fit one image equally well: neither is accepted.
+    const d = rel('d1', 'Band', 'Album')
+    const e = rel('e1', 'Band', 'Album')
+    expect(matchReleases([d, e], [site('Band', 'Album', 6)], [d, e]).accepted.size).toBe(0)
+    // A better owner elsewhere in the season keeps the image from a weaker release.
+    expect(matchReleases([a, c], [site('Band', 'Album', 7)], [a, c]).accepted.has('other-album')).toBe(false)
+  })
+
+  it('does not accept a site entry whose artist has extra foreign tokens', () => {
+    const a = rel('band-album', 'Band', 'Album')
+    expect(scoreCandidate(a, site('Band Other', 'Album', 6), 1)).toBeCloseTo(0.8)
+    const res = matchReleases([a], [site('Band Other', 'Album', 6)], [a])
+    expect(res.accepted.size).toBe(0)
+    expect(res.suggestions.get('band-album')?.length).toBe(1)
+  })
+
+  it('caps a filename that carries a foreign artist even if the title matches exactly', () => {
+    const r = rel('gh', 'Artist X', 'Greatest Hits')
+    const score = scoreCandidate(r, bucket('x/Other Band - Greatest Hits.jpg'), 1)
+    expect(score).toBeLessThanOrEqual(MATCH.titlePartialCap)
+    expect(scoreCandidate(r, bucket('x/Greatest Hits.jpg'), 1)).toBeCloseTo(1)
+  })
+
+  it('gives a partial-artist filename the shared score even for a unique artist', () => {
+    const r = rel('bk', 'Black Keys', 'Brothers')
+    expect(scoreCandidate(r, bucket('x/Black.jpg'), 1)).toBe(MATCH.artistOnlyShared)
+    expect(scoreCandidate(r, bucket('x/Black Keys.jpg'), 1)).toBe(MATCH.artistOnlyUnique)
+  })
+
+  it('does not take an image that belongs to another release in the season, even one that already has art', () => {
+    const pink = rel('pink-animals', 'Pink', 'Animals')
+    const floyd = rel('pink-floyd-animals', 'Pink Floyd', 'Animals')
+    const res = matchReleases([pink], [bucket('x/Pink Floyd - Animals.jpg')], [pink, floyd])
+    expect(res.accepted.has('pink-animals')).toBe(false)
   })
 
   it('demotes site matches whose photo id is far from the season median', () => {
