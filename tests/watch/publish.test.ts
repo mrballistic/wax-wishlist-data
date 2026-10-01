@@ -4,8 +4,10 @@ import { join } from 'node:path'
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import type { DiscogsInput } from '../../scripts/enrich-discogs.js'
 import { registerSeason } from '../../scripts/register-season.js'
-import type { RawRelease, Release } from '../../scripts/types.js'
+import type { SiteIndex } from '../../scripts/rsd/site-index.js'
+import type { Release } from '../../scripts/types.js'
 import { publishSeason } from '../../scripts/watch/publish.js'
 import { makeRelease, REPO_ROOT } from '../helpers/releases.js'
 
@@ -16,8 +18,9 @@ beforeEach(async () => {
   await cp(join(REPO_ROOT, 'current.json'), join(repo, 'current.json'))
 })
 
-const enrich = async (raw: RawRelease[]): Promise<Release[]> =>
-  raw.map((r) => ({ ...r, discogsMasterId: null, artFilename: `${r.id}.jpg` }))
+const enrich = async (raw: DiscogsInput[]): Promise<Release[]> =>
+  raw.map((r) => ({ ...r, discogsMasterId: r.discogsMasterId ?? null, artFilename: `${r.id}.jpg` }))
+const noSite = async (): Promise<SiteIndex | null> => null
 
 describe('publishSeason', () => {
   it('writes releases, fetches art, and registers the season', async () => {
@@ -25,7 +28,12 @@ describe('publishSeason', () => {
     const releases = [makeRelease(2), makeRelease(1)]
     await publishSeason(
       { repoRoot: repo, seasonId: '2026-november', date: '2026-11-27', releases },
-      { enrich, fetchArt, register: (id, date, label, root) => registerSeason(id, date, label, root) },
+      {
+        enrich,
+        fetchArt,
+        register: (id, date, label, root) => registerSeason(id, date, label, root),
+        siteIndex: noSite,
+      },
     )
 
     const written = JSON.parse(await readFile(join(repo, 'releases/2026-november/releases.json'), 'utf8'))
@@ -39,36 +47,126 @@ describe('publishSeason', () => {
     expect(current.id).toBe('2026-november')
   })
 
-  it('keeps a previous discogsMasterId on a revision when enrichment returns null', async () => {
+  it('carries previous ids and site fields forward into enrichment on a revision', async () => {
     const dir = join(repo, 'releases/2026-november')
     await mkdir(dir, { recursive: true })
     const previous: Release[] = [
-      { ...makeRelease(1), discogsMasterId: 111, artFilename: 'artist-1-title-1.jpg' },
+      {
+        ...makeRelease(1),
+        description: 'Old words',
+        discogsMasterId: 111,
+        artFilename: 'artist-1-title-1.jpg',
+        tracklist: ['A1. One'],
+        quantity: 500,
+        upc: '012345678905',
+        rsdUrl: 'https://recordstoreday.com/SpecialRelease/1',
+      },
       { ...makeRelease(2), discogsMasterId: 222, artFilename: 'artist-2-title-2.jpg' },
     ]
     await writeFile(join(dir, 'releases.json'), JSON.stringify(previous))
-    const enrichWithOneHit = async (raw: RawRelease[]): Promise<Release[]> =>
-      raw.map((r) => ({
-        ...r,
-        discogsMasterId: r.id === 'artist-2-title-2' ? 999 : null,
-        artFilename: `${r.id}.jpg`,
-      }))
+    const seen: DiscogsInput[] = []
+    const enrichSpy = async (raw: DiscogsInput[]): Promise<Release[]> => {
+      seen.push(...raw)
+      return enrich(raw)
+    }
 
     await publishSeason(
       {
         repoRoot: repo,
         seasonId: '2026-november',
         date: '2026-11-27',
-        releases: [makeRelease(1), makeRelease(2), makeRelease(3)],
+        releases: [makeRelease(1), makeRelease(2, { description: 'Fresh PDF words' }), makeRelease(3)],
       },
-      { enrich: enrichWithOneHit, fetchArt: async () => {}, register: async () => {} },
+      { enrich: enrichSpy, fetchArt: async () => {}, register: async () => {}, siteIndex: noSite },
     )
 
+    expect(seen.map((r) => r.discogsMasterId)).toEqual([111, 222, null])
     const written: Release[] = JSON.parse(await readFile(join(dir, 'releases.json'), 'utf8'))
-    expect(Object.fromEntries(written.map((r) => [r.id, r.discogsMasterId]))).toEqual({
-      'artist-1-title-1': 111, // carried forward
-      'artist-2-title-2': 999, // fresh lookup wins
-      'artist-3-title-3': null, // new release, nothing to carry
+    expect(written[0]).toMatchObject({
+      description: 'Old words',
+      discogsMasterId: 111,
+      tracklist: ['A1. One'],
+      quantity: 500,
+      upc: '012345678905',
+      rsdUrl: 'https://recordstoreday.com/SpecialRelease/1',
     })
+    expect(written[1]).toMatchObject({ description: 'Fresh PDF words', discogsMasterId: 222 })
+    expect(written[2]).toMatchObject({ discogsMasterId: null, description: '' })
+    expect(written[2]).not.toHaveProperty('tracklist')
+  })
+
+  it('keeps a previous discogsMasterId when enrichment returns null', async () => {
+    const dir = join(repo, 'releases/2026-november')
+    await mkdir(dir, { recursive: true })
+    await writeFile(
+      join(dir, 'releases.json'),
+      JSON.stringify([{ ...makeRelease(1), discogsMasterId: 111, artFilename: 'artist-1-title-1.jpg' }]),
+    )
+    const forgetful = async (raw: DiscogsInput[]): Promise<Release[]> =>
+      raw.map((r) => ({ ...r, discogsMasterId: null, artFilename: `${r.id}.jpg` }))
+    await publishSeason(
+      { repoRoot: repo, seasonId: '2026-november', date: '2026-11-27', releases: [makeRelease(1)] },
+      { enrich: forgetful, fetchArt: async () => {}, register: async () => {}, siteIndex: noSite },
+    )
+    const written: Release[] = JSON.parse(await readFile(join(dir, 'releases.json'), 'utf8'))
+    expect(written[0]?.discogsMasterId).toBe(111)
+  })
+
+  it('fills fields from the site index before Discogs, so the UPC reaches the lookup', async () => {
+    const siteIndex = vi.fn(async (): Promise<SiteIndex | null> => ({
+      seasonId: '2026-november',
+      eventId: 599,
+      entries: [
+        {
+          releaseId: '42',
+          artist: 'Artist 1',
+          title: 'Title 1',
+          photoId: 9,
+          format: 'LP',
+          label: 'Label',
+          description: 'From the site',
+          tracklist: ['A1. Song'],
+          quantity: 1500,
+          upc: '075678604034',
+          pageUrl: 'https://recordstoreday.com/SpecialRelease/42',
+        },
+      ],
+    }))
+    const seen: DiscogsInput[] = []
+    const enrichSpy = async (raw: DiscogsInput[]): Promise<Release[]> => {
+      seen.push(...raw)
+      return enrich(raw)
+    }
+    await publishSeason(
+      {
+        repoRoot: repo,
+        seasonId: '2026-november',
+        date: '2026-11-27',
+        releases: [makeRelease(1), makeRelease(2, { artist: 'Someone Else', title: 'Unrelated' })],
+      },
+      { enrich: enrichSpy, fetchArt: async () => {}, register: async () => {}, siteIndex },
+    )
+    expect(siteIndex).toHaveBeenCalledWith('2026-november', 2)
+    expect(seen[0]?.upc).toBe('075678604034')
+    const written: Release[] = JSON.parse(await readFile(join(repo, 'releases/2026-november/releases.json'), 'utf8'))
+    expect(written[0]).toMatchObject({
+      description: 'From the site',
+      tracklist: ['A1. Song'],
+      quantity: 1500,
+      upc: '075678604034',
+      rsdUrl: 'https://recordstoreday.com/SpecialRelease/42',
+    })
+    expect(written[1]).not.toHaveProperty('rsdUrl')
+  })
+
+  it('publishes without site enrichment when the index is null or fails', async () => {
+    for (const siteIndex of [noSite, async (): Promise<SiteIndex | null> => Promise.reject(new Error('blocked'))]) {
+      await publishSeason(
+        { repoRoot: repo, seasonId: '2026-november', date: '2026-11-27', releases: [makeRelease(1)] },
+        { enrich, fetchArt: async () => {}, register: async () => {}, siteIndex },
+      )
+      const written: Release[] = JSON.parse(await readFile(join(repo, 'releases/2026-november/releases.json'), 'utf8'))
+      expect(written).toEqual([{ ...makeRelease(1), discogsMasterId: null, artFilename: 'artist-1-title-1.jpg' }])
+    }
   })
 })

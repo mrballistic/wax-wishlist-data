@@ -13,8 +13,27 @@ interface DiscogsSearchHit {
   id?: number
 }
 
+/** A release before Discogs: optionally already enriched (a carried-forward id, a site UPC). */
+export type DiscogsInput = RawRelease & Partial<Omit<Release, keyof RawRelease>>
+
 interface DiscogsSearchResponse {
   results?: DiscogsSearchHit[]
+}
+
+const HEADERS = (consumerKey: string, consumerSecret: string): Record<string, string> => ({
+  Authorization: `Discogs key=${consumerKey}, secret=${consumerSecret}`,
+  'User-Agent': 'wax-wishlist-data/0.1 (+https://github.com/mrballistic/wax-wishlist-data)',
+})
+
+async function search(
+  url: URL,
+  consumerKey: string,
+  consumerSecret: string,
+): Promise<DiscogsSearchHit | null> {
+  const res = await fetch(url, { headers: HEADERS(consumerKey, consumerSecret) })
+  if (!res.ok) return null
+  const body = (await res.json()) as DiscogsSearchResponse
+  return body.results?.[0] ?? null
 }
 
 async function searchMasterId(
@@ -28,26 +47,36 @@ async function searchMasterId(
   url.searchParams.set('release_title', title)
   url.searchParams.set('type', 'master')
   url.searchParams.set('per_page', '1')
-
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Discogs key=${consumerKey}, secret=${consumerSecret}`,
-      'User-Agent': 'wax-wishlist-data/0.1 (+https://github.com/mrballistic/wax-wishlist-data)',
-    },
-  })
-
-  if (!res.ok) return null
-
-  const body = (await res.json()) as DiscogsSearchResponse
-  const first = body.results?.[0]
+  const first = await search(url, consumerKey, consumerSecret)
   return first?.master_id ?? first?.id ?? null
 }
 
+/** The master of the first release with this barcode; a release with no master gives null. */
+async function searchByBarcode(
+  upc: string,
+  consumerKey: string,
+  consumerSecret: string,
+): Promise<number | null> {
+  const url = new URL(DISCOGS_SEARCH_URL)
+  url.searchParams.set('barcode', upc)
+  url.searchParams.set('type', 'release')
+  url.searchParams.set('per_page', '1')
+  const first = await search(url, consumerKey, consumerSecret)
+  return first?.master_id ? first.master_id : null
+}
+
 async function lookup(
-  release: RawRelease,
+  release: DiscogsInput,
   consumerKey: string,
   consumerSecret: string,
 ): Promise<{ discogsMasterId: number | null }> {
+  // An exact barcode hit beats a fuzzy artist/title search.
+  if (release.upc) {
+    const byBarcode = await searchByBarcode(release.upc, consumerKey, consumerSecret)
+    if (byBarcode != null) return { discogsMasterId: byBarcode }
+    await sleep(RATE_LIMIT_MS)
+  }
+
   let masterId = await searchMasterId(release.artist, release.title, consumerKey, consumerSecret)
 
   // Retry once with edition suffix stripped — recovers many Deluxe /
@@ -69,13 +98,17 @@ async function lookup(
  * if either `DISCOGS_CONSUMER_KEY` or `DISCOGS_CONSUMER_SECRET` is unset, the
  * enricher returns a best-effort mapping with `discogsMasterId: null`.
  *
+ * An existing non-null `discogsMasterId` is kept without a request. When a
+ * `upc` is known it is tried first (`type=release` barcode search, the hit's
+ * `master_id`), then the artist/title search. Other fields pass through.
+ *
  * `artFilename` is always `<id>.jpg` — it names the release's art *slot*,
  * not a promise that the file exists. The art cascade and
  * wax-wishlist-art-admin both fill that slot later; the admin tool lists
  * releases whose slot is empty and commits to exactly that filename, so a
  * null here would make the release unfixable from the admin UI.
  */
-export async function enrichDiscogs(releases: RawRelease[]): Promise<Release[]> {
+export async function enrichDiscogs(releases: DiscogsInput[]): Promise<Release[]> {
   const consumerKey = process.env['DISCOGS_CONSUMER_KEY']
   const consumerSecret = process.env['DISCOGS_CONSUMER_SECRET']
   const enriched: Release[] = []
@@ -92,6 +125,11 @@ export async function enrichDiscogs(releases: RawRelease[]): Promise<Release[]> 
     const n = String(i + 1).padStart(pad, ' ')
     const label = `${raw.artist} – ${raw.title}`
 
+    if (raw.discogsMasterId != null) {
+      enriched.push({ ...raw, discogsMasterId: raw.discogsMasterId, artFilename: `${raw.id}.jpg` })
+      console.log(`[${n}/${total}] ${label} → master=${raw.discogsMasterId} (kept)`)
+      continue
+    }
     if (!consumerKey || !consumerSecret) {
       enriched.push({ ...raw, discogsMasterId: null, artFilename: `${raw.id}.jpg` })
       console.log(`[${n}/${total}] ${label} → skipped (no Discogs auth)`)
