@@ -149,8 +149,8 @@ what's already published, so the first run doesn't re-ingest history.
 
 Hand-maintained April dates (RSD announces them months ahead). Seeded with
 `{ "2025": "2025-04-12", "2026": "2026-04-18" }`; `2027` is added once it's
-announced. (Note: `seasons.json` currently has 2025-april dated 2025-04-19,
-which is wrong. Fixing that is a separate data change and out of scope here.)
+announced. (`seasons.json` had 2025-april dated 2025-04-19; corrected to
+2025-04-12 on 2026-09-30.)
 
 ## Extraction
 
