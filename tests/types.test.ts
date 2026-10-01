@@ -108,6 +108,57 @@ describe('ReleaseSchema / ReleaseListSchema', () => {
   })
 })
 
+describe('ReleaseSchema optional RSD fields', () => {
+  const RICH = {
+    ...VALID_RELEASE,
+    tracklist: ['A1. One', 'B1. Two'],
+    quantity: 2000,
+    upc: '075678604034',
+    rsdUrl: 'https://recordstoreday.com/Release/12345',
+  }
+  const fails = (extra: Record<string, unknown>): boolean =>
+    !ReleaseSchema.safeParse({ ...VALID_RELEASE, ...extra }).success
+
+  it('parses a release with all four new fields', () => {
+    expect(ReleaseSchema.parse(RICH)).toEqual(RICH)
+  })
+
+  it('parses a release with none of them', () => {
+    expect(ReleaseSchema.safeParse(VALID_RELEASE).success).toBe(true)
+  })
+
+  it('accepts an empty tracklist', () => {
+    expect(ReleaseSchema.safeParse({ ...VALID_RELEASE, tracklist: [] }).success).toBe(true)
+  })
+
+  it('rejects an empty tracklist entry', () => {
+    expect(fails({ tracklist: [''] })).toBe(true)
+  })
+
+  it('rejects quantity 0, -1 and 2.5; accepts null', () => {
+    expect(fails({ quantity: 0 })).toBe(true)
+    expect(fails({ quantity: -1 })).toBe(true)
+    expect(fails({ quantity: 2.5 })).toBe(true)
+    expect(fails({ quantity: null })).toBe(false)
+  })
+
+  it('validates upc as 8-14 digits or null', () => {
+    expect(fails({ upc: '12ab' })).toBe(true)
+    expect(fails({ upc: '1234567' })).toBe(true)
+    expect(fails({ upc: '075678604034' })).toBe(false)
+    expect(fails({ upc: null })).toBe(false)
+  })
+
+  it('validates rsdUrl as a URL or null', () => {
+    expect(fails({ rsdUrl: 'not a url' })).toBe(true)
+    expect(fails({ rsdUrl: null })).toBe(false)
+  })
+
+  it('still rejects unknown keys', () => {
+    expect(fails({ extra: 1 })).toBe(true)
+  })
+})
+
 describe('RawReleaseSchema', () => {
   it('accepts a raw release lacking enrichment fields', () => {
     const raw = {

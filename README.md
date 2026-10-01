@@ -71,9 +71,20 @@ Array of release objects:
   "category": "Exclusive Release",
   "description": "Debut reissue on translucent blue vinyl, limited to 2,000 copies.",
   "discogsMasterId": 1048576,       // nullable
-  "artFilename": "2026-april-001.jpg" // nullable; joined with artBaseUrl by the app
+  "artFilename": "2026-april-001.jpg", // nullable; joined with artBaseUrl by the app
+  "tracklist": ["A1. Low Tide", "B1. Dawn"],            // optional
+  "quantity": 2000,                                     // optional, nullable
+  "upc": "075678604034",                                // optional, nullable
+  "rsdUrl": "https://recordstoreday.com/Release/12345"  // optional, nullable
 }
 ```
+
+`tracklist`, `quantity`, `upc` and `rsdUrl` are optional and additive: older
+files without them stay valid, and the app can ignore them. All four come from
+the release's page on recordstoreday.com. `tracklist` is one string per line as
+printed there, `quantity` is the pressing size, `upc` is 8-14 digits, and
+`rsdUrl` is the release page itself. `quantity`, `upc` and `rsdUrl` are `null`
+when unknown. `description` is now populated from recordstoreday.com too.
 
 ## Prerequisites
 

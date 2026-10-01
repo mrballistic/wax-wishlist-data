@@ -68,6 +68,18 @@ export const ReleaseSchema = z
     description: z.string(),
     discogsMasterId: z.number().int().positive().nullable(),
     artFilename: z.string().min(1).nullable(),
+    /** Track listing as printed on recordstoreday.com, one line per entry. */
+    tracklist: z.array(z.string().min(1)).optional(),
+    /** Pressing size from recordstoreday.com; null when unknown. */
+    quantity: z.number().int().positive().nullable().optional(),
+    /** Barcode from recordstoreday.com; null when unknown. */
+    upc: z
+      .string()
+      .regex(/^\d{8,14}$/)
+      .nullable()
+      .optional(),
+    /** The release's recordstoreday.com page; null when unknown. */
+    rsdUrl: z.string().url().nullable().optional(),
   })
   .strict()
 export type Release = z.infer<typeof ReleaseSchema>
