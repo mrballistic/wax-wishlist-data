@@ -138,7 +138,10 @@ describe('gemini extractor', () => {
   })
 
   it('never returns partial output: MAX_TOKENS from one model moves on to the next', async () => {
-    const calls = script((m) => (m === M1 ? HttpResponse.json(reply('{"rows":[', 'MAX_TOKENS')) : ok()))
+    const partial = { rows: [{ ...ROWS.rows[0], artist: 'Partial', title: 'Cut off' }] }
+    const calls = script((m) =>
+      m === M1 ? HttpResponse.json(reply(JSON.stringify(partial), 'MAX_TOKENS')) : ok(),
+    )
     expect(await extractor.extract(pdf)).toEqual(ROWS.rows)
     expect(calls).toEqual([M1, M2])
     expect(extractor.detail?.()).toContain('finishReason MAX_TOKENS')
@@ -168,12 +171,20 @@ describe('gemini extractor', () => {
   it('waits the largest Retry-After seen in the round', async () => {
     script((m, n) => {
       if (n > 1) return ok()
-      if (m === M1) return status(429, { 'Retry-After': '7' })
-      if (m === M2) return status(429, { 'Retry-After': '12' })
+      if (m === M1) return status(429, { 'Retry-After': '12' })
+      if (m === M2) return status(429, { 'Retry-After': '7' })
       return status(503)
     })
     await extractor.extract(pdf)
     expect(sleep).toHaveBeenCalledWith(12_000)
+  })
+
+  it('ignores a non-numeric Retry-After and waits 60s', async () => {
+    script((m, n) =>
+      n > 1 ? ok() : status(429, { 'Retry-After': 'Wed, 21 Oct 2026 07:28:00 GMT' }),
+    )
+    await extractor.extract(pdf)
+    expect(sleep).toHaveBeenCalledWith(60_000)
   })
 
   it('caps a long Retry-After at 300s', async () => {
