@@ -31,6 +31,9 @@ concurrency:
 jobs:
   watch:
     runs-on: ubuntu-latest
+    # Gemini retries can wait minutes per PDF; never let a stuck run hold the
+    # concurrency group for the default six hours.
+    timeout-minutes: 60
     permissions:
       contents: write
       issues: write
