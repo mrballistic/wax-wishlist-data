@@ -1,7 +1,7 @@
 # Art coverage — design
 
 **Date:** 2026-10-01
-**Status:** Approved in conversation (2026-10-01)
+**Status:** Implemented (2026-10-01)
 **Scope:** Piece 2 of the data-pipeline rethink
 **Target:** In production before the RSD Black Friday 2026 list drops (late October 2026)
 
