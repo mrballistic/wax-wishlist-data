@@ -137,7 +137,9 @@ step. Design: `docs/superpowers/specs/2026-09-30-automatic-season-ingest-design.
 
 - **Extraction:** the positional parser first, then Gemini Flash
   (`GEMINI_API_KEY`), then Claude (`ANTHROPIC_API_KEY`, optional). The first
-  result that passes the quality gate wins.
+  result that passes the quality gate wins. Gemini tries a chain of Flash
+  models (`GEMINI_MODELS` in `scripts/extract/gemini.ts`), newest first,
+  moving on when a model is overloaded.
 - **Quality gate:** at least 25 complete rows, a size within 0.6–1.6× of the
   last same-kind season, bounded revisions (≤ 15% removed, ≤ 25% count
   change), and LLM rows that actually appear in the PDF's text.

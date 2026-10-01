@@ -96,11 +96,12 @@ export async function runCascade(input: CascadeInput): Promise<CascadeResult> {
       previousSameSeason: input.previousSameSeason,
       lastComparableCount: input.lastComparableCount,
     })
+    const note = extractor.detail?.()
     attempts.push({
       name: extractor.name,
       outcome: gate.pass ? 'passed' : 'failed-gate',
       rowCount: releases.length,
-      failures: gate.failures,
+      failures: note ? [...gate.failures, note] : gate.failures,
       report: gate.report,
     })
     if (gate.pass) {

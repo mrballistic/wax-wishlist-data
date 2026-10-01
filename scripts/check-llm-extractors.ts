@@ -33,6 +33,8 @@ async function main(): Promise<void> {
   const started = Date.now()
   const releases = finalizeRows(await extractor.extract(pdf))
   console.log(`${provider}: ${releases.length} rows in ${((Date.now() - started) / 1000).toFixed(1)}s`)
+  const detail = extractor.detail?.()
+  if (detail) console.log(detail)
 
   const context = seasonId
     ? await loadGateContext(process.cwd(), seasonId)

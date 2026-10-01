@@ -26,4 +26,6 @@ export interface Extractor {
   name: ExtractorName
   /** Throws on transport/config failure or malformed output; returns rows otherwise. */
   extract(pdf: Buffer): Promise<ExtractedRow[]>
+  /** Short note about the last extract() call, e.g. which model answered; null if none. */
+  detail?(): string | null
 }

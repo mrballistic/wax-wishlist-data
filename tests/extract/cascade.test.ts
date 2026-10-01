@@ -32,6 +32,16 @@ const input = (extractors: Extractor[], pdfText = '') => ({
 })
 
 describe('runCascade', () => {
+  it('shows an extractor\u2019s detail() in the report', async () => {
+    const gemini: Extractor = {
+      ...returns('gemini', rows),
+      detail: () => 'answered by gemini-3.6-flash after 1 failed (gemini-3.8-flash: HTTP 503)',
+    }
+    const r = await runCascade(input([returns('parser', rows.slice(0, 10)), gemini]))
+    expect(r.attempts[1]?.failures).toContain('answered by gemini-3.6-flash after 1 failed (gemini-3.8-flash: HTTP 503)')
+    expect(r.report).toContain('answered by gemini-3.6-flash after 1 failed')
+  })
+
   it('stops at the parser when it passes', async () => {
     const gemini = returns('gemini', rows)
     const r = await runCascade(input([returns('parser', rows), gemini]))
