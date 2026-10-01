@@ -1,5 +1,6 @@
 import { normalize } from '../art/match.js'
 import type { ExtractedRow } from '../extract/types.js'
+import type { RawRelease } from '../types.js'
 
 import type { SiteEntry } from './site-index.js'
 
@@ -84,4 +85,38 @@ export function repairRows(
   const out = [...rows.map(fill), ...recovered]
   log?.(`repair: recovered ${recovered.length} rows, filled ${filled} fields`)
   return { rows: out, repaired: recovered.length }
+}
+
+/**
+ * Repair entries from the season's previously published list, for a revision
+ * when recordstoreday.com is unavailable: rows recovered before (fused or
+ * blank-celled again in the new PDF) are recovered the same way. Only artist,
+ * title, label and format carry over; the site-only fields stay empty.
+ */
+export function entriesFromReleases(releases: RawRelease[]): SiteEntry[] {
+  return releases.map((r) => ({
+    releaseId: r.id,
+    artist: r.artist,
+    title: r.title,
+    photoId: 0,
+    format: r.format,
+    label: r.label,
+    description: '',
+    tracklist: [],
+    quantity: null,
+    upc: null,
+    pageUrl: '',
+  }))
+}
+
+/**
+ * The entries to repair against: the site index when there is one, else the
+ * previously published list on a revision, else none (repair is skipped).
+ */
+export function repairEntries(
+  index: { entries: SiteEntry[] } | null,
+  previousSameSeason: RawRelease[] | null,
+): SiteEntry[] | null {
+  if (index) return index.entries
+  return previousSameSeason ? entriesFromReleases(previousSameSeason) : null
 }

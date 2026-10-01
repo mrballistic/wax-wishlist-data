@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import { droppedLines } from '../extract/gate.js'
 import { runCascade } from '../extract/index.js'
 import type { Extractor, ExtractorName } from '../extract/types.js'
-import { repairRows } from '../rsd/repair.js'
+import { repairEntries, repairRows } from '../rsd/repair.js'
 import type { SiteIndex } from '../rsd/site-index.js'
 
 import { prefixesFor } from './bucket.js'
@@ -39,7 +39,10 @@ export interface WatchDeps {
   git: GitOps
   summary: (markdown: string) => Promise<void>
   log: (line: string) => void
-  /** recordstoreday.com listing for row repair; null when unavailable (repair is skipped). */
+  /**
+   * recordstoreday.com listing for row repair; null when unavailable (repair
+   * then uses the season's previously published list, or is skipped).
+   */
   siteIndex: (seasonId: string, expectedCount: number) => Promise<SiteIndex | null>
 }
 
@@ -168,12 +171,17 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
       deps.log(`repair: skipped (${message(err)})`)
       return null
     })
+    // No site index on a revision: repair against the previously published
+    // list, so rows recovered before don't vanish.
+    const entries = repairEntries(index, context.previousSameSeason)
+    if (!index && entries) deps.log('repair: using the previously published list')
     const result = await runCascade({
       pdf,
       pdfText,
       extractors,
       ...context,
-      repair: index ? (rows, partial) => repairRows(rows, partial, index.entries, deps.log).rows : undefined,
+      repair: entries ? (rows, partial) => repairRows(rows, partial, entries, deps.log).rows : undefined,
+      log: deps.log,
       title: `${seasonId} from \`${obj.key}\``,
     })
     await deps.summary(result.report)

@@ -132,6 +132,20 @@ describe('enrichDiscogs barcode lookup', () => {
     expect(queries).toHaveLength(2)
   })
 
+  it('falls back when the barcode request fails at the network', async () => {
+    server.use(
+      http.get(SEARCH, ({ request }) => {
+        const q = new URL(request.url).searchParams
+        queries.push(q)
+        if (q.has('barcode')) return HttpResponse.error()
+        return HttpResponse.json({ results: [{ master_id: 779 }] })
+      }),
+    )
+    const [out] = await run([{ ...raw, upc: '075678604034' }])
+    expect(out?.discogsMasterId).toBe(779)
+    expect(queries.map((q) => q.get('type'))).toEqual(['release', 'master'])
+  })
+
   it('searches by artist/title only when there is no UPC', async () => {
     server.use(
       http.get(SEARCH, ({ request }) => {

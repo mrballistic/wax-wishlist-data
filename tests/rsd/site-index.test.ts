@@ -96,6 +96,11 @@ describe('parseListing', () => {
     ])
     // No MORE INFO block at all.
     expect(byId.get('20155')).toMatchObject({ description: '', tracklist: [] })
+    // "Tracks:" heading between <br><br> pairs, sides in following paragraphs.
+    const lucy = byId.get('20035')
+    expect(lucy?.description).toMatch(/^Lucy Dacus shares her first song/)
+    expect(lucy?.description).not.toMatch(/Tracks/)
+    expect(lucy?.tracklist).toEqual(['Side A: Planting Tomatoes', 'Side B: Planting Tomatoes Demo'])
   })
 
   it('keeps paragraph breaks as blank lines', () => {

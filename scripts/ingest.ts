@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 import { unlockerFromEnv } from './art/brightdata.js'
 import { defaultExtractors, runCascade } from './extract/index.js'
 import { pdfTextLayer } from './extract/pdf-text.js'
-import { repairRows } from './rsd/repair.js'
+import { repairEntries, repairRows } from './rsd/repair.js'
 import { getSiteIndex } from './rsd/site-index.js'
 import { publishSeason } from './watch/publish.js'
 import { recordManualPublish } from './watch/record-manual.js'
@@ -73,12 +73,16 @@ async function main(): Promise<void> {
   const expectedCount = context.previousSameSeason?.length ?? context.lastComparableCount ?? 0
   const log = (line: string): void => console.log(line)
   const index = await getSiteIndex({ seasonId, expectedCount, unlocker: unlockerFromEnv(), log })
+  // No site index on a revision: repair against the previously published list.
+  const entries = repairEntries(index, context.previousSameSeason)
+  if (!index && entries) log('repair: using the previously published list')
   const result = await runCascade({
     pdf,
     pdfText,
     extractors: defaultExtractors(),
     ...context,
-    repair: index ? (rows, partial) => repairRows(rows, partial, index.entries, log).rows : undefined,
+    repair: entries ? (rows, partial) => repairRows(rows, partial, entries, log).rows : undefined,
+    log,
     title: `${seasonId} from ${pdfSource}`,
   })
   await writeStepSummary(result.report)

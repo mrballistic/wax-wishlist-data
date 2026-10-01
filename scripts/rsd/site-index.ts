@@ -207,8 +207,8 @@ function descriptionDiv(tail: string): string {
 
 const BR = '\ue000'
 const BLOCK = '\ue001'
-/** A tracklist heading on its own line ("Tracklist", "TRACK LISTING:"), optionally followed by a first track after a colon. */
-const TRACKLIST_HEADING = /^track[\s-]*list(?:ing)?(?:\s*:\s*(.*)|\s*)$/i
+/** A tracklist heading on its own line ("Tracklist", "TRACK LISTING:", "Tracks:"), optionally followed by a first track after a colon. */
+const TRACKLIST_HEADING = /^(?:track[\s-]*list(?:ing)?|tracks)(?:\s*:\s*(.*)|\s*)$/i
 
 /**
  * The quickview "MORE INFO" text as printed lines, each tagged with whether a

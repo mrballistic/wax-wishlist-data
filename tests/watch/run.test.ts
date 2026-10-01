@@ -4,7 +4,11 @@ import { join } from 'node:path'
 
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { finalizeRows } from '../../scripts/extract/finalize.js'
+import { parseRowsDetailed } from '../../scripts/extract/parser.js'
 import type { ExtractedRow, Extractor, ExtractorName } from '../../scripts/extract/types.js'
+import { repairRows } from '../../scripts/rsd/repair.js'
+import { parseListing } from '../../scripts/rsd/site-index.js'
 import { BucketError } from '../../scripts/watch/bucket.js'
 import type { IssueClient } from '../../scripts/watch/issues.js'
 import { runWatch, type WatchDeps } from '../../scripts/watch/run.js'
@@ -119,6 +123,77 @@ describe('runWatch', () => {
     const d = deps([APRIL, BF], [parser])
     await runWatch(opts(), d)
     expect(vi.mocked(d.publish).mock.calls[0]?.[0].releases).toHaveLength(173)
+  })
+
+  it('still publishes when the site index rejects', async () => {
+    const log = vi.fn()
+    const d = deps([APRIL, BF], [extractor('parser', async () => novemberRows)], {
+      siteIndex: async () => {
+        throw new Error('unlocker down')
+      },
+      log,
+    })
+    const out = await runWatch(opts(), d)
+    expect(out[0]?.outcome).toBe('published')
+    expect(vi.mocked(d.publish).mock.calls[0]?.[0].releases).toHaveLength(173)
+    expect(log).toHaveBeenCalledWith('repair: skipped (unlocker down)')
+  })
+
+  describe('a revision without the site index', () => {
+    const DJ = 'david-johansen-and-the-harry-smiths-david-johansen-and-the-harry-smiths'
+    const LARRY = 'larry-june-2-chainz-the-alchemist-life-is-beautiful-chopped-not-slopped'
+    let pdfRows: ExtractedRow[]
+    let pdfPartial: ExtractedRow[]
+    let repairedList: ReturnType<typeof finalizeRows>
+    beforeAll(async () => {
+      const parsed = await parseRowsDetailed(await readFile(join(REPO_ROOT, 'tests/fixtures/2025-november.pdf')))
+      pdfRows = parsed.rows
+      pdfPartial = parsed.partial
+      const html = await readFile(
+        join(REPO_ROOT, 'tests/fixtures/rsd-site/promotional-event-599-black-friday-2025.html'),
+        'utf8',
+      )
+      repairedList = finalizeRows(repairRows(
+          pdfRows,
+          pdfPartial,
+          parseListing(html).map((e) => ({ ...e, quantity: null, upc: null })),
+        ).rows)
+    })
+    const parser = (): Extractor => ({
+      ...extractor('parser', async () => pdfRows),
+      partialRows: () => pdfPartial,
+    })
+
+    it('recovers rows published before from the previous list', async () => {
+      expect(repairedList).toHaveLength(176)
+      await mkdir(join(repo, 'releases', '2026-november'), { recursive: true })
+      await writeFile(
+        join(repo, 'releases', '2026-november', 'releases.json'),
+        JSON.stringify(repairedList.map((r) => ({ ...r, discogsMasterId: null, artFilename: `${r.id}.jpg` }))),
+      )
+      const log = vi.fn()
+      const d = deps([APRIL, BF], [parser()], { log })
+      await runWatch(opts(), d)
+
+      expect(log).toHaveBeenCalledWith('repair: using the previously published list')
+      const published = vi.mocked(d.publish).mock.calls[0]?.[0].releases ?? []
+      expect(published).toHaveLength(176)
+      const byId = new Map(published.map((r) => [r.id, r]))
+      expect(byId.get(DJ)).toMatchObject({ label: 'Chesky Records', format: 'LP' })
+      expect(byId.get(`${DJ}-2`)).toMatchObject({ label: 'Chesky Records', format: 'SACD' })
+      expect(byId.get(LARRY)).toMatchObject({
+        artist: 'Larry June, 2 Chainz & The Alchemist',
+        title: 'Life Is Beautiful (Chopped Not Slopped)',
+      })
+    })
+
+    it('drops them as before when there is no previous list', async () => {
+      const d = deps([APRIL, BF], [parser()])
+      await runWatch(opts(), d)
+      const published = vi.mocked(d.publish).mock.calls[0]?.[0].releases ?? []
+      expect(published).toHaveLength(173)
+      expect(published.some((r) => r.id === DJ || r.id === LARRY)).toBe(false)
+    })
   })
 
   it('publishes a new Black Friday list', async () => {

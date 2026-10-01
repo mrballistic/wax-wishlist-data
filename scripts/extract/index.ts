@@ -26,9 +26,11 @@ export interface CascadeInput {
   /**
    * Row repair (scripts/rsd/repair.ts): given an extractor's rows and its
    * partial rows, returns the rows to finalize. Absent: partial rows are
-   * dropped, as before.
+   * dropped, as before. A throw is logged and the unrepaired rows are used.
    */
   repair?: ((rows: ExtractedRow[], partial: ExtractedRow[]) => ExtractedRow[]) | undefined
+  /** One-line progress/skip messages; defaults to console.warn. */
+  log?: ((line: string) => void) | undefined
 }
 
 export interface CascadeResult {
@@ -81,6 +83,21 @@ function render(input: CascadeInput, attempts: ExtractorAttempt[], winner: Extra
 }
 
 /**
+ * The extractor's rows after repair. Repair never fails an extractor: a throw
+ * is logged once and the unrepaired rows (partial rows dropped) are used.
+ */
+function repaired(input: CascadeInput, rows: ExtractedRow[], extractor: Extractor): ExtractedRow[] {
+  if (!input.repair) return rows
+  try {
+    return input.repair(rows, extractor.partialRows?.() ?? [])
+  } catch (err) {
+    const message = err instanceof Error ? err.message : JSON.stringify(err)
+    ;(input.log ?? console.warn)(`repair failed: ${message}`)
+    return rows
+  }
+}
+
+/**
  * Run extractors in order and return the first candidate that passes the
  * gate. A thrown error (rate limit, refusal, unset key, malformed output)
  * fails that extractor only; the next one runs.
@@ -93,7 +110,7 @@ export async function runCascade(input: CascadeInput): Promise<CascadeResult> {
     let releases: RawRelease[]
     try {
       const rows = await extractor.extract(input.pdf)
-      releases = finalizeRows(input.repair ? input.repair(rows, extractor.partialRows?.() ?? []) : rows)
+      releases = finalizeRows(repaired(input, rows, extractor))
     } catch (err) {
       const message = err instanceof Error ? err.message : JSON.stringify(err)
       attempts.push({ name: extractor.name, outcome: 'error', rowCount: null, failures: [message], report: '' })

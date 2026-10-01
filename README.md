@@ -205,7 +205,10 @@ index (`scripts/rsd/site-index.ts`), shared by row repair, enrichment and the
   wording verbatim, paragraphs separated by `\n\n`) and the four optional
   contract fields `tracklist`, `quantity`, `upc` and `rsdUrl`
   (`scripts/rsd/enrich.ts`). Only releases the art matcher *accepts* are
-  filled; below the bar nothing is written.
+  filled; below the bar nothing is written. One enrichment-only tie-break:
+  when a release ties between a site row whose format equals its own and rows
+  with no format at all, it takes the matching row (the art matcher is
+  unchanged).
 - **Never overwrite:** a field is filled only while it is empty (`""`, `null`,
   absent, or an empty tracklist). A value from the PDF, an earlier run or a hand
   edit always stays, and a revision carries every previously found value
@@ -214,7 +217,9 @@ index (`scripts/rsd/site-index.ts`), shared by row repair, enrichment and the
   would drop (a fused artist/title, a blank label or format) are completed
   from the site index on an exact normalized match, and blank labels/formats
   are filled where every matching site row agrees. Anything ambiguous is left
-  for the gate to drop, as before.
+  for the gate to drop, as before. On a revision with no site index, repair
+  matches against the season's previously published list instead, so rows
+  recovered before are recovered again.
 - **Barcode Discogs:** with a `upc`, the Discogs lookup searches by barcode
   first and falls back to artist/title. Existing Discogs ids are never
   replaced.
@@ -225,13 +230,16 @@ index (`scripts/rsd/site-index.ts`), shared by row repair, enrichment and the
 - **Cost:** 2 Bright Data Unlocker requests per season per run (listing +
   table page), 3-4 with retries, plus up to 6 when probing an unmapped season.
 - **Failures never block a publish:** no secrets, no event, an incomplete
-  listing or a parse error skips repair/enrichment with one log line.
+  listing, a parse error or a repair that throws skips that step with one log
+  line; a failed barcode search falls back to artist/title, and an art failure
+  in the daily refresh still lets the data changes be committed.
 
 Live check (2026-10-01, `tests/fixtures/2025-november.pdf` against the live
 site, event 599, 2 Unlocker requests): repair recovered 3 rows (173 to 176);
 enrichment filled 172 of 176 releases: description 163, tracklist 153,
-quantity 171, upc 172, rsdUrl 172. On the recorded 2026-april fixtures it
-fills 342 of 353 (description 324, tracklist 294, quantity 338, upc 342).
+quantity 171, upc 172, rsdUrl 172 (the format tie-break, added after, makes it
+173 on the recorded 599 fixture). On the recorded 2026-april fixtures it fills
+342 of 353 (description 324, tracklist 295, quantity 338, upc 342).
 
 The app-side contract for these fields lives in each app repo at
 `docs/data-contract/releases-json.md`.
@@ -393,7 +401,7 @@ in `current.json` while its date is today or later. It runs
 recordstoreday.com and Discogs (see
 [Release data from recordstoreday.com](#release-data-from-recordstoredaycom)),
 then the art cascade, and commits any new data and art and the updated
-`art-candidates.json` (`chore: refresh art for <season-id>`).
+`art-candidates.json` (`chore: refresh art and data for <season-id>`).
 Past seasons are skipped. Manual dispatch takes an optional `season-id` and
 works for any season. `ingest.yml` and `watch-rsd.yml` run the same cascade
 when they publish a season.

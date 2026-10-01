@@ -70,9 +70,15 @@ async function lookup(
   consumerKey: string,
   consumerSecret: string,
 ): Promise<{ discogsMasterId: number | null }> {
-  // An exact barcode hit beats a fuzzy artist/title search.
+  // An exact barcode hit beats a fuzzy artist/title search. A failed barcode
+  // request counts as a miss: the artist/title search still gets its turn.
   if (release.upc) {
-    const byBarcode = await searchByBarcode(release.upc, consumerKey, consumerSecret)
+    const byBarcode = await searchByBarcode(release.upc, consumerKey, consumerSecret).catch(
+      (err: unknown) => {
+        console.log(`barcode search failed: ${err instanceof Error ? err.message : JSON.stringify(err)}`)
+        return null
+      },
+    )
     if (byBarcode != null) return { discogsMasterId: byBarcode }
     await sleep(RATE_LIMIT_MS)
   }

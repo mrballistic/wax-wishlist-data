@@ -39,6 +39,26 @@ async function setup(currentId: string, releases = [release()]): Promise<void> {
 }
 
 const index: SiteIndex = { seasonId: '2026-november', eventId: 1, entries: [] }
+const releasesPath = (): string => join(root, 'releases', '2026-november', 'releases.json')
+const siteIndexFor = (description: string): SiteIndex => ({
+  seasonId: '2026-november',
+  eventId: 1,
+  entries: [
+    {
+      releaseId: '42',
+      artist: 'Alpha',
+      title: 'Bravo',
+      photoId: 1,
+      format: 'LP',
+      label: 'L',
+      description,
+      tracklist: [],
+      quantity: null,
+      upc: null,
+      pageUrl: 'https://recordstoreday.com/SpecialRelease/42',
+    },
+  ],
+})
 const readCurrent = async () => JSON.parse(await readFile(join(root, 'current.json'), 'utf8'))
 
 beforeEach(async () => {
@@ -51,12 +71,14 @@ afterEach(async () => {
 describe('refreshSeason', () => {
   it('writes nothing and does not stamp when data is unchanged; art still runs', async () => {
     await setup('2026-november')
+    const before = await readFile(releasesPath(), 'utf8')
     const art = vi.fn(async () => {})
     const res = await refreshSeason(
       { repoRoot: root, seasonId: '2026-november', now: () => NOW },
       { siteIndex: async () => index, discogs: async (r) => r, art },
     )
     expect(res).toEqual({ dataChanged: false, stamped: false })
+    expect(await readFile(releasesPath(), 'utf8')).toBe(before)
     expect((await readCurrent()).contentUpdatedAt).toBeUndefined()
     expect(art).toHaveBeenCalledTimes(1)
   })
@@ -93,6 +115,57 @@ describe('refreshSeason', () => {
     expect(res).toEqual({ dataChanged: true, stamped: false })
     expect((await readCurrent()).contentUpdatedAt).toBeUndefined()
     expect(art).toHaveBeenCalledTimes(1)
+  })
+
+  it('writes and stamps a description the site index fills', async () => {
+    await setup('2026-november', [release({ artist: 'Alpha', title: 'Bravo' })])
+    const res = await refreshSeason(
+      { repoRoot: root, seasonId: '2026-november', now: () => NOW },
+      { siteIndex: async () => siteIndexFor('From the site'), discogs: async (r) => r, art: async () => {} },
+    )
+    expect(res).toEqual({ dataChanged: true, stamped: true })
+    const written = JSON.parse(await readFile(releasesPath(), 'utf8'))
+    expect(written[0]).toMatchObject({
+      description: 'From the site',
+      rsdUrl: 'https://recordstoreday.com/SpecialRelease/42',
+    })
+    expect((await readCurrent()).contentUpdatedAt).toBe(NOW)
+  })
+
+  it('keeps the site changes when Discogs throws', async () => {
+    await setup('2026-november', [release({ artist: 'Alpha', title: 'Bravo', discogsMasterId: null })])
+    const res = await refreshSeason(
+      { repoRoot: root, seasonId: '2026-november', now: () => NOW },
+      {
+        siteIndex: async () => siteIndexFor('From the site'),
+        discogs: async () => {
+          throw new Error('discogs down')
+        },
+        art: async () => {},
+      },
+    )
+    expect(res).toEqual({ dataChanged: true, stamped: true })
+    const written = JSON.parse(await readFile(releasesPath(), 'utf8'))
+    expect(written[0]).toMatchObject({ description: 'From the site', discogsMasterId: null })
+  })
+
+  it('keeps the data changes and resolves when the art cascade throws', async () => {
+    await setup('2026-november', [release({ discogsMasterId: null })])
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const res = await refreshSeason(
+      { repoRoot: root, seasonId: '2026-november', now: () => NOW },
+      {
+        siteIndex: async () => null,
+        discogs: async (rs) => rs.map((r) => ({ ...r, discogsMasterId: 99 })),
+        art: async () => {
+          throw new Error('art down')
+        },
+      },
+    )
+    expect(res).toEqual({ dataChanged: true, stamped: true })
+    expect(JSON.parse(await readFile(releasesPath(), 'utf8'))[0].discogsMasterId).toBe(99)
+    expect(warn).toHaveBeenCalledWith('art cascade failed: art down')
+    warn.mockRestore()
   })
 
   it('survives site and discogs failures and still runs art', async () => {

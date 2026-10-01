@@ -7,7 +7,7 @@ import { type DiscogsInput, enrichDiscogs } from '../enrich-discogs.js'
 import { formatCoverageSummary, runArtCascade } from '../fetch-art.js'
 import { writeReleases } from '../generate-json.js'
 import { registerSeason } from '../register-season.js'
-import { enrichFromSite } from '../rsd/enrich.js'
+import { enrichFromSite, isEmpty } from '../rsd/enrich.js'
 import { getSiteIndex, type SiteIndex } from '../rsd/site-index.js'
 import { type RawRelease, type Release, ReleaseListSchema } from '../types.js'
 
@@ -65,9 +65,6 @@ async function loadExisting(path: string): Promise<Release[]> {
   }
   return ReleaseListSchema.parse(JSON.parse(raw))
 }
-
-const isEmpty = (v: unknown): boolean =>
-  v === undefined || v === null || v === '' || (Array.isArray(v) && v.length === 0)
 
 /** Fields a revision keeps from the previous releases.json when the new value is empty. */
 const CARRIED = ['description', 'tracklist', 'quantity', 'upc', 'rsdUrl', 'discogsMasterId'] as const

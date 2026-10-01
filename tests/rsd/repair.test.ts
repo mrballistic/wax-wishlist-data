@@ -190,6 +190,21 @@ describe('runCascade with repair', () => {
     expect(r.dropped).toEqual([])
   })
 
+  it('uses the unrepaired rows, logging once, when repair throws', async () => {
+    const log = vi.fn()
+    const r = await runCascade({
+      ...input(parserWith(rows, partial), () => {
+        throw new Error('bad entry')
+      }),
+      log,
+    })
+    expect(log).toHaveBeenCalledTimes(1)
+    expect(log).toHaveBeenCalledWith('repair failed: bad entry')
+    expect(r.attempts[0]).toMatchObject({ name: 'parser', outcome: 'passed', rowCount: 173 })
+    expect(r.passed).toBe(true)
+    expect(r.releases).toHaveLength(173)
+  })
+
   it('adds the repaired rows before ids are assigned', async () => {
     const r = await runCascade(
       input(parserWith(rows, partial), (x, p) => repairRows(x, p, entries).rows),

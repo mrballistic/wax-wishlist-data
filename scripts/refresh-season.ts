@@ -96,7 +96,13 @@ export async function refreshSeason(
     }
   }
 
-  await d.art({ repoRoot: opts.repoRoot, seasonId: opts.seasonId, releases: releases.map(toRaw) })
+  // An art failure must not lose the data changes above: the workflow commits
+  // whatever was written as long as this script exits 0.
+  try {
+    await d.art({ repoRoot: opts.repoRoot, seasonId: opts.seasonId, releases: releases.map(toRaw) })
+  } catch (err) {
+    console.warn(`art cascade failed: ${err instanceof Error ? err.message : JSON.stringify(err)}`)
+  }
   return { dataChanged, stamped }
 }
 

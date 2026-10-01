@@ -85,7 +85,7 @@ const artistKey = (artist: string): string => [...tokens(artist)].sort().join(' 
  * Format words, keeping lp/cd/ep/vinyl (which `tokens()` drops as stopwords) but
  * not quantity: "2 x LP" vs "2 x CD" must differ, "2 x LP" vs "LP" must not.
  */
-const formatTokens = (format: string): Set<string> =>
+export const formatTokens = (format: string): Set<string> =>
   new Set(
     normalize(format)
       .split(' ')

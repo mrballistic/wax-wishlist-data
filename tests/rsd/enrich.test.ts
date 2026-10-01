@@ -3,7 +3,10 @@ import { join } from 'node:path'
 
 import { beforeAll, describe, expect, it } from 'vitest'
 
+import { finalizeRows } from '../../scripts/extract/finalize.js'
+import { parseRowsDetailed } from '../../scripts/extract/parser.js'
 import { enrichFromSite } from '../../scripts/rsd/enrich.js'
+import { repairRows } from '../../scripts/rsd/repair.js'
 import {
   parseListing,
   parseTablePage,
@@ -87,11 +90,65 @@ describe('enrichFromSite', () => {
     expect(counts).toEqual({
       changed: 342,
       description: 324,
-      tracklist: 294,
+      tracklist: 295,
       quantity: 338,
       upc: 342,
       rsdUrl: 342,
     })
+  })
+
+  it('breaks a format tie for the BF2025 Johansen LP and reports BF and April counts', async () => {
+    const html = await readFile(join(FIXTURES, 'promotional-event-599-black-friday-2025.html'), 'utf8')
+    const table = parseTablePage(html)
+    const entries: SiteEntry[] = parseListing(html).map((e) => ({
+      ...e,
+      quantity: table.get(e.releaseId)?.quantity ?? null,
+      upc: table.get(e.releaseId)?.upc ?? null,
+    }))
+    const { rows, partial } = await parseRowsDetailed(
+      await readFile(join(REPO_ROOT, 'tests/fixtures/2025-november.pdf')),
+    )
+    const bf: Release[] = finalizeRows(repairRows(rows, partial, entries).rows).map((r) => ({
+      ...r,
+      discogsMasterId: null,
+      artFilename: `${r.id}.jpg`,
+    }))
+    const bfIndex: SiteIndex = { seasonId: '2025-november', eventId: 599, entries }
+    const out = enrichFromSite(bf, bfIndex, bf)
+    const DJ = 'david-johansen-and-the-harry-smiths-david-johansen-and-the-harry-smiths'
+    const byId = new Map(out.releases.map((r) => [r.id, r]))
+    expect(byId.get(DJ)).toMatchObject({
+      rsdUrl: 'https://recordstoreday.com/SpecialRelease/19313',
+      quantity: 1500,
+      upc: '4895241437960',
+    })
+    // The SACD keeps the format-less site row it already matched.
+    expect(byId.get(`${DJ}-2`)?.rsdUrl).not.toBe('https://recordstoreday.com/SpecialRelease/19313')
+    const accepted = (rs: Release[]): number => rs.filter((r) => r.rsdUrl != null).length
+    expect([accepted(out.releases), bf.length]).toEqual([173, 176])
+    expect([accepted(enrichFromSite(april, index, april).releases), april.length]).toEqual([342, 353])
+  })
+
+  it('breaks a format tie only against format-less rows', () => {
+    const lp = release({ id: 'alpha-one', artist: 'Alpha', title: 'One', format: 'LP' })
+    const tie = (otherFormat: string): SiteIndex => ({
+      seasonId: '2026-april',
+      eventId: 1,
+      entries: [
+        entry({ releaseId: '10', artist: 'Alpha', title: 'One', format: 'LP', pageUrl: 'https://recordstoreday.com/SpecialRelease/10' }),
+        entry({ releaseId: '11', artist: 'Alpha', title: 'One', format: otherFormat, pageUrl: 'https://recordstoreday.com/SpecialRelease/11' }),
+      ],
+    })
+    expect(enrichFromSite([lp], tie(''), [lp]).releases[0]?.rsdUrl).toBe(
+      'https://recordstoreday.com/SpecialRelease/10',
+    )
+    // Both rows formatted but neither matching: still a tie, nothing filled.
+    const sacd = { ...lp, format: 'SACD' }
+    expect(enrichFromSite([sacd], tie('CD'), [sacd]).changed).toBe(0)
+    // One LP row, two LP releases: the second never takes the row the first took.
+    const lp2 = { ...lp, id: 'alpha-one-2' }
+    const both = enrichFromSite([lp, lp2], tie(''), [lp, lp2]).releases
+    expect(both.map((r) => r.rsdUrl)).toEqual(['https://recordstoreday.com/SpecialRelease/10', undefined])
   })
 
   it('never overwrites a preset description or UPC', () => {
