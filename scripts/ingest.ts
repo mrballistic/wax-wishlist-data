@@ -60,7 +60,10 @@ async function main(): Promise<void> {
 
   console.log(`Ingesting season=${seasonId} from ${pdfSource}${dryRun ? ' (dry run)' : ''}`)
   const pdf = await fetchPdfBuffer(pdfSource)
-  const pdfText = await pdfTextLayer(pdf).catch(() => '')
+  const pdfText = await pdfTextLayer(pdf).catch((err: unknown) => {
+    console.error(`pdf text layer failed: ${err instanceof Error ? err.message : JSON.stringify(err)}`)
+    return ''
+  })
   const context = await loadGateContext(REPO_ROOT, seasonId)
   const result = await runCascade({
     pdf,

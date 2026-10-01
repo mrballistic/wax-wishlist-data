@@ -98,6 +98,7 @@ describe('runWatch', () => {
       expect.stringContaining('abc1234'),
     )
     expect(d.issues.close).toHaveBeenCalledWith('watch-rsd: bucket unreachable', expect.any(String))
+    expect(d.git.commitAndPush).toHaveBeenCalledTimes(1)
     expect((await sourcesOnDisk()).find((s) => s.key === BF_KEY)).toMatchObject({
       outcome: 'published',
       etag: BF.etag,
@@ -255,5 +256,42 @@ describe('runWatch', () => {
     await runWatch({ ...opts(true), prefixes: ['2025/'] }, d)
     expect(d.listBucket).toHaveBeenCalledWith('2025/')
     expect(d.listBucket).toHaveBeenCalledTimes(1)
+  })
+
+  it('supersedes an older pending copy when the published key is missing from the listing', async () => {
+    const stale = obj('2026/old/2026_RSD_PUBLIC_PDF.pdf', '"57a1e000"', '2026-03-01T00:00:00.000Z')
+    const parser = extractor('parser', async () => aprilRows)
+    const d = deps([stale], [parser])
+    const out = await runWatch(opts(), d)
+    expect(out).toEqual([{ key: stale.key, seasonId: '2026-april', outcome: 'superseded', extractor: null }])
+    expect(parser.extract).not.toHaveBeenCalled()
+    expect(d.publish).not.toHaveBeenCalled()
+  })
+
+  it('fails (not not-a-list) a list-signal key when the parser throws and the LLM finds nothing', async () => {
+    const extra = obj('2026/Forms/RSD26_PUBLIC_Extra.pdf', '"e47a0000"', '2026-10-01T00:00:00.000Z')
+    const d = deps(
+      [APRIL, extra],
+      [
+        extractor('parser', async () => {
+          throw new Error('Could not detect a 5-column grid')
+        }),
+        extractor('gemini', async () => []),
+      ],
+    )
+    const out = await runWatch(opts(), d)
+    expect(out[0]).toMatchObject({ key: extra.key, outcome: 'failed' })
+    expect(d.issues.ensure).toHaveBeenCalledTimes(1)
+  })
+
+  it('fails a non-signal key whose parser rows miss the gate when the LLM finds nothing', async () => {
+    const odd = obj('2026/Forms/RSD26_Something.pdf', '"0dd00000"', '2026-10-01T00:00:00.000Z')
+    const d = deps(
+      [APRIL, odd],
+      [extractor('parser', async () => aprilRows.slice(0, 10)), extractor('gemini', async () => [])],
+    )
+    const out = await runWatch(opts(), d)
+    expect(out[0]).toMatchObject({ key: odd.key, outcome: 'failed' })
+    expect(d.issues.ensure).toHaveBeenCalledTimes(1)
   })
 })

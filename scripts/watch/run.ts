@@ -129,7 +129,10 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
       await fail(`Downloading the PDF failed: ${message(err)}`)
       return
     }
-    const pdfText = await deps.pdfText(pdf).catch(() => '')
+    const pdfText = await deps.pdfText(pdf).catch((err: unknown) => {
+      deps.log(`pdf text layer failed for ${obj.key}: ${message(err)}`)
+      return ''
+    })
     const context = await loadGateContext(opts.repoRoot, seasonId)
     const extractors = opts.only ? deps.extractors.filter((e) => e.name === opts.only) : deps.extractors
     const result = await runCascade({
@@ -190,15 +193,18 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
   }
 
   for (const [seasonId, candidates] of bySeason) {
-    // Published copies compete too: an older key that shows up late must
-    // never overwrite a newer list.
-    const publishedKeys = new Set(
-      sources.filter((s) => s.seasonId === seasonId && s.outcome === 'published').map((s) => s.key),
-    )
-    const published = objects.filter((o) => publishedKeys.has(o.key) && !candidates.includes(o))
-    const newest = [...candidates, ...published].sort((a, b) => b.lastModified.localeCompare(a.lastModified))[0]
-    for (const obj of candidates) if (obj !== newest) record(obj, seasonId, 'superseded', null)
-    if (newest && candidates.includes(newest)) await processKey(newest, seasonId)
+    // Published copies compete too, judged by the lastModified recorded in
+    // sources.json (not this run's listing, which may not include them): an
+    // older key that shows up late must never overwrite a newer list.
+    const newestPublished = sources
+      .filter((s) => s.seasonId === seasonId && s.outcome === 'published' && !candidates.some((c) => c.key === s.key))
+      .map((s) => s.lastModified)
+      .sort()
+      .at(-1)
+    const newest = [...candidates].sort((a, b) => b.lastModified.localeCompare(a.lastModified))[0]
+    const winner = newest && (!newestPublished || newest.lastModified > newestPublished) ? newest : undefined
+    for (const obj of candidates) if (obj !== winner) record(obj, seasonId, 'superseded', null)
+    if (winner) await processKey(winner, seasonId)
   }
 
   if (live && stateChanged) {
