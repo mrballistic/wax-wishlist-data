@@ -148,6 +148,16 @@ zero network calls.
   commits back to `main`.
 - **update-status.yml** — manual dispatch only. Runs `update-status.ts`,
   validates, and commits back to `main`.
+- **auto-status.yml** — daily cron. Recomputes every season's status from
+  its date. Each run re-enables itself through the Actions API, which resets
+  GitHub's 60-day inactivity timer for scheduled workflows.
+- **refresh-art.yml** — manual dispatch only. Re-runs the art cascade for an
+  already-ingested season, filling only empty art slots. Existing files
+  (including ones committed by `wax-wishlist-art-admin`) are never
+  overwritten.
+
+`artFilename` is always `<id>.jpg`: it names the release's art slot, not a
+promise the file exists. `pnpm validate` prints per-season art coverage.
 
 ## Data Sources
 

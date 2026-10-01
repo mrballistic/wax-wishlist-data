@@ -1,0 +1,69 @@
+name: refresh-art
+
+# Re-run the art cascade for a season that's already ingested, without
+# re-parsing its PDF. Only empty art slots are looked up: files already in
+# releases/<season-id>/art/ (from earlier runs or wax-wishlist-art-admin)
+# are kept, so this is safe to run as often as you like — e.g. weekly
+# between a list drop and the event, as Discogs/MusicBrainz catch up.
+
+on:
+  workflow_dispatch:
+    inputs:
+      season-id:
+        description: 'Season id (e.g. 2025-november)'
+        required: true
+        type: string
+
+jobs:
+  refresh-art:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Fetch album art
+        env:
+          SEASON_ID: ${{ inputs.season-id }}
+          DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
+          DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
+          METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
+        run: pnpm tsx scripts/fetch-art.ts "$SEASON_ID"
+
+      - name: Validate JSON
+        run: pnpm tsx scripts/validate.ts
+
+      - name: Commit updates
+        env:
+          SEASON_ID: ${{ inputs.season-id }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "releases/$SEASON_ID/art/"
+          if git diff --staged --quiet; then
+            echo "No new art found."
+            exit 0
+          fi
+          git commit -m "chore: refresh art for $SEASON_ID"
+          # Retry to survive concurrent pushes (e.g. art-admin commits).
+          for attempt in 1 2 3 4 5; do
+            if git push origin main; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); rebasing onto latest main..."
+            git pull --rebase origin main
+          done
+          echo "Exhausted push retries." >&2
+          exit 1

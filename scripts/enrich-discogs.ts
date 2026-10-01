@@ -67,9 +67,13 @@ async function lookup(
 /**
  * Enrich raw releases with Discogs master IDs. Completely optional:
  * if either `DISCOGS_CONSUMER_KEY` or `DISCOGS_CONSUMER_SECRET` is unset, the
- * enricher returns a best-effort mapping with `discogsMasterId: null` and
- * `artFilename: null`. Callers then either ship the null or fill it in
- * via the art cascade's MusicBrainz / manual tiers.
+ * enricher returns a best-effort mapping with `discogsMasterId: null`.
+ *
+ * `artFilename` is always `<id>.jpg` — it names the release's art *slot*,
+ * not a promise that the file exists. The art cascade and
+ * wax-wishlist-art-admin both fill that slot later; the admin tool lists
+ * releases whose slot is empty and commits to exactly that filename, so a
+ * null here would make the release unfixable from the admin UI.
  */
 export async function enrichDiscogs(releases: RawRelease[]): Promise<Release[]> {
   const consumerKey = process.env['DISCOGS_CONSUMER_KEY']
@@ -89,7 +93,7 @@ export async function enrichDiscogs(releases: RawRelease[]): Promise<Release[]> 
     const label = `${raw.artist} – ${raw.title}`
 
     if (!consumerKey || !consumerSecret) {
-      enriched.push({ ...raw, discogsMasterId: null, artFilename: null })
+      enriched.push({ ...raw, discogsMasterId: null, artFilename: `${raw.id}.jpg` })
       console.log(`[${n}/${total}] ${label} → skipped (no Discogs auth)`)
       continue
     }
@@ -105,7 +109,7 @@ export async function enrichDiscogs(releases: RawRelease[]): Promise<Release[]> 
       }
     } catch (err) {
       errors += 1
-      enriched.push({ ...raw, discogsMasterId: null, artFilename: null })
+      enriched.push({ ...raw, discogsMasterId: null, artFilename: `${raw.id}.jpg` })
       console.log(`[${n}/${total}] ${label} → error: ${(err as Error).message}`)
     }
     await sleep(RATE_LIMIT_MS)

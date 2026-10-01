@@ -10,6 +10,13 @@ const RELEASES_DIR = resolve(REPO_ROOT, 'releases')
 
 type Problem = { path: string; message: string }
 
+/**
+ * Per-season art coverage, reported but never fatal: a release whose
+ * `artFilename` slot has no file yet is a normal state (the app shows a
+ * placeholder until the cascade or wax-wishlist-art-admin fills it).
+ */
+const coverageLines: string[] = []
+
 async function validateCurrent(): Promise<Problem[]> {
   const problems: Problem[] = []
   try {
@@ -57,7 +64,11 @@ async function validateReleases(): Promise<Problem[]> {
       const result = ReleaseListSchema.safeParse(JSON.parse(raw))
       if (!result.success) {
         problems.push({ path: releasesPath, message: result.error.toString() })
+        continue
       }
+      const artFiles = new Set(await readdir(resolve(dir, 'art')).catch(() => []))
+      const covered = result.data.filter((r) => r.artFilename && artFiles.has(r.artFilename))
+      coverageLines.push(`  ${entry}: ${covered.length} / ${result.data.length} art files present`)
     } catch (err) {
       problems.push({ path: releasesPath, message: `${(err as Error).message}` })
     }
@@ -71,6 +82,10 @@ async function main(): Promise<void> {
     ...(await validateSeasons()),
     ...(await validateReleases()),
   ]
+
+  if (coverageLines.length > 0) {
+    console.log(['Art coverage:', ...coverageLines].join('\n'))
+  }
 
   if (problems.length === 0) {
     console.log('All JSON files validated against Zod schemas.')

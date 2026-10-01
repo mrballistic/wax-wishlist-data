@@ -227,6 +227,7 @@ describe('formatCoverageSummary', () => {
     const summary = {
       total: 72,
       counts: { discogs: 42, musicbrainz: 18, manual: 3, none: 9 },
+      kept: 0,
       results: [],
       orphanManualFiles: [],
     }
@@ -240,14 +241,104 @@ describe('formatCoverageSummary', () => {
     expect(out).toContain('Coverage: 63 / 72 (88%)')
   })
 
+  it('counts kept files toward coverage and reports them on their own line', () => {
+    const out = formatCoverageSummary({
+      total: 10,
+      counts: { discogs: 2, musicbrainz: 1, manual: 0, none: 2 },
+      kept: 5,
+      results: [],
+      orphanManualFiles: [],
+    })
+    expect(out).toContain('Already on disk:         5 (50%)')
+    expect(out).toContain('Coverage: 8 / 10 (80%)')
+  })
+
   it('handles zero releases gracefully', () => {
     const out = formatCoverageSummary({
       total: 0,
       counts: { discogs: 0, musicbrainz: 0, manual: 0, none: 0 },
+      kept: 0,
       results: [],
       orphanManualFiles: [],
     })
     expect(out).toContain('Total releases: 0')
     expect(out).toContain('Coverage: 0 / 0 (0%)')
+  })
+})
+
+describe('runArtCascade — existing art on disk', () => {
+  let tmp: string
+
+  beforeEach(async () => {
+    tmp = await mkdtemp(join(tmpdir(), 'fetch-art-existing-'))
+  })
+
+  afterEach(async () => {
+    await rm(tmp, { recursive: true, force: true })
+  })
+
+  const discogsHit = constantSource('discogs', (r) => ({
+    releaseId: r.id,
+    tier: 'discogs',
+    sourceUrl: 'https://img.discogs.com/x.jpg',
+    artFilename: `${r.id}.jpg`,
+  }))
+
+  it('keeps an existing art file (e.g. committed by art-admin) instead of overwriting it', async () => {
+    const { mkdir, readFile } = await import('node:fs/promises')
+    const artDir = join(tmp, 'art')
+    await mkdir(artDir, { recursive: true })
+    const handPicked = Buffer.from('hand-picked-image')
+    await writeFile(join(artDir, 'r-existing.jpg'), handPicked)
+
+    const discogsLookup = vi.fn(discogsHit.lookup)
+    const fetchImpl = vi.fn(async () => new Response(Buffer.from('discogs-image'))) as unknown as typeof fetch
+
+    const summary = await runArtCascade([makeRelease('r-existing')], {
+      artDir,
+      manualArtDir: join(tmp, 'manual-art'),
+      fetchImpl,
+      sources: {
+        manual: constantSource('manual', () => null),
+        discogs: { name: 'discogs', lookup: discogsLookup },
+        musicbrainz: constantSource('musicbrainz', () => null),
+      },
+    })
+
+    expect(await readFile(join(artDir, 'r-existing.jpg'))).toEqual(handPicked)
+    expect(discogsLookup).not.toHaveBeenCalled()
+    expect(fetchImpl).not.toHaveBeenCalled()
+    expect(summary.kept).toBe(1)
+    expect(summary.counts).toEqual({ manual: 0, discogs: 0, musicbrainz: 0, none: 0 })
+  })
+
+  it('still lets a manual-art override replace an existing file', async () => {
+    const { mkdir } = await import('node:fs/promises')
+    const artDir = join(tmp, 'art')
+    await mkdir(artDir, { recursive: true })
+    await writeFile(join(artDir, 'r-override.jpg'), Buffer.from('old'))
+
+    const resizeImpl = vi.fn(async (_src: string, dest: string) => {
+      await writeFile(dest, Buffer.from('new'))
+    })
+
+    const summary = await runArtCascade([makeRelease('r-override')], {
+      artDir,
+      manualArtDir: join(tmp, 'manual-art'),
+      resizeImpl,
+      sources: {
+        manual: constantSource('manual', (r) => ({
+          releaseId: r.id,
+          tier: 'manual',
+          sourceUrl: null,
+          artFilename: `${r.id}.jpg`,
+        })),
+        discogs: discogsHit,
+        musicbrainz: constantSource('musicbrainz', () => null),
+      },
+    })
+
+    expect(summary.counts.manual).toBe(1)
+    expect(summary.kept).toBe(0)
   })
 })

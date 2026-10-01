@@ -73,6 +73,11 @@ export interface CascadeSummary {
   total: number
   counts: Record<ArtTier, number>
   results: ArtLookupResult[]
+  /**
+   * Releases skipped because their art file was already on disk (from a
+   * previous run or a wax-wishlist-art-admin commit). Counted toward coverage.
+   */
+  kept: number
   /** Files in manual-art/ that didn't match any release id in this run. */
   orphanManualFiles: string[]
 }
@@ -101,6 +106,10 @@ export function buildDefaultSources(
  *
  * Cascade order per release (short-circuits on first match):
  *   1. manual (tier 3) — highest priority, wins over auto-sourced art
+ *      and over an existing file
+ *   -  existing file in `artDir` — kept as-is, no network lookups. This is
+ *      what makes re-runs safe for art committed by wax-wishlist-art-admin,
+ *      which writes straight into `art/` rather than `manual-art/`.
  *   2. discogs (tier 1)
  *   3. musicbrainz (tier 2)
  *   4. none (tier 4) — `artFilename: null`
@@ -131,6 +140,7 @@ export async function runArtCascade(
     none: 0,
   }
   const results: ArtLookupResult[] = []
+  let kept = 0
 
   const seenReleaseIds = new Set<string>()
   const total = releases.length
@@ -143,15 +153,22 @@ export async function runArtCascade(
     const label = `${release.artist} – ${release.title}`
     seenReleaseIds.add(release.id)
 
-    // Order: manual (always wins), then discogs, then musicbrainz.
-    const tierOrder: ArtSource[] = [sources.manual, sources.discogs, sources.musicbrainz]
-    let hit: ArtLookupResult | null = null
-    for (const src of tierOrder) {
+    // Order: manual (always wins), then an existing file on disk, then
+    // discogs, then musicbrainz.
+    const manualHit = await sources.manual.lookup(release)
+    let hit: ArtLookupResult | null = manualHit?.artFilename ? manualHit : null
+
+    if (!hit && (await exists(resolvePath(options.artDir, `${release.id}.jpg`)))) {
+      kept += 1
+      console.log(`[${n}/${total}] ${label} → kept existing file`)
+      continue
+    }
+
+    const remoteTiers: ArtSource[] = [sources.discogs, sources.musicbrainz]
+    for (const src of remoteTiers) {
+      if (hit) break
       const res = await src.lookup(release)
-      if (res && res.artFilename) {
-        hit = res
-        break
-      }
+      if (res && res.artFilename) hit = res
     }
 
     if (!hit) {
@@ -227,19 +244,19 @@ export async function runArtCascade(
   const seenLower = new Set(Array.from(seenReleaseIds).map((id) => id.toLowerCase()))
   const orphanManualFiles = basenames.filter((name) => !seenLower.has(name))
 
-  return { total: releases.length, counts, results, orphanManualFiles }
+  return { total: releases.length, counts, kept, results, orphanManualFiles }
 }
 
 /**
  * Pretty-print the coverage summary exactly as specified in FR-F-004.
  */
 export function formatCoverageSummary(summary: CascadeSummary): string {
-  const { total, counts } = summary
+  const { total, counts, kept } = summary
   const pct = (n: number): string => {
     if (total === 0) return '0%'
     return `${Math.round((n / total) * 100)}%`
   }
-  const covered = counts.manual + counts.discogs + counts.musicbrainz
+  const covered = counts.manual + counts.discogs + counts.musicbrainz + kept
   const pad = (n: number, width: number): string => String(n).padStart(width, ' ')
   // Width matches the FR-F-004 example: 2 digits fits 0–99 releases; larger
   // seasons get whatever the actual digit count is.
@@ -254,6 +271,7 @@ export function formatCoverageSummary(summary: CascadeSummary): string {
     `  Tier 2 (MusicBrainz):  ${pad(counts.musicbrainz, w)} (${pct(counts.musicbrainz)})`,
     `  Tier 3 (Manual):        ${pad(counts.manual, w)} (${pct(counts.manual)})`,
     `  Tier 4 (No art):        ${pad(counts.none, w)} (${pct(counts.none)})`,
+    `  Already on disk:        ${pad(kept, w)} (${pct(kept)})`,
     `Coverage: ${covered} / ${total} (${pct(covered)})`,
     '===========================',
   ].join('\n')

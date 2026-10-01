@@ -11,14 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      # For the keepalive step below.
+      actions: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Enable corepack
         run: corepack enable
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'pnpm'
@@ -43,3 +45,14 @@ jobs:
             git commit -m "chore: auto-status recompute"
             git push origin main
           fi
+
+      # GitHub disables scheduled workflows after 60 days without a commit,
+      # and this job only commits on status flips (a few times a year) — it
+      # went dark in June 2026 that way. Re-enabling the workflow through
+      # the API resets the inactivity timer without a dummy commit. Runs
+      # even if an earlier step failed, so one bad day can't let it lapse.
+      - name: Keep this schedule alive
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/auto-status.yml/enable"
