@@ -65,6 +65,23 @@ describe('listPdfs', () => {
     server.use(http.get(BUCKET_URL, () => HttpResponse.error()))
     await expect(listPdfs('2026/')).rejects.toBeInstanceOf(BucketError)
   })
+
+  it('throws BucketError when the body stream errors mid-read', async () => {
+    server.use(
+      http.get(
+        BUCKET_URL,
+        () =>
+          new HttpResponse(
+            new ReadableStream({
+              start(c) {
+                c.error(new Error('reset'))
+              },
+            }),
+          ),
+      ),
+    )
+    await expect(listPdfs('2026/')).rejects.toBeInstanceOf(BucketError)
+  })
 })
 
 describe('prefixesFor', () => {

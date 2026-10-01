@@ -61,7 +61,15 @@ export async function listPdfs(prefix: string, fetchImpl: typeof fetch = fetch):
     }
     if (!res.ok) throw new BucketError(`HTTP ${res.status} listing ${prefix}`)
 
-    const page = parseListing(await res.text())
+    let body: string
+    try {
+      body = await res.text()
+    } catch (err) {
+      throw new BucketError(
+        `network error reading ${prefix} listing: ${err instanceof Error ? err.message : String(err)}`,
+      )
+    }
+    const page = parseListing(body)
     pdfs.push(...page.objects.filter((o) => o.key.toLowerCase().endsWith('.pdf')))
     if (!page.isTruncated) return pdfs
     if (!page.nextToken) throw new BucketError('malformed listing: truncated without a continuation token')
