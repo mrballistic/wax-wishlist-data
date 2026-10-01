@@ -43,9 +43,13 @@ export function parseListing(xml: string): {
   return { objects, isTruncated: tag(xml, 'IsTruncated') === 'true', nextToken: tag(xml, 'NextContinuationToken') }
 }
 
-/** Every `.pdf` key under `prefix`, following pagination. */
-export async function listPdfs(prefix: string, fetchImpl: typeof fetch = fetch): Promise<BucketObject[]> {
-  const pdfs: BucketObject[] = []
+/** Every key under `prefix` that `keep` accepts, following pagination. */
+export async function listKeys(
+  prefix: string,
+  keep: (key: string) => boolean,
+  fetchImpl: typeof fetch = fetch,
+): Promise<BucketObject[]> {
+  const kept: BucketObject[] = []
   let token: string | null = null
   for (let i = 0; i < MAX_PAGES; i++) {
     const url = new URL(BUCKET_URL)
@@ -70,12 +74,17 @@ export async function listPdfs(prefix: string, fetchImpl: typeof fetch = fetch):
       )
     }
     const page = parseListing(body)
-    pdfs.push(...page.objects.filter((o) => o.key.toLowerCase().endsWith('.pdf')))
-    if (!page.isTruncated) return pdfs
+    kept.push(...page.objects.filter((o) => keep(o.key)))
+    if (!page.isTruncated) return kept
     if (!page.nextToken) throw new BucketError('malformed listing: truncated without a continuation token')
     token = page.nextToken
   }
   throw new BucketError(`listing ${prefix} exceeded ${MAX_PAGES} pages`)
+}
+
+/** Every `.pdf` key under `prefix`, following pagination. */
+export async function listPdfs(prefix: string, fetchImpl: typeof fetch = fetch): Promise<BucketObject[]> {
+  return listKeys(prefix, (k) => k.toLowerCase().endsWith('.pdf'), fetchImpl)
 }
 
 /** Current year, plus next year from September 1 (the 2026/ prefix appeared 2025-09-15). */
