@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 
-import { defaultExtractors, runCascade } from '../../scripts/extract/index.js'
+import { defaultExtractors, EXTRACTOR_ENV, runCascade } from '../../scripts/extract/index.js'
 import type { ExtractedRow, Extractor, ExtractorName } from '../../scripts/extract/types.js'
 import type { RawRelease } from '../../scripts/types.js'
 import { loadRaw, toRows } from '../helpers/releases.js'
@@ -88,5 +88,11 @@ describe('defaultExtractors', () => {
       'gemini',
       'claude',
     ])
+  })
+})
+
+describe('EXTRACTOR_ENV', () => {
+  it('names the env var that enables each LLM extractor', () => {
+    expect(EXTRACTOR_ENV).toEqual({ parser: null, gemini: 'GEMINI_API_KEY', claude: 'ANTHROPIC_API_KEY' })
   })
 })

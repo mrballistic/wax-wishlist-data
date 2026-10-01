@@ -37,6 +37,13 @@ export interface CascadeResult {
   report: string
 }
 
+/** The env var that enables each extractor (the parser needs none). */
+export const EXTRACTOR_ENV: Record<ExtractorName, string | null> = {
+  parser: null,
+  gemini: 'GEMINI_API_KEY',
+  claude: 'ANTHROPIC_API_KEY',
+}
+
 /** parser always; gemini/claude only when their key is set. */
 export function defaultExtractors(env: NodeJS.ProcessEnv = process.env): Extractor[] {
   const extractors: Extractor[] = [parserExtractor]
