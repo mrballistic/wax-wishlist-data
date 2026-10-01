@@ -118,6 +118,13 @@ them. `ArtTier` is internal, not part of the app contract.
 - **Duplicates:** candidates whose normalized names are identical (the same
   file in `01-ALL ART COMBINED/` and in a distributor folder) count as one
   image; the first key in listing order is used.
+- **Foreign-artist guards (added 2026-10-01 after review):** site artist
+  scores use shared ÷ max(candidate, release artist tokens), so `Pink Floyd`
+  never fully matches `Pink`; a title-only filename is acceptable only when
+  it has no tokens outside the release's artist and title; an artist-only
+  filename scores `0.9` only when it covers the whole artist; and an
+  accepted image is demoted when any *other* release in the whole season
+  (not just those missing art) scores at least as high for it.
 - **One image, one release:** if a candidate image is the accepted match for
   two releases, neither is accepted; both get it as a suggestion. Exception:
   releases whose ids differ only by a `-2`/`-3` suffix (the same title in two
