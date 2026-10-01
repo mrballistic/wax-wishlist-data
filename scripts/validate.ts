@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 import type { ZodTypeAny } from 'zod'
 
 import { ART_CANDIDATES_FILE, ArtCandidatesSchema } from './art/candidates.js'
+import { RSD_EVENTS_FILE, RsdEventsSchema } from './art/rsd-site.js'
 import { CurrentSeasonSchema, ReleaseListSchema, SeasonsListSchema } from './types.js'
 import { CalendarSchema } from './watch/calendar.js'
 import { SourcesSchema } from './watch/sources.js'
@@ -13,6 +14,7 @@ const CURRENT_PATH = resolve(REPO_ROOT, 'current.json')
 const SEASONS_PATH = resolve(REPO_ROOT, 'seasons.json')
 const SOURCES_PATH = resolve(REPO_ROOT, 'sources.json')
 const CALENDAR_PATH = resolve(REPO_ROOT, 'calendar.json')
+const RSD_EVENTS_PATH = resolve(REPO_ROOT, RSD_EVENTS_FILE)
 const RELEASES_DIR = resolve(REPO_ROOT, 'releases')
 
 type Problem = { path: string; message: string }
@@ -107,6 +109,7 @@ async function main(): Promise<void> {
     ...(await validateSeasons()),
     ...(await validateOptional(SOURCES_PATH, SourcesSchema)),
     ...(await validateOptional(CALENDAR_PATH, CalendarSchema)),
+    ...(await validateOptional(RSD_EVENTS_PATH, RsdEventsSchema)),
     ...(await validateReleases()),
   ]
 

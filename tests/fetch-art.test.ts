@@ -19,6 +19,14 @@ vi.mock('../scripts/art/rsd-bucket.js', () => ({
     suggestions: () => [],
   })),
 }))
+vi.mock('../scripts/art/rsd-site.js', () => ({
+  createRsdSiteSource: vi.fn(() => ({
+    name: 'rsd-site',
+    prepare: async () => {},
+    accepted: () => null,
+    suggestions: () => [],
+  })),
+}))
 
 function makeRelease(id: string, overrides: Partial<RawRelease> = {}): RawRelease {
   return {
@@ -598,11 +606,15 @@ describe('runArtCascade — indexed RSD sources', () => {
 })
 
 describe('buildDefaultIndexedSources', () => {
-  it('is empty without a season and the bucket source (by year) with one', async () => {
+  it('is empty without a season and the site then bucket sources with one', async () => {
     const { createRsdBucketSource } = await import('../scripts/art/rsd-bucket.js')
+    const { createRsdSiteSource } = await import('../scripts/art/rsd-site.js')
+    vi.stubEnv('BRIGHT_DATA_KEY', '')
     expect(buildDefaultIndexedSources({})).toEqual([])
     const sources = buildDefaultIndexedSources({ seasonId: '2025-november' })
-    expect(sources.map((s) => s.name)).toEqual(['rsd-bucket'])
+    expect(sources.map((s) => s.name)).toEqual(['rsd-site', 'rsd-bucket'])
+    expect(createRsdSiteSource).toHaveBeenLastCalledWith({ seasonId: '2025-november', unlocker: null })
     expect(createRsdBucketSource).toHaveBeenLastCalledWith({ year: '2025' })
+    vi.unstubAllEnvs()
   })
 })

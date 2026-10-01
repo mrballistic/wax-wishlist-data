@@ -136,6 +136,48 @@ describe('matchReleases', () => {
   })
 })
 
+describe('matchReleases — site formats', () => {
+  const siteF = (artist: string, title: string, photoId: number, format: string): ArtCandidate => ({
+    ...site(artist, title, photoId),
+    format,
+  })
+  const relF = (id: string, artist: string, title: string, format: string): RawRelease =>
+    makeRelease(0, { id, artist, title, format })
+
+  it('blends a 0.15 format score into site scores when both sides have a format', () => {
+    const r = relF('x', 'Jeff Buckley', "Live À L'Olympia", '2 x LP')
+    expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 1, '2 x LP'), 1)).toBeCloseTo(1)
+    expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 2, 'CD'), 1)).toBeCloseTo(0.85)
+    expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 3, 'LP'), 1)).toBeCloseTo(0.85 + 0.15 / 3)
+    expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 4, ''), 1)).toBeCloseTo(1)
+  })
+
+  it('gives each Jeff Buckley format its own photo (fixture rows 19910 / 19911)', async () => {
+    const season = await loadRaw('2026-april')
+    const lp = season.find((r) => r.id === 'jeff-buckley-live-a-lolympia')
+    const cd = season.find((r) => r.id === 'jeff-buckley-live-a-lolympia-2')
+    expect(lp?.format).toBe('2 x LP')
+    expect(cd?.format).toBe('CD')
+    const candidates = [
+      siteF('Jeff Buckley', "Live À L'Olympia", 418467310333, '2 x LP'),
+      siteF('Jeff Buckley', "Live À L'Olympia", 418467310334, 'CD'),
+    ]
+    const res = matchReleases(season, candidates, season)
+    expect(res.accepted.get('jeff-buckley-live-a-lolympia')?.photoId).toBe(418467310333)
+    expect(res.accepted.get('jeff-buckley-live-a-lolympia-2')?.photoId).toBe(418467310334)
+  })
+
+  it('collapses identical-format site rows to the lowest photo id', () => {
+    const r = relF('a-b', 'Artist', 'Some Title', 'LP')
+    const res = matchReleases(
+      [r],
+      [siteF('Artist', 'Some Title', 502, 'LP'), siteF('Artist', 'Some Title', 501, 'LP')],
+      [r],
+    )
+    expect(res.accepted.get('a-b')?.photoId).toBe(501)
+  })
+})
+
 describe('matchReleases — real April 2025 bucket art', () => {
   let season: RawRelease[]
   let candidates: ArtCandidate[]

@@ -14,6 +14,8 @@ export interface ArtCandidate {
   artist?: string
   title?: string
   photoId?: number
+  /** Site entries: the listing's format cell, e.g. "2 x LP". */
+  format?: string
 }
 
 export interface ScoredCandidate extends ArtCandidate {
@@ -78,6 +80,8 @@ const shared = (a: Set<string>, b: Set<string>): number => {
 }
 const subset = (a: Set<string>, b: Set<string>): boolean => a.size > 0 && shared(a, b) === a.size
 const artistKey = (artist: string): string => [...tokens(artist)].sort().join(' ')
+/** Format words, keeping lp/cd/ep/vinyl (which `tokens()` drops as stopwords). */
+const formatTokens = (format: string): Set<string> => new Set(normalize(format).split(' ').filter((t) => t !== ''))
 
 /** Score one candidate for one release. `artistReleaseCount` = releases in the season by this artist. */
 export function scoreCandidate(release: RawRelease, candidate: ArtCandidate, artistReleaseCount: number): number {
@@ -89,7 +93,12 @@ export function scoreCandidate(release: RawRelease, candidate: ArtCandidate, art
     const cArtist = tokens(candidate.artist)
     const a = rArtist.size ? shared(cArtist, rArtist) / Math.max(cArtist.size, rArtist.size) : 0
     const t = shared(tokens(candidate.title), rTitle) / rTitle.size
-    return 0.4 * a + 0.6 * t
+    const text = 0.4 * a + 0.6 * t
+    // Same title in several formats (2 x LP vs CD): let the format pick the photo.
+    const cFormat = formatTokens(candidate.format ?? '')
+    const rFormat = formatTokens(release.format)
+    if (cFormat.size === 0 || rFormat.size === 0) return text
+    return 0.85 * text + 0.15 * (shared(cFormat, rFormat) / Math.max(cFormat.size, rFormat.size))
   }
 
   const f = tokens(candidate.label)
@@ -124,6 +133,25 @@ const imageKey = (c: ArtCandidate): string =>
 /** Ids that differ only by a -2/-3 suffix are one title in two formats. */
 const baseId = (id: string): string => id.replace(/-\d+$/, '')
 
+/**
+ * Site rows identical in artist, title and format are colour variants of one
+ * release; keep the lowest photo id so they don't fail each other's margin.
+ */
+function collapseSiteVariants(candidates: ArtCandidate[]): ArtCandidate[] {
+  const best = new Map<string, ArtCandidate>()
+  const out: ArtCandidate[] = []
+  for (const c of candidates) {
+    if (c.artist === undefined || c.title === undefined || c.photoId === undefined) {
+      out.push(c)
+      continue
+    }
+    const k = [normalize(c.artist), normalize(c.title), normalize(c.format ?? '')].join('|')
+    const prev = best.get(k)
+    if (!prev || (prev.photoId ?? Infinity) > c.photoId) best.set(k, c)
+  }
+  return [...out, ...best.values()]
+}
+
 function demote(result: MatchResult, releaseId: string): void {
   const c = result.accepted.get(releaseId)
   if (!c) return
@@ -140,7 +168,7 @@ export function matchReleases(releases: RawRelease[], candidates: ArtCandidate[]
   for (const r of season) artistCounts.set(artistKey(r.artist), (artistCounts.get(artistKey(r.artist)) ?? 0) + 1)
 
   const seen = new Set<string>()
-  const unique = candidates.filter((c) => {
+  const unique = collapseSiteVariants(candidates).filter((c) => {
     const k = imageKey(c)
     if (!k || seen.has(k)) return false
     seen.add(k)

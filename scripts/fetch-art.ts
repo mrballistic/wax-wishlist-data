@@ -1,11 +1,13 @@
 import { access, mkdir, writeFile } from 'node:fs/promises'
 import { dirname, resolve as resolvePath } from 'node:path'
 
+import { unlockerFromEnv } from './art/brightdata.js'
 import { writeArtCandidates } from './art/candidates.js'
 import type { IndexedArtSource } from './art/indexed-source.js'
 import type { ScoredCandidate } from './art/match.js'
 import { normalizeArtImage } from './art/normalize.js'
 import { createRsdBucketSource } from './art/rsd-bucket.js'
+import { createRsdSiteSource } from './art/rsd-site.js'
 import { createDiscogsSource } from './sources/discogs.js'
 import {
   createManualSource,
@@ -110,8 +112,12 @@ const MAX_SUGGESTIONS = 3
  * season id.
  */
 export function buildDefaultIndexedSources(options: Pick<CascadeOptions, 'seasonId'>): IndexedArtSource[] {
-  if (!options.seasonId) return []
-  return [createRsdBucketSource({ year: options.seasonId.slice(0, 4) })]
+  const { seasonId } = options
+  if (!seasonId) return []
+  return [
+    createRsdSiteSource({ seasonId, unlocker: unlockerFromEnv() }),
+    createRsdBucketSource({ year: seasonId.slice(0, 4) }),
+  ]
 }
 
 /** Merge every source's suggestions: best first, one per image URL, at most 3. */
