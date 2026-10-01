@@ -1,0 +1,38 @@
+[
+  {
+    "releaseId": "beck-george-harrison-be-here-now-rsd-song-of-the-year",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467290197:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467290197:360",
+        "label": "George Harrison/Beck – Be Here Now (RSD Song of the Year)",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "releaseId": "george-harrison-beck-be-here-now-rsd-song-of-the-year",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467290197:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467290197:360",
+        "label": "George Harrison/Beck – Be Here Now (RSD Song of the Year)",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "releaseId": "thelonius-monk-live-at-the-it-club",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467289108:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467289108:360",
+        "label": "Thelonious Monk – Live At The It Club",
+        "score": 0.83
+      }
+    ]
+  }
+]
