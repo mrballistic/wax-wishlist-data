@@ -217,7 +217,7 @@ describe('createRsdSiteSource', () => {
 
     const accepted = april.filter((r) => source.accepted(r.id) !== null)
     console.log(`rsd-site 601 vs 2026-april: ${accepted.length} / ${april.length} accepted`)
-    expect(accepted.length).toBeGreaterThanOrEqual(335)
+    expect(accepted.length).toBeGreaterThanOrEqual(340)
     const aha = april.find((r) => /analogue/i.test(r.title) && /a-ha/i.test(r.artist))
     expect(aha && source.accepted(aha.id)).toMatchObject({
       source: 'rsd-site',
@@ -229,6 +229,64 @@ describe('createRsdSiteSource', () => {
     expect(source.accepted('jeff-buckley-live-a-lolympia')?.photoId).toBe(418467310333)
     expect(source.accepted('jeff-buckley-live-a-lolympia-2')?.photoId).toBe(418467310334)
     expect(unlocker.urls).toEqual([eventUrl(601)])
+  })
+
+  /** The ?view=all listing with the quickview of SpecialRelease/`releaseId` removed. */
+  const withoutRow = (html: string, releaseId: number): string => {
+    const marker = 'quickview_image image">'
+    const parts = html.split(marker)
+    const kept = parts.filter((p, i) => i === 0 || !p.trimStart().startsWith(`<a href="/SpecialRelease/${releaseId}">`))
+    expect(kept).toHaveLength(parts.length - 1)
+    return kept.join(marker)
+  }
+  const CHET_VOL1 = 'chet-baker-live-in-japan-1987-fukui-vol-1'
+  const CHET_VOL2 = 'chet-baker-live-in-japan-1987-fukui-vol-2'
+  const CHET_VOL1_PHOTO = 418467310906
+  const CHET_VOL2_PHOTO = 418467312327
+
+  it('never gives Chet Baker Vol. 1 the Vol. 2 photo when its own row is missing', async () => {
+    const html = withoutRow(viewAll601, 19841)
+    const unlocker = fakeUnlocker({ [eventUrl(601)]: html }, html600)
+    const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events: EVENTS, log: vi.fn() })
+    await source.prepare(april, april)
+    expect(source.accepted(CHET_VOL1)?.photoId).not.toBe(CHET_VOL2_PHOTO)
+    expect(source.accepted(CHET_VOL1)).toBeNull()
+    expect(source.accepted(CHET_VOL2)?.photoId).toBe(CHET_VOL2_PHOTO)
+  })
+
+  it('gives each Chet Baker volume its own photo, or only suggestions, when both rows are present', async () => {
+    const unlocker = fakeUnlocker({ [eventUrl(601)]: viewAll601 }, html600)
+    const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events: EVENTS, log: vi.fn() })
+    await source.prepare(april, april)
+    for (const [id, own] of [
+      [CHET_VOL1, CHET_VOL1_PHOTO],
+      [CHET_VOL2, CHET_VOL2_PHOTO],
+    ] as const) {
+      const acc = source.accepted(id)
+      if (acc) expect(acc.photoId).toBe(own)
+      else expect(source.suggestions(id)[0]?.photoId).toBe(own)
+    }
+  })
+
+  it('ignores a photo id shared by two different releases (a placeholder image)', async () => {
+    // Give Chet Baker Vol. 1's row the Vol. 2 photo, as a site placeholder would.
+    const html = viewAll601.replaceAll(`Photo/${CHET_VOL1_PHOTO}:`, `Photo/${CHET_VOL2_PHOTO}:`)
+    expect(parseListing(html).filter((e) => e.photoId === CHET_VOL2_PHOTO)).toHaveLength(2)
+    const unlocker = fakeUnlocker({ [eventUrl(601)]: html }, html600)
+    const log = vi.fn()
+    const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events: EVENTS, log })
+    await source.prepare(april, april)
+    expect(source.accepted(CHET_VOL1)).toBeNull()
+    expect(source.accepted(CHET_VOL2)).toBeNull()
+    expect(
+      [...source.suggestions(CHET_VOL1), ...source.suggestions(CHET_VOL2)].some(
+        (c) => c.photoId === CHET_VOL2_PHOTO,
+      ),
+    ).toBe(false)
+    expect(log).toHaveBeenCalledWith(
+      `rsd-site: photo ${CHET_VOL2_PHOTO} shared by 2 different releases; ignored`,
+    )
+    expect(log.mock.calls.filter(([l]) => String(l).includes('shared by'))).toHaveLength(1)
   })
 
   it('matches most of 2025-november from the recorded Black Friday listing', async () => {
@@ -255,7 +313,7 @@ describe('createRsdSiteSource', () => {
     expect(source.accepted(`${dead}-2`)?.photoId).toBe(cd?.photoId)
     expect(source.accepted('bobby-womack-live-in-london')?.format).toBe('2 x LP')
     expect(source.accepted('bobby-womack-live-in-london-2')?.format).toBe('2 x CD')
-    expect(accepted.length).toBeGreaterThanOrEqual(165)
+    expect(accepted.length).toBeGreaterThanOrEqual(168)
   })
 
   it('still matches from the original table page', async () => {
@@ -269,7 +327,7 @@ describe('createRsdSiteSource', () => {
     await source.prepare(april, april)
     const accepted = april.filter((r) => source.accepted(r.id) !== null)
     console.log(`rsd-site 601 table vs 2026-april: ${accepted.length} / ${april.length} accepted`)
-    expect(accepted.length).toBeGreaterThanOrEqual(335)
+    expect(accepted.length).toBeGreaterThanOrEqual(340)
   })
 
   it('retries an incomplete (JS-rendered) listing once, then skips without partial matching', async () => {
@@ -311,7 +369,7 @@ describe('createRsdSiteSource', () => {
     })
     await source.prepare(april, april)
     expect(calls).toBe(2)
-    expect(april.filter((r) => source.accepted(r.id) !== null).length).toBeGreaterThanOrEqual(335)
+    expect(april.filter((r) => source.accepted(r.id) !== null).length).toBeGreaterThanOrEqual(340)
   })
 
   it('logs once and accepts nothing without Bright Data', async () => {

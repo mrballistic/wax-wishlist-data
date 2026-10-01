@@ -69,7 +69,8 @@ export function tokens(s: string): Set<string> {
   return new Set(
     normalize(s)
       .split(' ')
-      .filter((t) => t.length > 1 && !STOPWORDS.has(t) && !/^\d+(st|nd|rd|th)$/.test(t)),
+      // Single letters are noise; single digits ("Vol. 1" vs "Vol. 2") are not.
+      .filter((t) => (t.length > 1 || /^\d$/.test(t)) && !STOPWORDS.has(t) && !/^\d+(st|nd|rd|th)$/.test(t)),
   )
 }
 
@@ -138,8 +139,15 @@ export function scoreCandidate(release: RawRelease, candidate: ArtCandidate, art
 const imageKey = (c: ArtCandidate): string =>
   c.photoId !== undefined ? `photo:${c.photoId}` : [...tokens(c.label)].sort().join(' ')
 
-/** Ids that differ only by a -2/-3 suffix are one title in two formats. */
-const baseId = (id: string): string => id.replace(/-\d+$/, '')
+const titleKey = (title: string): string => [...tokens(title)].sort().join(' ')
+
+/**
+ * Two releases are format variants of one title (e.g. `x` and `x-2`, LP and CD)
+ * only when their ids differ solely by a trailing -2..-9 suffix and their titles
+ * normalize identically. "…-vol-1" and "…-vol-2" are different releases.
+ */
+const variantKey = (r: Pick<RawRelease, 'id' | 'title'>): string =>
+  `${r.id.replace(/-[2-9]$/, '')}|${titleKey(r.title)}`
 
 /**
  * Site rows identical in artist, title and format are colour variants of one
@@ -198,19 +206,28 @@ export function matchReleases(releases: RawRelease[], candidates: ArtCandidate[]
     }
   }
 
+  const byId = new Map<string, RawRelease>()
+  for (const r of [...season, ...releases]) byId.set(r.id, r)
+  const variantOf = (id: string): string => {
+    const r = byId.get(id)
+    return r ? variantKey(r) : id
+  }
+
   // An image that fits another release in the season at least as well belongs to that one.
   for (const [id, c] of [...result.accepted]) {
     const owned = season.some(
-      (o) => baseId(o.id) !== baseId(id) && scoreCandidate(o, c, artistCounts.get(artistKey(o.artist)) ?? 1) >= c.score - EPS,
+      (o) =>
+        variantKey(o) !== variantOf(id) &&
+        scoreCandidate(o, c, artistCounts.get(artistKey(o.artist)) ?? 1) >= c.score - EPS,
     )
     if (owned) demote(result, id)
   }
 
-  // One image, one release (except -2/-3 format variants of one title).
+  // One image, one release (except -2..-9 format variants of one title).
   const byImage = new Map<string, string[]>()
   for (const [id, c] of result.accepted) byImage.set(imageKey(c), [...(byImage.get(imageKey(c)) ?? []), id])
   for (const ids of byImage.values()) {
-    if (new Set(ids.map(baseId)).size > 1) for (const id of ids) demote(result, id)
+    if (new Set(ids.map(variantOf)).size > 1) for (const id of ids) demote(result, id)
   }
 
   // Site photo ids come in season-sized upload batches; an outlier is suspect.

@@ -533,7 +533,49 @@ describe('runArtCascade — indexed RSD sources', () => {
     expect(summary.counts['rsd-bucket']).toBe(0)
     expect(summary.counts.discogs).toBe(1)
     expect(summary.results[0]?.tier).toBe('discogs')
+    // Two tries at the bucket image, then the discogs download.
+    expect(fetchImpl).toHaveBeenCalledTimes(3)
+  })
+
+  it('retries a failed rsd image download once', async () => {
+    const site = fakeIndexed('rsd-site', { r1: scored('rsd-site', 1, 0.95) })
+    let siteCalls = 0
+    const fetchImpl = vi.fn(async () => {
+      siteCalls += 1
+      return siteCalls === 1 ? new Response('busy', { status: 503 }) : new Response(png)
+    }) as unknown as typeof fetch
+
+    const summary = await runArtCascade([makeRelease('r1')], {
+      artDir: join(tmp, 'art'),
+      manualArtDir: join(tmp, 'manual-art'),
+      fetchImpl,
+      indexedSources: [site],
+      sources: { manual: miss('manual'), discogs: miss('discogs'), musicbrainz: miss('musicbrainz') },
+    })
+
+    expect(summary.counts['rsd-site']).toBe(1)
     expect(fetchImpl).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps an accepted rsd candidate whose image never downloads as the first suggestion', async () => {
+    const accepted = scored('rsd-site', 1, 0.95)
+    const site = fakeIndexed('rsd-site', { r1: accepted }, { r1: [scored('rsd-site', 2, 0.6)] })
+    const fetchImpl = vi.fn(async () => new Response('gone', { status: 500 })) as unknown as typeof fetch
+
+    const summary = await runArtCascade([makeRelease('r1')], {
+      artDir: join(tmp, 'art'),
+      manualArtDir: join(tmp, 'manual-art'),
+      fetchImpl,
+      indexedSources: [site],
+      sources: { manual: miss('manual'), discogs: miss('discogs'), musicbrainz: miss('musicbrainz') },
+    })
+
+    expect(summary.counts.none).toBe(1)
+    expect(fetchImpl).toHaveBeenCalledTimes(2)
+    expect(summary.suggestions.get('r1')?.map((c) => c.imageUrl)).toEqual([
+      accepted.imageUrl,
+      'https://img.example/rsd-site/2.jpg',
+    ])
   })
 
   it('an undecodable rsd image falls through to the next tier', async () => {

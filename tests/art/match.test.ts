@@ -40,8 +40,13 @@ describe('normalize / tokens', () => {
     expect(normalize('Cover Vinyl_Dada_Puzzle_With Sticker.jpg')).toBe('vinyl dada puzzle')
   })
 
-  it('drops stopwords, ordinals and single characters', () => {
+  it('drops stopwords, ordinals and single letters', () => {
     expect([...tokens('The Sword – Warp Riders (15th Anniversary Edition) LP')]).toEqual(['sword', 'warp', 'riders'])
+    expect([...tokens('Mr. T Experience')]).toEqual(['mr', 'experience'])
+  })
+
+  it('keeps single digits, so volumes differ', () => {
+    expect([...tokens('Live in Japan 1987 (Fukui, Vol. 1)')]).toEqual(['japan', '1987', 'fukui', 'vol', '1'])
   })
 })
 
@@ -96,6 +101,20 @@ describe('matchReleases', () => {
     expect(matchReleases([d, e], [site('Band', 'Album', 6)], [d, e]).accepted.size).toBe(0)
     // A better owner elsewhere in the season keeps the image from a weaker release.
     expect(matchReleases([a, c], [site('Band', 'Album', 7)], [a, c]).accepted.has('other-album')).toBe(false)
+  })
+
+  it('treats ids differing by -2..-9 as variants only when their titles match', () => {
+    // "-vol-1" / "-vol-2" are not a -2 variant of one id, so Vol. 1 can't share Vol. 2's photo.
+    const v1 = rel('band-live-vol-1', 'Band', 'Live Vol. 1')
+    const v2 = rel('band-live-vol-2', 'Band', 'Live Vol. 2')
+    const onlyVol2 = matchReleases([v1, v2], [site('Band', 'Live Vol. 2', 8)], [v1, v2])
+    expect(onlyVol2.accepted.has('band-live-vol-1')).toBe(false)
+    expect(onlyVol2.accepted.get('band-live-vol-2')?.photoId).toBe(8)
+    // A -2 id whose title differs is a different release: one image can't serve both.
+    const a = rel('band-album', 'Band', 'Album')
+    const b = rel('band-album-2', 'Band', 'Album Two')
+    const res = matchReleases([a, b], [site('Band', 'Album', 9)], [a, b])
+    expect(res.accepted.has('band-album-2')).toBe(false)
   })
 
   it('does not accept a site entry whose artist has extra foreign tokens', () => {
@@ -205,8 +224,8 @@ describe('matchReleases — real April 2025 bucket art', () => {
     }
   })
 
-  it('accepts a substantial share of the season (measured 154/309 on 2026-10-01)', () => {
+  it('accepts a substantial share of the season (measured 152/309 on 2026-10-01, after digit tokens)', () => {
     const res = matchReleases(season, candidates, season)
-    expect(res.accepted.size).toBeGreaterThanOrEqual(140)
+    expect(res.accepted.size).toBeGreaterThanOrEqual(150)
   })
 })

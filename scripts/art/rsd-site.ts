@@ -11,6 +11,7 @@ import {
   type ArtCandidate,
   matchReleases,
   type MatchResult,
+  normalize,
   type ScoredCandidate,
 } from './match.js'
 
@@ -202,6 +203,26 @@ export function parseReleasePage(html: string, pageUrl: string): SiteEntry | nul
   return { artist, title, photoId: Number(photo[1]), format, pageUrl }
 }
 
+/**
+ * Drop rows whose photo id also appears on a row for a different release
+ * (normalized artist + title): that photo is a site placeholder, not art.
+ * Colour variants of one release share artist and title, so they survive.
+ */
+export function dropSharedPhotos(entries: SiteEntry[], log: (line: string) => void): SiteEntry[] {
+  const releasesByPhoto = new Map<number, Set<string>>()
+  for (const e of entries) {
+    const key = `${normalize(e.artist)}|${normalize(e.title)}`
+    releasesByPhoto.set(e.photoId, (releasesByPhoto.get(e.photoId) ?? new Set()).add(key))
+  }
+  const shared = new Set<number>()
+  for (const [photoId, releases] of releasesByPhoto) {
+    if (releases.size < 2) continue
+    shared.add(photoId)
+    log(`rsd-site: photo ${photoId} shared by ${releases.size} different releases; ignored`)
+  }
+  return shared.size === 0 ? entries : entries.filter((e) => !shared.has(e.photoId))
+}
+
 /** The committed season -> event map; a missing file is an empty map. */
 export async function loadRsdEvents(
   path = resolve(process.cwd(), RSD_EVENTS_FILE),
@@ -304,7 +325,7 @@ export function createRsdSiteSource(opts: RsdSiteOptions): IndexedArtSource {
             return
           }
         }
-        const candidates: ArtCandidate[] = entries.map((e) => ({
+        const candidates: ArtCandidate[] = dropSharedPhotos(entries, log).map((e) => ({
           source: 'rsd-site',
           key: `photo:${e.photoId}`,
           imageUrl: photoUrl(e.photoId, 800),

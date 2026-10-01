@@ -52,6 +52,7 @@ jobs:
         run: |
           if [ -n "$INPUT_SEASON_ID" ]; then
             season="$INPUT_SEASON_ID"
+            [[ "$season" =~ ^[0-9]{4}-(april|november)$ ]] || { echo "Invalid season id"; exit 1; }
           else
             season="$(pnpm -s tsx scripts/art-refresh-target.ts)"
           fi

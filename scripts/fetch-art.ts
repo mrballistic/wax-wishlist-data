@@ -120,12 +120,20 @@ export function buildDefaultIndexedSources(options: Pick<CascadeOptions, 'season
   ]
 }
 
-/** Merge every source's suggestions: best first, one per image URL, at most 3. */
+/**
+ * Merge every source's suggestions: best first, one per image URL, at most 3.
+ * A release that ends with no art despite an accepted candidate (its image
+ * couldn't be fetched) keeps that candidate first, for a human to retry.
+ */
 function topSuggestions(indexed: IndexedArtSource[], releaseId: string): ScoredCandidate[] {
-  const all = indexed.flatMap((src) => src.suggestions(releaseId)).sort((a, b) => b.score - a.score)
+  const accepted = indexed.flatMap((src) => {
+    const c = src.accepted(releaseId)
+    return c ? [c] : []
+  })
+  const rest = indexed.flatMap((src) => src.suggestions(releaseId)).sort((a, b) => b.score - a.score)
   const seen = new Set<string>()
   const out: ScoredCandidate[] = []
-  for (const c of all) {
+  for (const c of [...accepted, ...rest]) {
     if (seen.has(c.imageUrl)) continue
     seen.add(c.imageUrl)
     out.push(c)
@@ -241,19 +249,22 @@ export async function runArtCascade(
     for (const r of pending) if (src.accepted(r.id)) acceptedIds.add(r.id)
   }
 
-  /** Fetch + normalize an RSD image into `destPath`. False (logged) on any failure. */
+  /** Fetch + normalize an RSD image into `destPath`, retrying once. False (logged) on any failure. */
   const materializeRsd = async (url: string, destPath: string, releaseId: string, tier: ArtTier): Promise<boolean> => {
-    try {
-      const res = await fetchImpl(url)
-      if (!res.ok) throw new Error(`HTTP ${res.status} from ${url}`)
-      const jpeg = await normalizeArtImage(Buffer.from(await res.arrayBuffer()))
-      await mkdir(dirname(destPath), { recursive: true })
-      await writeFile(destPath, jpeg)
-      return true
-    } catch (err) {
-      console.warn(`art: failed to materialize ${releaseId} (tier=${tier}), trying next tier: ${(err as Error).message}`)
-      return false
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const res = await fetchImpl(url)
+        if (!res.ok) throw new Error(`HTTP ${res.status} from ${url}`)
+        const jpeg = await normalizeArtImage(Buffer.from(await res.arrayBuffer()))
+        await mkdir(dirname(destPath), { recursive: true })
+        await writeFile(destPath, jpeg)
+        return true
+      } catch (err) {
+        const next = attempt === 1 ? 'retrying' : 'trying next tier'
+        console.warn(`art: failed to materialize ${releaseId} (tier=${tier}), ${next}: ${(err as Error).message}`)
+      }
     }
+    return false
   }
 
   const recordNone = (releaseId: string): void => {
