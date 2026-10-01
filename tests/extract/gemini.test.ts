@@ -180,7 +180,7 @@ describe('gemini extractor', () => {
   })
 
   it('ignores a non-numeric Retry-After and waits 60s', async () => {
-    script((m, n) =>
+    script((_m, n) =>
       n > 1 ? ok() : status(429, { 'Retry-After': 'Wed, 21 Oct 2026 07:28:00 GMT' }),
     )
     await extractor.extract(pdf)
