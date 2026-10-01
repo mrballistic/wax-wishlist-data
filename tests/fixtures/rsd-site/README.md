@@ -59,7 +59,9 @@ Ids for older events (from `/RSDArchive`): RSD 2024 593, RSD 2023 590, BF 2023 5
 RSD Drops 2022 587, BF 2022 588. Ids 598
 and 602+ were not checked. Black Friday 2026 (`2026-november`) will be a new id above 601, so a parser needs either a
 `season id -> event id` map (simplest, set when a season is registered) or discovery: request ids upward from the
-last known one and accept the page whose anchor heading (below) is `BLACK FRIDAY <year>` or `RECORD STORE DAY <year>`.
+last known one and accept the first real listing whose quickview release dates, by majority vote, fall in the season
+(`Date: 4/…/<year>` = `<year>-april`, `Date: 11/…/<year>` = `<year>-november`). The parser does both: `rsd-events.json`,
+then probing ids max+1..max+6.
 
 ### Telling a real event from a missing one
 
@@ -67,8 +69,10 @@ A missing id still returns HTTP 200 (`promotional-event-600-not-found.html`). It
 `/SpecialRelease/` links, and contains `we are sorry, but the page you requested was not found`. The `<title>` is
 `PromotionalEvent | RECORD STORE DAY` for real and missing events alike, so it is useless here.
 
-The event name is in the listing's anchor: `<a id="anchor" name="RECORD STORE DAY 2026">` /
-`<a id="anchor" name="BLACK FRIDAY 2025">`. Each row's quickview also has `<strong>Date</strong>: 4/18/2026` (M/D/YYYY).
+To tell *which* season a real listing is, use the date vote: each row's quickview has
+`<strong>Date</strong>: 4/18/2026` (M/D/YYYY), and the majority month/year names the season. The table page's
+`<a id="anchor" name="RECORD STORE DAY 2026">` looks like an event name but is not reliable: on the `?view=all` page the
+anchors name release-type sections instead (see "View-all page" below).
 
 ## Listing page (`PromotionalEvent/<id>`)
 

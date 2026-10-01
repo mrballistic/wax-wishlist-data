@@ -291,11 +291,18 @@ to the next tier; art never blocks a publish.
   with one log line.
 - Needs the season in `rsd-events.json` (`season id → PromotionalEvent id`).
   Event ids are opaque and cannot be derived from the season id. For a season
-  that isn't in the file, the tier probes the next few ids above the highest
-  known one and logs the id it found; add that id to `rsd-events.json`.
-- Costs one Unlocker request per run (the whole season is one listing page),
-  with a hard cap of 400 per run. The product images themselves come straight
-  from `img.broadtime.com` and cost nothing.
+  that isn't in the file, the tier probes the six ids above the highest known
+  one, takes the first listing whose release dates fall in the season, and
+  logs `rsd-site: <season> is PromotionalEvent/<id> — add it to
+  rsd-events.json`. **Runbook: when you see that line, add the discovered id
+  to `rsd-events.json` and commit it**, so later runs skip the probing.
+- Unlocker requests per run: 1 normally (the whole season is one `?view=all`
+  listing page); 2 when the listing comes back incomplete (under 80% of the
+  season's releases) and is retried once; up to 7 when probing an unmapped
+  season. Hard cap of 400 per run. The product images themselves come
+  straight from `img.broadtime.com` and cost nothing.
+- A photo id that appears on rows for different releases is treated as a site
+  placeholder and ignored for all of them (logged once per photo).
 - Recorded pages and site notes: `tests/fixtures/rsd-site/README.md`.
 
 ### `rsd-bucket`: RSD's S3 bucket
@@ -304,9 +311,11 @@ to the next tier; art never blocks a publish.
   watches and matches image filenames (`.jpg .jpeg .png .webp .tif .tiff`,
   skipping `logos/`, `__MACOSX/`, files over 25 MB) against the season.
 - Only useful when RSD uploads art packs for that year and leaves them
-  publicly readable. As of 2026-10-01 only `2025/` has art packs, and their
-  objects return HTTP 403 to anonymous requests, so the tier lists and
-  matches but every download fails and falls through.
+  publicly readable. After matching, the tier probes one matched image; if
+  the bucket refuses it (401/403) or can't be reached, the whole tier is
+  skipped for the run (`rsd-bucket: art images not publicly readable;
+  skipping`), so no 403 URLs reach the cascade or `art-candidates.json`. As
+  of 2026-10-01 only `2025/` has art packs, and their objects return 403.
 
 ### `art-candidates.json`
 

@@ -160,6 +160,36 @@ them. `ArtTier` is internal, not part of the app contract.
 - **Budget.** A hard cap of 400 Unlocker requests per run (constant). Hitting
   it stops the tier for that run, logged.
 
+### As built (2026-10-01)
+
+Where this differs from the sections above, this is what shipped:
+
+- **Site score:** `0.85 × (0.4a + 0.6t) + 0.15 × format` when both the
+  listing row and the release have a format; format tokens drop quantity
+  (`2 x LP` = `LP`, `2 x LP` ≠ `2 x CD`). Without a format on either side the
+  score is `0.4a + 0.6t`.
+- **Colour variants:** site rows identical in artist, title and format
+  collapse to the row with the lowest photo id before matching.
+- **Event ids:** `rsd-events.json` (season id → PromotionalEvent id) at the
+  repo root; an unmapped season probes ids max+1..max+6 above the highest
+  known id and logs the one it finds, to be added to the file.
+- **Listing:** `PromotionalEvent/<id>?view=all`, parsed from the per-release
+  quickview blocks (the plain URL is sometimes returned JS-rendered and
+  paginated to 50 rows).
+- **Season check:** a listing is used only when the majority of its quickview
+  release dates (`M/D/YYYY`) fall in the season's month and year.
+- **Completeness:** a listing with fewer entries than 80% of the season's
+  releases is refetched once, then skipped; never matched partially.
+- **Placeholder guard:** a photo id on rows for different releases
+  (normalized artist + title) is dropped for all of them, logged once.
+- **Tokens:** single letters are dropped but single digits are kept
+  (`Vol. 1` ≠ `Vol. 2`). Two releases count as format variants (exempt from
+  the owner check and the one-image rule) only when their ids differ solely
+  by a trailing `-[2-9]` suffix **and** their normalized titles are identical.
+- **Bucket tier:** after matching it probes one matched image and disables
+  itself for the run when the bucket refuses it (401/403) or can't be
+  reached; the 2025 art packs return 403, so the tier currently self-disables.
+
 ## `rsd-bucket` source
 
 `scripts/art/rsd-bucket.ts`:
