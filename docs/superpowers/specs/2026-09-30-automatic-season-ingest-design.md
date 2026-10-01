@@ -223,12 +223,14 @@ Rules (all must hold):
 | Rule | Applies to | Threshold |
 |---|---|---|
 | Minimum size | all | ≥ 25 rows |
-| Complete rows | all | artist, title, label, format non-empty for every row |
+| Complete rows | all | rows missing artist, title, label or format are dropped (not published) and listed in the report and a `watch-rsd: <season-id> published without incomplete rows (<etag-short>)` issue; more than 2% of rows incomplete fails the gate |
 | Valid categories | all | every category ∈ {exclusive, small-run, rsd-first} |
 | Unique ids | all | no collisions after suffixing |
 | Plausible size | when `lastComparableCount` is known and this isn't a revision | 0.6× – 1.6× of it |
 | Bounded revision | revisions | ≤ 15% of previous ids removed; count change ≤ 25% |
 | Grounded in PDF | gemini, claude | ≥ 98% of artist strings and ≥ 98% of title strings found in `pdfText` after normalization (case-fold, NFKD, strip punctuation, collapse whitespace); empty `pdfText` fails |
+
+*Note (2026-10-01):* the rule used to require every row to be complete. The Black Friday 2025 PDF has a genuinely blank label cell (Matchbox Twenty, “Mad Season (Live 2001)”), so a faithful transcription could never pass. Todd approved dropping up to 2% incomplete rows and surfacing them. All other rules now judge the kept rows; a dropped row that was in the previous list counts as removed for the revision bound.
 
 "Same kind" means April vs April and November vs November, using the season
 id suffix.

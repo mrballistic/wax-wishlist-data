@@ -6,6 +6,7 @@ import {
   createGitHubIssueClient,
   etagShort,
   failureIssueTitle,
+  incompleteIssueTitle,
   seasonIssuePrefix,
 } from '../../scripts/watch/issues.js'
 
@@ -19,6 +20,12 @@ const client = createGitHubIssueClient({ token: 't', repo: 'mrballistic/wax-wish
 const issue = (number: number, title: string, extra: Record<string, unknown> = {}) => ({ number, title, ...extra })
 
 describe('issue titles', () => {
+  it('formats the incomplete-rows title and keeps it out of the failure prefix', () => {
+    const title = incompleteIssueTitle('2026-november', '"9f1c2ab4ee0011"')
+    expect(title).toBe('watch-rsd: 2026-november published without incomplete rows (9f1c2ab4)')
+    expect(title.startsWith(seasonIssuePrefix('2026-november'))).toBe(false)
+  })
+
   it('formats the failure title with a short ETag', () => {
     expect(etagShort('"9f1c2ab4ee0011"')).toBe('9f1c2ab4')
     expect(failureIssueTitle('2026-november', '"9f1c2ab4ee0011"')).toBe(

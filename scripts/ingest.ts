@@ -81,6 +81,18 @@ async function main(): Promise<void> {
     process.exit(1)
     return
   }
+  if (result.dropped.length > 0) {
+    console.warn(
+      [
+        `WARNING: ${result.dropped.length} incomplete rows are NOT being published (category | artist | title | label | format):`,
+        ...result.dropped.map(
+          (r) =>
+            `  ${r.category} | ${r.artist || '?'} | ${r.title || '?'} | ${r.label || '(blank)'} | ${r.format || '(blank)'}`,
+        ),
+        'Add them by hand if they are real releases.',
+      ].join('\n'),
+    )
+  }
   if (dryRun) {
     console.log(`Dry run: would publish ${result.releases.length} releases (${result.extractor}).`)
     return

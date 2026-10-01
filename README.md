@@ -142,7 +142,10 @@ step. Design: `docs/superpowers/specs/2026-09-30-automatic-season-ingest-design.
   moving on when a model is overloaded.
 - **Quality gate:** at least 25 complete rows, a size within 0.6–1.6× of the
   last same-kind season, bounded revisions (≤ 15% removed, ≤ 25% count
-  change), and LLM rows that actually appear in the PDF's text.
+  change), and LLM rows that actually appear in the PDF's text. Rows missing
+  an artist, title, label or format are dropped rather than published (up to
+  2% of the list; more fails the gate) and listed in the report and in a
+  `watch-rsd: <season-id> published without incomplete rows` issue.
 - **Failures** publish nothing and open a `watch-rsd:` issue, which closes
   itself once the season is published (by the watcher or manual `ingest`).
 - **State:** `sources.json` records every bucket PDF seen and what happened

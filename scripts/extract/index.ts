@@ -29,6 +29,8 @@ export interface CascadeResult {
   passed: boolean
   extractor: ExtractorName | null
   releases: RawRelease[] | null
+  /** Incomplete rows the winner's gate removed; [] when nothing passed. */
+  dropped: RawRelease[]
   attempts: ExtractorAttempt[]
   /** The parser ran without error and produced at least one row. */
   parserFoundRows: boolean
@@ -79,7 +81,7 @@ function render(input: CascadeInput, attempts: ExtractorAttempt[], winner: Extra
  */
 export async function runCascade(input: CascadeInput): Promise<CascadeResult> {
   const attempts: ExtractorAttempt[] = []
-  let winner: { name: ExtractorName; releases: RawRelease[] } | null = null
+  let winner: { name: ExtractorName; releases: RawRelease[]; dropped: RawRelease[] } | null = null
 
   for (const extractor of input.extractors) {
     let releases: RawRelease[]
@@ -105,7 +107,7 @@ export async function runCascade(input: CascadeInput): Promise<CascadeResult> {
       report: gate.report,
     })
     if (gate.pass) {
-      winner = { name: extractor.name, releases }
+      winner = { name: extractor.name, releases: gate.kept, dropped: gate.dropped }
       break
     }
   }
@@ -114,6 +116,7 @@ export async function runCascade(input: CascadeInput): Promise<CascadeResult> {
     passed: winner !== null,
     extractor: winner?.name ?? null,
     releases: winner?.releases ?? null,
+    dropped: winner?.dropped ?? [],
     attempts,
     parserFoundRows: attempts.some((a) => a.name === 'parser' && a.outcome !== 'error' && (a.rowCount ?? 0) > 0),
     llmRan: attempts.some((a) => a.name !== 'parser' && a.outcome !== 'error'),

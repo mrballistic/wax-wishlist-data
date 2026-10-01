@@ -15,6 +15,11 @@ export function failureIssueTitle(seasonId: string, etag: string): string {
   return `${seasonIssuePrefix(seasonId)}${etagShort(etag)})`
 }
 
+/** Deliberately outside `seasonIssuePrefix`, so a successful publish never closes it. */
+export function incompleteIssueTitle(seasonId: string, etag: string): string {
+  return `watch-rsd: ${seasonId} published without incomplete rows (${etagShort(etag)})`
+}
+
 export interface IssueClient {
   /** Open an issue unless an open one already has this exact title. */
   ensure(title: string, body: string): Promise<void>

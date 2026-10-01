@@ -344,4 +344,43 @@ describe('runWatch', () => {
     expect(out[0]).toMatchObject({ key: odd.key, outcome: 'failed' })
     expect(d.issues.ensure).toHaveBeenCalledTimes(1)
   })
+
+  describe('incomplete rows', () => {
+    const withBlank = (): ExtractedRow[] =>
+      novemberRows.map((r, i) => (i === 5 ? { ...r, label: '' } : r))
+
+    it('publishes the kept rows and opens an issue listing the dropped one', async () => {
+      const d = deps([APRIL, BF], [extractor('parser', async () => withBlank())])
+      const out = await runWatch(opts(), d)
+      expect(out[0]).toMatchObject({ outcome: 'published' })
+      const published = vi.mocked(d.publish).mock.calls[0]?.[0].releases ?? []
+      const dropped = novemberRows[5]
+      expect(published).toHaveLength(novemberRows.length - 1)
+      expect(
+        published.some((r) => r.artist === dropped?.artist && r.title === dropped?.title),
+      ).toBe(false)
+      expect(d.issues.ensure).toHaveBeenCalledWith(
+        'watch-rsd: 2026-november published without incomplete rows (bf26bf26)',
+        expect.stringContaining(`${dropped?.artist} | ${dropped?.title} | (blank)`),
+      )
+      const body = vi.mocked(d.issues.ensure).mock.calls[0]?.[1] ?? ''
+      expect(body).toContain(BF_KEY)
+      expect(body).toContain('abc1234')
+      expect(body).toMatch(/by hand/)
+    })
+
+    it('files no issue on a dry run', async () => {
+      const d = deps([APRIL, BF], [extractor('parser', async () => withBlank())])
+      await runWatch(opts(true), d)
+      expect(d.issues.ensure).not.toHaveBeenCalled()
+    })
+
+    it('does not fail the publish when opening the issue throws', async () => {
+      const d = deps([APRIL, BF], [extractor('parser', async () => withBlank())])
+      vi.mocked(d.issues.ensure).mockRejectedValue(new Error('GitHub down'))
+      const out = await runWatch(opts(), d)
+      expect(out[0]).toMatchObject({ outcome: 'published' })
+      expect((await sourcesOnDisk()).find((s) => s.key === BF_KEY)?.outcome).toBe('published')
+    })
+  })
 })

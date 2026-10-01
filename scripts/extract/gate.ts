@@ -10,6 +10,11 @@ export const GATE = {
   maxRemovedFraction: 0.15,
   maxCountChange: 0.25,
   minGrounded: 0.98,
+  /**
+   * Rows with an empty artist/title/label/format are dropped, not published,
+   * up to this share of the list; more than that fails the gate.
+   */
+  maxIncompleteFraction: 0.02,
 } as const
 
 const VALID_CATEGORIES = new Set(['exclusive', 'small-run', 'rsd-first'])
@@ -28,6 +33,10 @@ export interface GateContext {
 export interface GateResult {
   pass: boolean
   failures: string[]
+  /** The rows that would be published (the candidate minus incomplete rows). */
+  kept: RawRelease[]
+  /** Incomplete rows removed from the candidate. */
+  dropped: RawRelease[]
   /** Markdown section for the step summary / issue body. */
   report: string
 }
@@ -88,6 +97,10 @@ export function diffReleases(prev: RawRelease[], next: RawRelease[]): ReleaseDif
 }
 
 const pct = (x: number): string => `${(x * 100).toFixed(1)}%`
+const describeRow = (r: RawRelease): string =>
+  [r.category, r.artist || '?', r.title || '?', r.label || '(blank)', r.format || '(blank)'].join(
+    ' | ',
+  )
 const describe = (r: RawRelease): string => `${r.artist || '?'} – ${r.title || '?'}`
 
 function list<T>(items: T[], render: (item: T) => string): string {
@@ -96,31 +109,44 @@ function list<T>(items: T[], render: (item: T) => string): string {
   return shown.join('\n')
 }
 
+/** Report lines for incomplete rows; shared with the watcher's issue body. */
+export function droppedLines(dropped: RawRelease[]): string[] {
+  return [
+    `- ⚠️ Dropped ${dropped.length} incomplete rows (not published):`,
+    ...dropped.map((r) => `  - ${describeRow(r)}`),
+  ]
+}
+
 export function checkCandidate(candidate: RawRelease[], ctx: GateContext): GateResult {
   const failures: string[] = []
   const notes: string[] = []
-  const n = candidate.length
+
+  const isIncomplete = (r: RawRelease): boolean => !r.artist || !r.title || !r.label || !r.format
+  const dropped = candidate.filter(isIncomplete)
+  // Every other rule judges what would actually be published.
+  const kept = candidate.filter((r) => !isIncomplete(r))
+  const n = kept.length
 
   if (n < GATE.minRows) failures.push(`only ${n} rows (minimum ${GATE.minRows})`)
 
-  const incomplete = candidate.filter((r) => !r.artist || !r.title || !r.label || !r.format)
-  const firstIncomplete = incomplete[0]
-  if (firstIncomplete) {
+  const limit = Math.floor(candidate.length * GATE.maxIncompleteFraction)
+  const firstDropped = dropped[0]
+  if (firstDropped && dropped.length > limit) {
     failures.push(
-      `${incomplete.length} rows missing artist, title, label or format (first: ${describe(firstIncomplete)})`,
+      `${dropped.length} rows missing artist, title, label or format (limit ${limit} = ${GATE.maxIncompleteFraction * 100}% of ${candidate.length}; first: ${describe(firstDropped)})`,
     )
   }
 
-  const badCategory = candidate.filter((r) => !VALID_CATEGORIES.has(r.category))
+  const badCategory = kept.filter((r) => !VALID_CATEGORIES.has(r.category))
   if (badCategory.length > 0) failures.push(`${badCategory.length} rows with an unknown category`)
 
-  const uniqueIds = new Set(candidate.map((r) => r.id)).size
+  const uniqueIds = new Set(kept.map((r) => r.id)).size
   if (uniqueIds !== n) failures.push(`${n - uniqueIds} duplicate ids`)
 
   let diff: ReleaseDiff | null = null
   const prev = ctx.previousSameSeason
   if (prev && prev.length > 0) {
-    diff = diffReleases(prev, candidate)
+    diff = diffReleases(prev, kept)
     const removedFraction = diff.removed.length / prev.length
     const countChange = Math.abs(n - prev.length) / prev.length
     notes.push(
@@ -150,8 +176,8 @@ export function checkCandidate(candidate: RawRelease[], ctx: GateContext): GateR
     if (!ctx.pdfText.trim()) {
       failures.push('PDF has no text layer to check LLM output against')
     } else {
-      const artists = groundedFraction(candidate.map((r) => r.artist), ctx.pdfText)
-      const titles = groundedFraction(candidate.map((r) => r.title), ctx.pdfText)
+      const artists = groundedFraction(kept.map((r) => r.artist), ctx.pdfText)
+      const titles = groundedFraction(kept.map((r) => r.title), ctx.pdfText)
       notes.push(`Found in PDF text: artists ${pct(artists)}, titles ${pct(titles)}`)
       if (artists < GATE.minGrounded) {
         failures.push(`only ${pct(artists)} of artists appear in the PDF text (need ${pct(GATE.minGrounded)})`)
@@ -163,9 +189,11 @@ export function checkCandidate(candidate: RawRelease[], ctx: GateContext): GateR
   }
 
   const pass = failures.length === 0
-  const lines = [`#### ${ctx.extractor}: ${pass ? 'PASS' : 'FAIL'} (${n} rows)`, '']
+  const count = dropped.length > 0 ? `${n} rows, ${dropped.length} dropped` : `${n} rows`
+  const lines = [`#### ${ctx.extractor}: ${pass ? 'PASS' : 'FAIL'} (${count})`, '']
   for (const note of notes) lines.push(`- ${note}`)
   for (const failure of failures) lines.push(`- ❌ ${failure}`)
+  if (dropped.length > 0) lines.push(...droppedLines(dropped))
   if (diff && (diff.added.length || diff.removed.length || diff.changed.length)) {
     lines.push('', '<details><summary>Revision diff</summary>', '')
     if (diff.added.length) lines.push('**Added**', '', list(diff.added, describe), '')
@@ -183,5 +211,5 @@ export function checkCandidate(candidate: RawRelease[], ctx: GateContext): GateR
     }
     lines.push('</details>')
   }
-  return { pass, failures, report: lines.join('\n') }
+  return { pass, failures, kept, dropped, report: lines.join('\n') }
 }

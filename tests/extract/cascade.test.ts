@@ -51,6 +51,21 @@ describe('runCascade', () => {
     expect(gemini.extract).not.toHaveBeenCalled()
   })
 
+  it('publishes the kept rows and reports the dropped ones', async () => {
+    const withBlank = rows.map((x, i) => (i === 7 ? { ...x, label: '' } : x))
+    const r = await runCascade(input([returns('parser', withBlank)]))
+    expect(r.passed).toBe(true)
+    expect(r.releases).toHaveLength(172)
+    expect(r.releases?.some((x) => x.id === november[7]?.id)).toBe(false)
+    expect(r.dropped.map((x) => x.id)).toEqual([november[7]?.id])
+    expect(r.attempts[0]?.rowCount).toBe(173)
+  })
+
+  it('has no dropped rows when nothing passes', async () => {
+    const r = await runCascade(input([returns('parser', rows.slice(0, 10))]))
+    expect(r.dropped).toEqual([])
+  })
+
   it('falls through a parser error to a passing Gemini', async () => {
     const text = november.map((x) => `${x.artist} ${x.title}`).join('\n')
     const r = await runCascade(input([throws('parser', 'no grid'), returns('gemini', rows)], text))

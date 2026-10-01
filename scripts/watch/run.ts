@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 
+import { droppedLines } from '../extract/gate.js'
 import { runCascade } from '../extract/index.js'
 import type { Extractor, ExtractorName } from '../extract/types.js'
 
@@ -7,7 +8,13 @@ import { prefixesFor } from './bucket.js'
 import { loadCalendar, seasonDate } from './calendar.js'
 import { classifyKey, hasListSignal } from './classify.js'
 import type { GitOps } from './git.js'
-import { BUCKET_ISSUE_TITLE, failureIssueTitle, type IssueClient, seasonIssuePrefix } from './issues.js'
+import {
+  BUCKET_ISSUE_TITLE,
+  failureIssueTitle,
+  incompleteIssueTitle,
+  type IssueClient,
+  seasonIssuePrefix,
+} from './issues.js'
 import type { PublishInput } from './publish.js'
 import { loadGateContext } from './season-context.js'
 import {
@@ -165,6 +172,7 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
       record(obj, seasonId, 'published', result.extractor)
       if (!live) {
         deps.log(`[dry-run] would publish ${seasonId}: ${result.releases.length} releases via ${result.extractor}`)
+        if (result.dropped.length > 0) deps.log(`[dry-run] would drop ${result.dropped.length} incomplete rows`)
         return 'published'
       }
       try {
@@ -179,6 +187,27 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
           seasonIssuePrefix(seasonId),
           `Published ${sha ? `in ${sha}` : '(no file changes)'} from \`${obj.key}\` via ${result.extractor}.`,
         )
+        if (result.dropped.length > 0) {
+          try {
+            await deps.issues.ensure(
+              incompleteIssueTitle(seasonId, obj.etag),
+              [
+                `Source: \`${obj.key}\``,
+                `Published${sha ? ` in ${sha}` : ''} via ${result.extractor}, without ${result.dropped.length} rows that had an empty artist, title, label or format.`,
+                '',
+                ...droppedLines(result.dropped),
+                '',
+                'If these are real releases, add them by hand (for example via wax-wishlist-art-admin, or by editing `releases/' +
+                  `${seasonId}/releases.json\`). Format of each row: category | artist | title | label | format.`,
+              ].join('\n'),
+            )
+          } catch (issueErr) {
+            // The publish already succeeded; don't mark the key failed.
+            deps.log(
+              `opening the incomplete-rows issue for ${seasonId} failed: ${message(issueErr)}`,
+            )
+          }
+        }
       } catch (err) {
         // Keep going with the other seasons; the run rejects at the end.
         deps.log(`publishing ${seasonId} from ${obj.key} failed: ${message(err)}`)
