@@ -4083,8 +4083,9 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 Report to Todd, with the numbers from Steps 2–3, and **ask before doing any of these**:
 1. Push the branch / open the PR to `main` (needs the `mrballistic` `GH_TOKEN`).
 2. Add the `GEMINI_API_KEY` repository secret from `.env` (`gh secret set GEMINI_API_KEY --repo mrballistic/wax-wishlist-data`).
-3. After merge: dispatch `watch-rsd` once with `publish` unchecked and confirm the step summary says `No new or revised PDFs.`
-4. Flip publishing on by setting the repository variable `WATCH_RSD_PUBLISH=true` (spec rollout step 3), ideally before the late-October Black Friday 2026 drop.
+3. After merge: dispatch `watch-rsd` once with `publish` unchecked and confirm the step summary says `No new or revised PDFs.` (`watch-rsd.ts` writes the outcome table, or that line, to the step summary on every run.)
+4. Immediately before the flip, re-run the live Gemini check and confirm it passes: `pnpm tsx --env-file=.env scripts/check-llm-extractors.ts gemini tests/fixtures/2025-november.pdf 2025-november`.
+5. Flip publishing on by setting the repository variable `WATCH_RSD_PUBLISH=true` (spec rollout step 3), ideally before the late-October Black Friday 2026 drop.
 
 ---
 
