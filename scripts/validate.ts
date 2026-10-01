@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 import type { ZodTypeAny } from 'zod'
 
 import { ART_CANDIDATES_FILE, ArtCandidatesSchema } from './art/candidates.js'
-import { RSD_EVENTS_FILE, RsdEventsSchema } from './art/rsd-site.js'
+import { RSD_EVENTS_FILE, RsdEventsSchema } from './rsd/site-index.js'
 import { CurrentSeasonSchema, ReleaseListSchema, SeasonsListSchema } from './types.js'
 import { CalendarSchema } from './watch/calendar.js'
 import { SourcesSchema } from './watch/sources.js'

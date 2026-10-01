@@ -1,12 +1,12 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { type Unlocker, UnlockerBudgetError } from '../../scripts/art/brightdata.js'
+import { createRsdSiteSource } from '../../scripts/art/rsd-site.js'
 import {
   cleanText,
-  createRsdSiteSource,
   eventUrl,
   isEventPage,
   listingSeason,
@@ -14,7 +14,9 @@ import {
   parseListing,
   parseReleasePage,
   photoUrl,
-} from '../../scripts/art/rsd-site.js'
+  resetSiteIndexCache,
+  tableUrl,
+} from '../../scripts/rsd/site-index.js'
 import type { RawRelease } from '../../scripts/types.js'
 import { loadRaw, REPO_ROOT } from '../helpers/releases.js'
 
@@ -52,6 +54,11 @@ beforeAll(async () => {
   html600 = await fixture('promotional-event-600-not-found.html')
 })
 
+// The site index is memoized per season per process; each test brings its own pages.
+beforeEach(() => {
+  resetSiteIndexCache()
+})
+
 describe('parseListing', () => {
   it.each([
     ['table page', () => html601],
@@ -59,20 +66,22 @@ describe('parseListing', () => {
   ])('returns every release of the April 2026 listing (%s)', (_name, html) => {
     const entries = parseListing(html())
     expect(entries).toHaveLength(359)
-    expect(entries[0]).toEqual({
+    expect(entries[0]).toMatchObject({
       artist: '13th Floor Elevators',
       title: 'We Are Not Live',
       photoId: 418467310726,
       format: expect.any(String),
       pageUrl: expect.stringMatching(/^https:\/\/recordstoreday\.com\/SpecialRelease\/\d+$/),
     })
-    expect(entries).toContainEqual({
-      artist: 'A-Ha',
-      title: 'Analogue 20th Anniversary Deluxe Edition',
-      photoId: 418467310484,
-      format: '2 x LP',
-      pageUrl: 'https://recordstoreday.com/SpecialRelease/19926',
-    })
+    expect(entries).toContainEqual(
+      expect.objectContaining({
+        artist: 'A-Ha',
+        title: 'Analogue 20th Anniversary Deluxe Edition',
+        photoId: 418467310484,
+        format: '2 x LP',
+        pageUrl: 'https://recordstoreday.com/SpecialRelease/19926',
+      }),
+    )
     expect(new Set(entries.map((e) => e.photoId)).size).toBe(359)
   })
 
@@ -122,8 +131,12 @@ describe('parseListing', () => {
       format: 'LP',
     })
     expect(entries.filter((e) => /RSD|Exclusive|Limited/i.test(e.format))).toEqual([])
+    // Head fields only: the rendered DOM re-encodes some description punctuation.
+    const head = ({ releaseId, artist, title, photoId, format, label, pageUrl }: (typeof entries)[number]) =>
+      ({ releaseId, artist, title, photoId, format, label, pageUrl })
     const full = new Map(parseListing(viewAll601).map((e) => [e.photoId, e]))
-    for (const e of entries) expect(full.get(e.photoId)).toEqual(e)
+    for (const e of entries) expect(head(full.get(e.photoId) ?? e)).toEqual(head(e))
+    expect(entries.every((e) => full.has(e.photoId))).toBe(true)
   })
 
   it('returns every row of the Black Friday 2025 listing and nothing for a soft 404', () => {
@@ -209,8 +222,8 @@ describe('createRsdSiteSource', () => {
     november = await loadRaw('2025-november')
   })
 
-  it('matches most of 2026-april from the recorded ?view=all listing with one request', async () => {
-    const unlocker = fakeUnlocker({ [eventUrl(601)]: viewAll601 }, html600)
+  it('matches most of 2026-april from the recorded ?view=all listing and table page', async () => {
+    const unlocker = fakeUnlocker({ [eventUrl(601)]: viewAll601, [tableUrl(601)]: html601 }, html600)
     const log = vi.fn()
     const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events: EVENTS, log })
     await source.prepare(april, april)
@@ -228,7 +241,7 @@ describe('createRsdSiteSource', () => {
     })
     expect(source.accepted('jeff-buckley-live-a-lolympia')?.photoId).toBe(418467310333)
     expect(source.accepted('jeff-buckley-live-a-lolympia-2')?.photoId).toBe(418467310334)
-    expect(unlocker.urls).toEqual([eventUrl(601)])
+    expect(unlocker.urls).toEqual([eventUrl(601), tableUrl(601)])
   })
 
   /** The ?view=all listing with the quickview of SpecialRelease/`releaseId` removed. */
@@ -368,7 +381,8 @@ describe('createRsdSiteSource', () => {
       log: vi.fn(),
     })
     await source.prepare(april, april)
-    expect(calls).toBe(2)
+    // Listing, its retry, then the table page (a soft 404 here) and its retry.
+    expect(calls).toBe(4)
     expect(april.filter((r) => source.accepted(r.id) !== null).length).toBeGreaterThanOrEqual(340)
   })
 
@@ -405,8 +419,8 @@ describe('createRsdSiteSource', () => {
     const events = { '2024-november': 596, '2025-april': 597 }
     const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events, log })
     await source.prepare(april, april)
-    // 598 and 600 are soft 404s, 599 is the wrong event.
-    expect(unlocker.urls).toEqual([598, 599, 600, 601].map(eventUrl))
+    // 598 and 600 are soft 404s, 599 is the wrong event; then the table page (soft 404) twice.
+    expect(unlocker.urls).toEqual([...[598, 599, 600, 601].map(eventUrl), tableUrl(601), tableUrl(601)])
     expect(log).toHaveBeenCalledWith(
       'rsd-site: 2026-april is PromotionalEvent/601 — add it to rsd-events.json',
     )
