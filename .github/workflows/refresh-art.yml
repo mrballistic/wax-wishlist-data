@@ -5,20 +5,31 @@ name: refresh-art
 # releases/<season-id>/art/ (from earlier runs or wax-wishlist-art-admin)
 # are kept, so this is safe to run as often as you like — e.g. weekly
 # between a list drop and the event, as Discogs/MusicBrainz catch up.
+# Runs daily for the upcoming season (current.json) until its date passes;
+# a manual run can name any season.
 
 on:
+  schedule:
+    - cron: '0 14 * * *'
   workflow_dispatch:
     inputs:
       season-id:
-        description: 'Season id (e.g. 2025-november)'
-        required: true
+        description: 'Season id (e.g. 2025-november); blank = the upcoming season'
+        required: false
         type: string
+
+concurrency:
+  group: refresh-art
+  cancel-in-progress: false
 
 jobs:
   refresh-art:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
       contents: write
+      # For the keepalive step below.
+      actions: write
     steps:
       - uses: actions/checkout@v7
 
@@ -34,26 +45,46 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Fetch album art
+      - name: Pick season
+        id: pick
         env:
-          SEASON_ID: ${{ inputs.season-id }}
+          INPUT_SEASON_ID: ${{ inputs.season-id }}
+        run: |
+          if [ -n "$INPUT_SEASON_ID" ]; then
+            season="$INPUT_SEASON_ID"
+          else
+            season="$(pnpm -s tsx scripts/art-refresh-target.ts)"
+          fi
+          if [ -z "$season" ]; then
+            echo "No upcoming season; skipping."
+          fi
+          echo "season=$season" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch album art
+        if: steps.pick.outputs.season != ''
+        env:
+          SEASON_ID: ${{ steps.pick.outputs.season }}
+          BRIGHT_DATA_KEY: ${{ secrets.BRIGHT_DATA_KEY }}
+          BRIGHT_DATA_ZONE: ${{ secrets.BRIGHT_DATA_ZONE }}
           DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
           DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
           METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
         run: pnpm tsx scripts/fetch-art.ts "$SEASON_ID"
 
       - name: Validate JSON
+        if: steps.pick.outputs.season != ''
         run: pnpm tsx scripts/validate.ts
 
       - name: Commit updates
+        if: steps.pick.outputs.season != ''
         env:
-          SEASON_ID: ${{ inputs.season-id }}
+          SEASON_ID: ${{ steps.pick.outputs.season }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "releases/$SEASON_ID/art/"
+          git add "releases/$SEASON_ID/"
           if git diff --staged --quiet; then
-            echo "No new art found."
+            echo "No new art or candidates."
             exit 0
           fi
           git commit -m "chore: refresh art for $SEASON_ID"
@@ -67,3 +98,11 @@ jobs:
           done
           echo "Exhausted push retries." >&2
           exit 1
+
+      # Scheduled workflows are disabled after 60 days without a commit;
+      # re-enabling through the API resets the timer (same as auto-status).
+      - name: Keep this schedule alive
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/refresh-art.yml/enable"

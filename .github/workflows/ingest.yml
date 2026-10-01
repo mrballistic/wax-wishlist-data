@@ -56,6 +56,8 @@ jobs:
           DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
           DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
           METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
+          BRIGHT_DATA_KEY: ${{ secrets.BRIGHT_DATA_KEY }}
+          BRIGHT_DATA_ZONE: ${{ secrets.BRIGHT_DATA_ZONE }}
         run: |
           if [ -n "$SEASON_LABEL" ]; then
             pnpm tsx scripts/ingest.ts "$SEASON_ID" "$PDF_URL" "$SEASON_DATE" --label="$SEASON_LABEL"
