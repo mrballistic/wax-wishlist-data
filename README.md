@@ -25,7 +25,7 @@ releases/
     art/                  # album art (one file per release, name matches artFilename)
 scripts/                  # TypeScript ingestion + validation tooling
 tests/                    # Vitest suite for schemas + generators
-.github/workflows/        # validate / ingest / update-status pipelines
+.github/workflows/        # validate / ingest / watch-rsd / status / art pipelines
 ```
 
 ## Data contract
@@ -103,9 +103,10 @@ export DISCOGS_CONSUMER_SECRET=...
 pnpm tsx scripts/ingest.ts <season-id> <pdfUrl-or-local-path> <YYYY-MM-DD> [--label="..."] [--dry-run]
 ```
 
-Writes `releases/<season-id>/releases.json`, sorted stably by artist then
-title (case-insensitive). Art is **not** pre-downloaded — the consuming app
-fetches art lazily per release.
+Runs the extractor cascade and quality gate, then writes
+`releases/<season-id>/releases.json` (sorted stably by artist then title,
+case-insensitive), fills empty art slots via the art cascade, and registers
+the season (see [Season promotion flow](#season-promotion-flow)).
 
 ### Update season status
 
@@ -147,7 +148,9 @@ step. Design: `docs/superpowers/specs/2026-09-30-automatic-season-ingest-design.
   announces it; Black Friday is computed).
 - **Publishing switch:** scheduled runs are dry runs (report in the step
   summary) unless the repository variable `WATCH_RSD_PUBLISH` is `true`.
-  Manual runs take a `publish` checkbox and an `only` extractor choice.
+  Manual runs take a `publish` checkbox and an `only` extractor choice:
+  `all` (the full cascade, default), `parser`, `gemini` or `claude`. Choosing
+  an LLM whose key isn't configured fails the run up front.
 
 Local dry run (reads `.env` for `GEMINI_API_KEY`):
 
@@ -157,7 +160,9 @@ pnpm tsx --env-file=.env scripts/watch-rsd.ts --dry-run --prefix=2025/ --sources
 ```
 
 Manual `ingest` now takes the date as a third argument and runs the same
-cascade and gate:
+cascade and gate. When the PDF URL points into the RSD bucket, a successful
+publish is also recorded in `sources.json`, so the watcher treats that PDF
+as handled instead of retrying or republishing it:
 
 ```sh
 pnpm tsx scripts/ingest.ts 2026-november <pdf-url-or-path> 2026-11-27 [--label="..."] [--dry-run]
@@ -171,13 +176,21 @@ pnpm tsx --env-file=.env scripts/check-llm-extractors.ts gemini tests/fixtures/2
 
 ## Season promotion flow
 
-1. A new PDF drops. Open the **Actions -> ingest** workflow in GitHub and
-   run it with the new `season-id` and the PDF URL. The workflow commits
-   `releases/<season-id>/releases.json` back to `main`.
-2. Edit `current.json` and prepend a new entry to `seasons.json` by hand
-   (or via a follow-up script) with `status: "upcoming"`.
-3. The daily **update-status** workflow (or a manual dispatch) moves the
-   season through `upcoming -> active -> past` as the calendar advances.
+1. A new PDF drops. **watch-rsd** picks it up on its next daily run and
+   publishes it if it passes the gate. If it doesn't (or publishing is still
+   switched off), run the **Actions -> ingest** workflow with the
+   `season-id`, the PDF URL and the season `date` (`yyyy-MM-dd`; required).
+2. Either path registers the season itself via `register-season`: the entry
+   is upserted into `seasons.json` (new seasons start `upcoming`; an existing
+   entry keeps its status), and `current.json` is pointed at it if its date
+   is later than the current season's, or if it *is* the current season (a
+   revision). Every `current.json` write stamps a fresh `contentUpdatedAt`.
+   Registering an older season never touches `current.json`. Both commit
+   `releases/<season-id>/`, `seasons.json`, `current.json` and `sources.json`
+   back to `main`.
+3. The daily **auto-status** workflow moves the season through
+   `upcoming -> active -> past` as the calendar advances (**update-status**
+   is the manual override).
 4. The consuming iOS app polls `current.json` — a change in `id` prompts
    a download; a change in `status` updates silently.
 
@@ -185,8 +198,15 @@ pnpm tsx --env-file=.env scripts/check-llm-extractors.ts gemini tests/fixtures/2
 
 - **validate.yml** — on every push and PR: `pnpm install`, lint, typecheck,
   tests, and schema validation of every shipped JSON file.
-- **ingest.yml** — manual dispatch only. Runs `ingest.ts`, validates, and
-  commits back to `main`.
+- **ingest.yml** — manual dispatch only. Inputs: `season-id`, `pdfUrl`,
+  `date` (`yyyy-MM-dd`, required so the season can be registered) and an
+  optional `label`. Runs `ingest.ts` (cascade, gate, publish,
+  register-season), validates, commits back to `main`, and closes this
+  season's `watch-rsd:` issues.
+- **watch-rsd.yml** — daily cron (13:30 UTC) plus manual dispatch. Watches
+  RSD's bucket and publishes new or revised lists; see
+  [Automatic ingest](#automatic-ingest-watch-rsd). Dry run unless
+  `WATCH_RSD_PUBLISH` is `true` (scheduled) or `publish` is ticked (manual).
 - **update-status.yml** — manual dispatch only. Runs `update-status.ts`,
   validates, and commits back to `main`.
 - **auto-status.yml** — daily cron. Recomputes every season's status from
