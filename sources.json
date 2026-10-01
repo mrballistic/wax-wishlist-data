@@ -1,0 +1,56 @@
+[
+  {
+    "key": "2025/RSD 2025 List Links/2025_BLACK_FRIDAY_PUBLIC.pdf",
+    "etag": "\"ce056820ed9d32a1c91e534a4faf27a7\"",
+    "lastModified": "2025-11-19T02:44:35.000Z",
+    "seasonId": "2025-november",
+    "outcome": "superseded",
+    "extractor": null,
+    "processedAt": "2026-10-01T05:10:47.131Z"
+  },
+  {
+    "key": "2025/RSD 2025 List Links/2025_RSD_PUBLICX354A.pdf",
+    "etag": "\"a23c111f78a5cdc10e8a90608597bb8c\"",
+    "lastModified": "2025-04-10T18:03:49.000Z",
+    "seasonId": "2025-april",
+    "outcome": "published",
+    "extractor": "parser",
+    "processedAt": "2026-10-01T05:10:47.131Z"
+  },
+  {
+    "key": "2025/RSD Black Friday 2025 l/2025_BLACK_FRIDAY_PUBLIC.pdf",
+    "etag": "\"469c7587ab049ca5d4e5b6abcab0d8e7\"",
+    "lastModified": "2025-11-25T02:48:51.000Z",
+    "seasonId": "2025-november",
+    "outcome": "published",
+    "extractor": "parser",
+    "processedAt": "2026-10-01T05:10:47.131Z"
+  },
+  {
+    "key": "2025/RSD_2025_Italia/2025_RSD_PUBLIC_PDF_Italia.pdf",
+    "etag": "\"658d8b2d6773cf0c461940c1acf212c6\"",
+    "lastModified": "2025-02-06T19:57:12.000Z",
+    "seasonId": null,
+    "outcome": "skipped-country",
+    "extractor": null,
+    "processedAt": "2026-10-01T05:10:47.131Z"
+  },
+  {
+    "key": "2026/RSD 2026_v2/2026_RSD_PUBLIC_PDF.pdf",
+    "etag": "\"9cd30d3b4eec35553fd76dbe6fbb87ed\"",
+    "lastModified": "2026-04-16T19:58:15.000Z",
+    "seasonId": "2026-april",
+    "outcome": "published",
+    "extractor": "parser",
+    "processedAt": "2026-10-01T05:10:47.131Z"
+  },
+  {
+    "key": "2026/RSD 2026_v2/RSD26_PDF_4-3.pdf",
+    "etag": "\"679a5601de57f5145df7323d43e0e0ff\"",
+    "lastModified": "2026-02-04T20:09:38.000Z",
+    "seasonId": "2026-april",
+    "outcome": "superseded",
+    "extractor": null,
+    "processedAt": "2026-10-01T05:10:47.131Z"
+  }
+]

@@ -1,0 +1,80 @@
+name: watch-rsd
+
+# Daily: list RSD's public bucket, ingest new or revised release-list PDFs
+# through the extractor cascade and quality gate, publish what passes, and
+# open an issue for anything that doesn't. Publishing is off until the
+# WATCH_RSD_PUBLISH repository variable is "true"; until then scheduled runs
+# are dry runs (report only, in the step summary).
+
+on:
+  schedule:
+    # 13:30 UTC daily, after auto-status (12:00).
+    - cron: '30 13 * * *'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish (otherwise a dry run: report only)'
+        required: false
+        type: boolean
+        default: false
+      only:
+        description: 'Run a single extractor (dry-run rehearsals); all = full cascade'
+        required: false
+        type: choice
+        options: [all, parser, gemini, claude]
+        default: all
+
+concurrency:
+  group: watch-rsd
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      # For the keepalive step below.
+      actions: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Watch the RSD bucket
+        env:
+          PUBLISH: ${{ (github.event_name == 'schedule' && vars.WATCH_RSD_PUBLISH == 'true') || (github.event_name == 'workflow_dispatch' && inputs.publish) }}
+          ONLY: ${{ inputs.only }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
+          DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
+          METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          args=()
+          if [ "$PUBLISH" != "true" ]; then args+=(--dry-run); fi
+          if [ -n "$ONLY" ] && [ "$ONLY" != "all" ]; then args+=("--only=$ONLY"); fi
+          pnpm tsx scripts/watch-rsd.ts "${args[@]}"
+
+      # GitHub disables scheduled workflows after 60 days without a commit,
+      # and this job only commits when RSD publishes something. Re-enabling
+      # the workflow through the API resets the inactivity timer without a
+      # dummy commit (same fix as auto-status).
+      - name: Keep this schedule alive
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/watch-rsd.yml/enable"

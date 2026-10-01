@@ -14,7 +14,8 @@
     "lint": "eslint . --ext .ts",
     "test": "vitest run",
     "format": "prettier --write .",
-    "validate": "tsx scripts/validate.ts"
+    "validate": "tsx scripts/validate.ts",
+    "watch-rsd": "tsx scripts/watch-rsd.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
