@@ -88,20 +88,36 @@ them. `ArtTier` is internal, not part of the app contract.
   punctuation, drop filename noise (`copy`, `cover`, `front`, `final`,
   `us only`, `rsd`, `rsd25`-style tags, file extensions, standalone runs of
   8+ digits, which are barcodes), collapse whitespace.
-- **Score:** token-set overlap. For a candidate with separate artist and title
-  (site entries): `0.4 × artistScore + 0.6 × titleScore`, where each part
-  score is |shared tokens| ÷ |tokens in the shorter side|. For a single-string
-  candidate (bucket filenames): the release's artist and title tokens are
-  scored against the filename tokens the same way, with the artist score
-  required to be at least 0.5 when the filename contains any artist-looking
-  tokens; when the filename is title-only, the title score alone, with a
-  higher acceptance bar (below).
-- **Accept** a candidate when its score is at least `0.85` (title-only
-  filenames: `0.95`) and it beats the second-best candidate for that release
-  by at least `0.15`. Otherwise, if the best score is at least `0.5`, record
-  the top three as suggestions. Constants live in one exported object, and
-  their values are set against the recorded fixtures in the implementation
-  plan.
+- **Stopwords** are ignored when scoring: `the a an of and in on at to for
+  with feat featuring live edition deluxe anniversary remastered vinyl lp
+  ep cd picture disc sticker packshot art artwork 1lp 2lp`, ordinals
+  (`25th`, `30th`), and single characters.
+- **Score** (token sets after normalization and stopwords):
+  - *Site entries* (separate artist and title): `0.4 × artistScore +
+    0.6 × titleScore`, each part = |shared| ÷ |release-side tokens|.
+  - *Bucket filenames* (one string), three shapes, evaluated in order:
+    1. *Artist + title:* the filename contains at least half of the
+       release's artist tokens and at least one title token → score as a site
+       entry, with the artist part taken from the shared artist tokens.
+    2. *Artist only:* every filename token is an artist token and they cover
+       at least half of the artist → score `0.9`, but only if that artist has
+       exactly one release in the season; otherwise it can only be a
+       suggestion (score `0.6`). Real examples: `Alison Moyet copy.png`,
+       `Collective Soul_Cover.jpg`.
+    3. *Title only:* score = |shared| ÷ |release title tokens|, and it must
+       cover every title token to reach acceptance. One-word fragments
+       (`Sweet copy.jpeg`) therefore become suggestions at most.
+    4. *Partial artist:* every filename token is an artist token but they
+       cover less than half of the artist (`gilmour.jpg` for David Gilmour
+       with Romany Gilmour) → score `0.5`, a suggestion at most.
+- **Accept** a candidate when its score is at least `0.85` and it beats the
+  second-best candidate for that release by at least `0.15`. Otherwise, if
+  the best score is at least `0.5`, record the top three as suggestions.
+  Constants live in one exported object and are checked against the
+  hand-labelled April 2025 fixture.
+- **Duplicates:** candidates whose normalized names are identical (the same
+  file in `01-ALL ART COMBINED/` and in a distributor folder) count as one
+  image; the first key in listing order is used.
 - **One image, one release:** if a candidate image is the accepted match for
   two releases, neither is accepted; both get it as a suggestion. Exception:
   releases whose ids differ only by a `-2`/`-3` suffix (the same title in two
@@ -116,8 +132,8 @@ them. `ArtTier` is internal, not part of the app contract.
 
 - **Fetching.** Through Bright Data Web Unlocker:
   `POST https://api.brightdata.com/request` with
-  `Authorization: Bearer <BRIGHTDATA_API_KEY>` and body
-  `{ "zone": <BRIGHTDATA_ZONE>, "url": <page>, "format": "raw" }`. The exact
+  `Authorization: Bearer <BRIGHT_DATA_KEY>` and body
+  `{ "zone": <BRIGHT_DATA_ZONE>, "url": <page>, "format": "raw" }`. The exact
   request shape is confirmed against the live API in the plan's first task. A
   missing key or zone disables the tier (logged once). Non-2xx, timeouts
   (60 s) and empty bodies are tier failures: logged, never thrown into the
@@ -190,7 +206,7 @@ suggestions, the run writes `releases/<season>/art-candidates.json`:
 - Keepalive step (`if: always()`, re-enables the workflow), as in
   `auto-status.yml`.
 - `watch-rsd.yml`, `ingest.yml` and `refresh-art.yml` all pass
-  `BRIGHTDATA_API_KEY` and `BRIGHTDATA_ZONE`.
+  `BRIGHT_DATA_KEY` and `BRIGHT_DATA_ZONE`.
 
 ## art-admin (`wax-wishlist-art-admin` repo)
 
@@ -222,8 +238,8 @@ suggestions, the run writes `releases/<season>/art-candidates.json`:
 
 | Secret | Required | Use |
 |---|---|---|
-| `BRIGHTDATA_API_KEY` | Recommended | Web Unlocker API key (`rsd-site` tier) |
-| `BRIGHTDATA_ZONE` | With the key | Web Unlocker zone name |
+| `BRIGHT_DATA_KEY` | Recommended | Web Unlocker API key (`rsd-site` tier) |
+| `BRIGHT_DATA_ZONE` | With the key | Web Unlocker zone name |
 
 art-admin needs no new secrets.
 
