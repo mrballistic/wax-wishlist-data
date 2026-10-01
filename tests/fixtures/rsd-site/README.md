@@ -1,6 +1,6 @@
 # recordstoreday.com fixtures
 
-Recorded 2026-10-01 through Bright Data Web Unlocker (zone `wax_wishlist_web_unlocker`) with
+Recorded 2026-10-01 through Bright Data Web Unlocker (the zone named in `BRIGHT_DATA_ZONE`) with
 
 ```sh
 pnpm tsx --env-file=.env scripts/art/record-rsd-pages.ts <url> <out-file>
@@ -19,6 +19,8 @@ Product images are on an open CDN and are fetched directly (see below).
 | `promotional-event-600-not-found.html` | `https://recordstoreday.com/PromotionalEvent/600` | An unused event id: **HTTP 200** soft "not found" page |
 | `special-release-19926-a-ha-analogue.html` | `https://recordstoreday.com/SpecialRelease/19926` | a-ha, *Analogue 20th Anniversary Deluxe Edition*, photo id `418467310484` |
 | `special-release-19910-live-a-lolympia.html` | `https://recordstoreday.com/SpecialRelease/19910` | Jeff Buckley, *Live À L'Olympia*, photo id `418467310333` (non-ASCII title) |
+| `promotional-event-601-view-all.html` | `https://recordstoreday.com/PromotionalEvent/601?view=all` | April 2026 image grid: 359 quickview blocks, no `<tbody>`. **What the parser fetches.** Saved during the Task 9 live check |
+| `live-601-rendered.html` | `https://recordstoreday.com/PromotionalEvent/601` | A bad Unlocker response from the Task 9 live check: a JS-rendered, client-paginated DOM with only 50 of 359 rows (the incomplete-listing test) |
 
 ## Character encoding (read before parsing)
 
@@ -69,6 +71,11 @@ The event name is in the listing's anchor: `<a id="anchor" name="RECORD STORE DA
 `<a id="anchor" name="BLACK FRIDAY 2025">`. Each row's quickview also has `<strong>Date</strong>: 4/18/2026` (M/D/YYYY).
 
 ## Listing page (`PromotionalEvent/<id>`)
+
+> **Superseded (Task 9 live check).** The Unlocker *intermittently* returns this URL as a JS-rendered DOM
+> (`live-601-rendered.html`): bootstrap-table has already paginated it to 50 rows and re-laid the columns, so
+> release type lands where format was. The parser therefore fetches `?view=all` and reads the per-release
+> quickview blocks, not table cells; see "View-all page" below. The table description is kept for reference.
 
 **No pagination.** Every release is in the server-rendered HTML in one `<table>` with exactly one `<tbody>`.
 The table has `data-pagination="true" data-page-size="50"`, but that is bootstrap-table paginating client-side over rows
@@ -155,3 +162,16 @@ returns `image/jpeg`.
 11. `PromotionalEvent/599` (saved: Black Friday 2025)
 
 Requests 10 and 11 were made with the fixed recorder, so their saved HTML is correctly decoded.
+
+## View-all page (`PromotionalEvent/<id>?view=all`): what the parser uses
+
+- An image grid grouped by release type. Every release has the same quickview block as the table page's first cell:
+  `quickview_image image">` + `<a href="/SpecialRelease/<id>">` + `<img src="https://img.broadtime.com/Photo/<photoId>:284">`,
+  then `<H2 ...>Artist</h2>`, `<p><a ...><em>Title</em></a></p>`, `<strong>Date</strong>: M/D/YYYY`, `<strong>Format</strong>: …`.
+  There is no `Quantity` line here.
+- 359 blocks for 601, all `Date: 4/18/2026`. No `<tbody>`.
+- **The anchor is not the event name here:** `<a id="anchor" name="…">` names each release-type section
+  ("RSD Exclusive Release", "RSD Limited Run / Regional Focus Release"). The parser identifies the season by majority vote over
+  the quickview dates instead (month 4 = april, 11 = november), on every page shape.
+- The same quickview parse works on the table page (359 and 177 blocks) and on the rendered page (only the 50 rows it really
+  has). A listing with fewer than 80% of the season's release count is refetched once, then skipped.

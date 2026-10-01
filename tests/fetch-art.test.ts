@@ -606,6 +606,10 @@ describe('runArtCascade — indexed RSD sources', () => {
 })
 
 describe('buildDefaultIndexedSources', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
   it('is empty without a season and the site then bucket sources with one', async () => {
     const { createRsdBucketSource } = await import('../scripts/art/rsd-bucket.js')
     const { createRsdSiteSource } = await import('../scripts/art/rsd-site.js')
@@ -615,6 +619,5 @@ describe('buildDefaultIndexedSources', () => {
     expect(sources.map((s) => s.name)).toEqual(['rsd-site', 'rsd-bucket'])
     expect(createRsdSiteSource).toHaveBeenLastCalledWith({ seasonId: '2025-november', unlocker: null })
     expect(createRsdBucketSource).toHaveBeenLastCalledWith({ year: '2025' })
-    vi.unstubAllEnvs()
   })
 })

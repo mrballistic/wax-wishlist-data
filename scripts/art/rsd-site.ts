@@ -24,6 +24,8 @@ const SITE = 'https://recordstoreday.com'
 export const RSD_EVENTS_FILE = 'rsd-events.json'
 /** How many ids above the highest known event id to try for an unmapped season. */
 export const EVENT_PROBE_LIMIT = 6
+/** A listing with fewer entries than this share of the season's releases is incomplete. */
+export const INCOMPLETE_RATIO = 0.8
 
 /** Season id -> PromotionalEvent id, committed at the repo root. */
 export const RsdEventsSchema = z.record(
@@ -60,9 +62,13 @@ const NAMED: Record<string, string> = {
 
 const CP1252 = new TextDecoder('windows-1252').decode(Uint8Array.from({ length: 256 }, (_, i) => i))
 const CP1252_BYTE = new Map([...CP1252].map((ch, i) => [ch, i]))
-/** A UTF-8 lead byte (Â..ô) followed by a continuation byte, both read as Windows-1252. */
+/**
+ * A UTF-8 lead byte followed by a continuation byte, both read as Windows-1252.
+ * Only Â/Ã leads (U+0080..U+00FF, i.e. Latin-1 and its punctuation): wider leads
+ * would "repair" correct text such as "CAFÉ—LIVE" (É— is also valid UTF-8 bytes).
+ */
 const MOJIBAKE =
-  /[\u00c2-\u00f4][\u0080-\u00bf\u0152\u0153\u0160\u0161\u0178\u017d\u017e\u0192\u02c6\u02dc\u2013\u2014\u2018-\u201e\u2020-\u2022\u2026\u2030\u2039\u203a\u20ac\u2122]/
+  /[\u00c2\u00c3][\u0080-\u00bf\u0152\u0153\u0160\u0161\u0178\u017d\u017e\u0192\u02c6\u02dc\u2013\u2014\u2018-\u201e\u2020-\u2022\u2026\u2030\u2039\u203a\u20ac\u2122]/
 
 /**
  * Some rows are stored double-encoded on the site itself ("MotÃ¶rhead"). Undo it
@@ -108,58 +114,71 @@ export function cleanText(html: string): string {
   )
 }
 
-export const eventUrl = (eventId: number): string => `${SITE}/PromotionalEvent/${eventId}`
+/** The unpaginated listing. Without `?view=all` the Unlocker sometimes returns a JS-rendered, 50-row page. */
+export const eventUrl = (eventId: number): string => `${SITE}/PromotionalEvent/${eventId}?view=all`
 
 export function photoUrl(photoId: number, size: 360 | 800 = 800): string {
   return `https://img.broadtime.com/Photo/${photoId}:${size}`
 }
 
-/** The listing's `<a id="anchor" name="…">`, e.g. "RECORD STORE DAY 2026". */
-export function eventName(html: string): string | null {
-  const m = /<a\s+id="anchor"\s+name="([^"]*)"/i.exec(html)
-  return m?.[1] !== undefined ? cleanText(m[1]) : null
-}
+const QUICKVIEW = /quickview_image image">/
 
-/** A real event listing, not the HTTP 200 soft "not found" page. */
+/** A real event listing (it has release quickviews), not the HTTP 200 soft "not found" page. */
 export function isEventPage(html: string): boolean {
-  return /<tbody[\s>]/i.test(html) && !/the page you requested was not found/i.test(html)
+  return QUICKVIEW.test(html) && !/the page you requested was not found/i.test(html)
 }
 
-/** The anchor name a season's event carries, or null for a season type the site doesn't have. */
-export function expectedEventName(seasonId: string): string | null {
-  const m = /^(\d{4})-(april|november)$/.exec(seasonId)
-  if (!m) return null
-  return m[2] === 'april' ? `RECORD STORE DAY ${m[1]}` : `BLACK FRIDAY ${m[1]}`
+/** One release's quickview popup, cut before its free-text description. */
+function quickviews(html: string): string[] {
+  return html
+    .split(QUICKVIEW)
+    .slice(1)
+    .map((chunk) => chunk.split('quickview_description')[0] ?? chunk)
 }
 
-const sameName = (a: string | null, b: string): boolean =>
-  a !== null && a.trim().toLowerCase() === b.toLowerCase()
+/**
+ * The season the listing's releases are dated in, by majority vote over the
+ * quickview `Date: M/D/YYYY` lines: "<year>-april" or "<year>-november", or
+ * null when there are no dates or the usual month is neither.
+ */
+export function listingSeason(html: string): string | null {
+  const votes = new Map<string, number>()
+  for (const block of quickviews(html)) {
+    const m = /<strong>Date<\/strong>:\s*(\d{1,2})\/\d{1,2}\/(\d{4})/.exec(block)
+    if (!m?.[1] || !m[2]) continue
+    const key = `${m[2]}-${Number(m[1])}`
+    votes.set(key, (votes.get(key) ?? 0) + 1)
+  }
+  const top = [...votes].sort((x, y) => y[1] - x[1])[0]
+  if (!top) return null
+  const [year, month] = top[0].split('-')
+  return month === '4' ? `${year}-april` : month === '11' ? `${year}-november` : null
+}
 
-/** Every release row of an event listing. One server-rendered page; rows after `</tbody>` are not releases. */
+/**
+ * Every release on an event listing, read from each release's quickview block
+ * (not table columns, which shift on the JS-rendered page). Works on the
+ * `?view=all` grid, the server-rendered table and the rendered DOM alike.
+ */
 export function parseListing(html: string): SiteEntry[] {
-  const start = html.search(/<tbody[\s>]/i)
-  if (start < 0) return []
-  const end = html.indexOf('</tbody>', start)
-  const body = html.slice(start, end < 0 ? undefined : end)
   const entries: SiteEntry[] = []
-  for (const chunk of body.split(/quickview_image image">/).slice(1)) {
+  const seen = new Set<string>()
+  for (const block of quickviews(html)) {
     const head =
       /^\s*<a href="\/SpecialRelease\/(\d+)">\s*<img[^>]*src="https?:\/\/img\.broadtime\.com\/Photo\/(\d+)/.exec(
-        chunk,
+        block,
       )
-    if (!head?.[1] || !head[2]) continue
+    if (!head?.[1] || !head[2] || seen.has(head[1])) continue
     const releaseId = head[1]
-    const cells = new RegExp(
-      `<td[^>]*>\\s*<a href="/SpecialRelease/${releaseId}">([\\s\\S]*?)</a>\\s*</td>` +
-        '\\s*<td[^>]*>([\\s\\S]*?)</td>'.repeat(4),
-    ).exec(chunk)
-    // cells: title, artist, sort key (hidden, not the artist), label, format.
-    const title = cleanText(cells?.[1] ?? /<em>([\s\S]*?)<\/em>/.exec(chunk)?.[1] ?? '')
-    const artist = cleanText(cells?.[2] ?? /<h2[^>]*>([\s\S]*?)<\/h2>/i.exec(chunk)?.[1] ?? '')
-    const format = cleanText(
-      cells?.[5] ?? /<strong>Format<\/strong>:([^<]*)/.exec(chunk)?.[1] ?? '',
+    const artist = cleanText(/<h2[^>]*>([\s\S]*?)<\/h2>/i.exec(block)?.[1] ?? '')
+    const title = cleanText(
+      /<em>([\s\S]*?)<\/em>/.exec(block)?.[1] ??
+        new RegExp(`<a href="/SpecialRelease/${releaseId}">([^<]+)</a>`).exec(block)?.[1] ??
+        '',
     )
+    const format = cleanText(/<strong>Format<\/strong>:([^<]*)/.exec(block)?.[1] ?? '')
     if (!title || !artist) continue
+    seen.add(releaseId)
     entries.push({
       artist,
       title,
@@ -213,19 +232,22 @@ export function createRsdSiteSource(opts: RsdSiteOptions): IndexedArtSource {
   let result: MatchResult = { accepted: new Map(), suggestions: new Map() }
   let warnedUnconfigured = false
 
-  /** The season's listing HTML, or null (already logged) when there is none to use. */
-  async function fetchListing(
-    unlocker: Unlocker,
-    expected: string,
-  ): Promise<{ id: number; html: string } | null> {
+  /** A fetched listing that is a real event dated in this season, or null. */
+  async function fetchEvent(unlocker: Unlocker, id: number): Promise<string | null> {
+    const html = await unlocker.fetchPage(eventUrl(id))
+    return isEventPage(html) && listingSeason(html) === opts.seasonId ? html : null
+  }
+
+  /** The season's event id and listing HTML, or null (already logged) when there is none to use. */
+  async function findEvent(unlocker: Unlocker): Promise<{ id: number; html: string } | null> {
     const events = opts.events ?? (await loadRsdEvents())
     const mapped = events[opts.seasonId]
     if (mapped !== undefined) {
       const html = await unlocker.fetchPage(eventUrl(mapped))
-      const name = eventName(html)
-      if (!isEventPage(html) || !sameName(name, expected)) {
+      const dated = isEventPage(html) ? listingSeason(html) : null
+      if (dated !== opts.seasonId) {
         log(
-          `rsd-site: PromotionalEvent/${mapped} is "${name ?? 'not an event'}", expected "${expected}" for ${opts.seasonId}; skipping`,
+          `rsd-site: PromotionalEvent/${mapped} lists ${dated ?? 'no dated'} releases, expected ${opts.seasonId}; skipping`,
         )
         return null
       }
@@ -240,8 +262,8 @@ export function createRsdSiteSource(opts: RsdSiteOptions): IndexedArtSource {
     }
     const max = Math.max(...known)
     for (let id = max + 1; id <= max + EVENT_PROBE_LIMIT; id += 1) {
-      const html = await unlocker.fetchPage(eventUrl(id))
-      if (isEventPage(html) && sameName(eventName(html), expected)) {
+      const html = await fetchEvent(unlocker, id)
+      if (html !== null) {
         log(`rsd-site: ${opts.seasonId} is PromotionalEvent/${id} — add it to ${RSD_EVENTS_FILE}`)
         return { id, html }
       }
@@ -262,15 +284,26 @@ export function createRsdSiteSource(opts: RsdSiteOptions): IndexedArtSource {
         return
       }
       if (missing.length === 0) return
-      const expected = expectedEventName(opts.seasonId)
-      if (!expected) {
+      if (!/^\d{4}-(april|november)$/.test(opts.seasonId)) {
         log(`rsd-site: ${opts.seasonId} is not an April or November season; skipping`)
         return
       }
       try {
-        const listing = await fetchListing(unlocker, expected)
+        const listing = await findEvent(unlocker)
         if (!listing) return
-        const entries = parseListing(listing.html)
+        // A short list (e.g. a JS-rendered 50-row page) is retried once, never matched partially.
+        const minimum = INCOMPLETE_RATIO * season.length
+        let entries = parseListing(listing.html)
+        if (entries.length < minimum) {
+          const retry = await fetchEvent(unlocker, listing.id)
+          entries = retry === null ? [] : parseListing(retry)
+          if (entries.length < minimum) {
+            log(
+              `rsd-site: listing for ${opts.seasonId} looks incomplete (${entries.length} entries); skipping`,
+            )
+            return
+          }
+        }
         const candidates: ArtCandidate[] = entries.map((e) => ({
           source: 'rsd-site',
           key: `photo:${e.photoId}`,

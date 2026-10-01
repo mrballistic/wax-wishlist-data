@@ -7,10 +7,9 @@ import { type Unlocker, UnlockerBudgetError } from '../../scripts/art/brightdata
 import {
   cleanText,
   createRsdSiteSource,
-  eventName,
   eventUrl,
-  expectedEventName,
   isEventPage,
+  listingSeason,
   loadRsdEvents,
   parseListing,
   parseReleasePage,
@@ -41,17 +40,24 @@ function fakeUnlocker(
 }
 
 let html601: string
+let viewAll601: string
+let rendered601: string
 let html599: string
 let html600: string
 beforeAll(async () => {
   html601 = await fixture('promotional-event-601-rsd-2026.html')
+  viewAll601 = await fixture('promotional-event-601-view-all.html')
+  rendered601 = await fixture('live-601-rendered.html')
   html599 = await fixture('promotional-event-599-black-friday-2025.html')
   html600 = await fixture('promotional-event-600-not-found.html')
 })
 
 describe('parseListing', () => {
-  it('returns every release row of the April 2026 listing', () => {
-    const entries = parseListing(html601)
+  it.each([
+    ['table page', () => html601],
+    ['?view=all page', () => viewAll601],
+  ])('returns every release of the April 2026 listing (%s)', (_name, html) => {
+    const entries = parseListing(html())
     expect(entries).toHaveLength(359)
     expect(entries[0]).toEqual({
       artist: '13th Floor Elevators',
@@ -70,8 +76,11 @@ describe('parseListing', () => {
     expect(new Set(entries.map((e) => e.photoId)).size).toBe(359)
   })
 
-  it('decodes entities, non-ASCII and line breaks inside cells', () => {
-    const entries = parseListing(html601)
+  it.each([
+    ['table page', () => html601],
+    ['?view=all page', () => viewAll601],
+  ])('decodes entities, non-ASCII and line breaks (%s)', (_name, html) => {
+    const entries = parseListing(html())
     const buckley = entries.filter((e) => e.artist === 'Jeff Buckley')
     expect(buckley.map((e) => [e.title, e.format, e.photoId])).toEqual([
       ["Live À L'Olympia", '2 x LP', 418467310333],
@@ -98,6 +107,25 @@ describe('parseListing', () => {
     expect(cleanText('Fran\u00e7oise H\u00e2rdy \u00c3')).toBe('Françoise Hârdy Ã')
   })
 
+  it('never alters correct text whose accented capital is followed by punctuation', () => {
+    expect(cleanText('CAF\u00c9\u2014LIVE')).toBe('CAF\u00c9\u2014LIVE')
+    expect(cleanText('BEYONC\u00c9\u2122')).toBe('BEYONC\u00c9\u2122')
+    expect(cleanText('Mot\u00c3\u00b6rhead')).toBe('Mot\u00f6rhead')
+  })
+
+  it('returns only the rows a JS-rendered page really has, without column confusion', () => {
+    const entries = parseListing(rendered601)
+    expect(entries).toHaveLength(50)
+    expect(entries[0]).toMatchObject({
+      artist: '13th Floor Elevators',
+      title: 'We Are Not Live',
+      format: 'LP',
+    })
+    expect(entries.filter((e) => /RSD|Exclusive|Limited/i.test(e.format))).toEqual([])
+    const full = new Map(parseListing(viewAll601).map((e) => [e.photoId, e]))
+    for (const e of entries) expect(full.get(e.photoId)).toEqual(e)
+  })
+
   it('returns every row of the Black Friday 2025 listing and nothing for a soft 404', () => {
     expect(parseListing(html599)).toHaveLength(177)
     expect(parseListing(html600)).toEqual([])
@@ -105,18 +133,29 @@ describe('parseListing', () => {
 })
 
 describe('event pages', () => {
-  it('reads the anchor name and tells real events from soft 404s', () => {
-    expect(eventName(html601)).toBe('RECORD STORE DAY 2026')
-    expect(eventName(html599)).toBe('BLACK FRIDAY 2025')
+  it('reads the season from the quickview release dates and tells real events from soft 404s', () => {
+    expect(listingSeason(html601)).toBe('2026-april')
+    expect(listingSeason(viewAll601)).toBe('2026-april')
+    expect(listingSeason(rendered601)).toBe('2026-april')
+    expect(listingSeason(html599)).toBe('2025-november')
+    expect(listingSeason(html600)).toBeNull()
+    expect(isEventPage(viewAll601)).toBe(true)
     expect(isEventPage(html601)).toBe(true)
     expect(isEventPage(html600)).toBe(false)
   })
 
-  it('maps season ids to event names and URLs', () => {
-    expect(expectedEventName('2026-april')).toBe('RECORD STORE DAY 2026')
-    expect(expectedEventName('2026-november')).toBe('BLACK FRIDAY 2026')
-    expect(expectedEventName('2026-june')).toBeNull()
-    expect(eventUrl(601)).toBe('https://recordstoreday.com/PromotionalEvent/601')
+  it('takes the majority date and rejects months that are not April or November', () => {
+    const block = (date: string): string =>
+      `<div class="quickview_image image"><a href="/SpecialRelease/1"><img src="https://img.broadtime.com/Photo/2:284" /></a></div>` +
+      `<H2>A</h2><p><a href="/SpecialRelease/1"><em>T</em></a></p><strong>Date</strong>: ${date}<br/>`
+    expect(
+      listingSeason([block('11/28/2025'), block('11/28/2025'), block('4/18/2026')].join('')),
+    ).toBe('2025-november')
+    expect(listingSeason(block('6/14/2026'))).toBeNull()
+  })
+
+  it('fetches the unpaginated ?view=all listing', () => {
+    expect(eventUrl(601)).toBe('https://recordstoreday.com/PromotionalEvent/601?view=all')
   })
 
   it('loads the committed rsd-events.json', async () => {
@@ -170,8 +209,8 @@ describe('createRsdSiteSource', () => {
     november = await loadRaw('2025-november')
   })
 
-  it('matches most of 2026-april from the recorded listing with one request', async () => {
-    const unlocker = fakeUnlocker({ [eventUrl(601)]: html601 }, html600)
+  it('matches most of 2026-april from the recorded ?view=all listing with one request', async () => {
+    const unlocker = fakeUnlocker({ [eventUrl(601)]: viewAll601 }, html600)
     const log = vi.fn()
     const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events: EVENTS, log })
     await source.prepare(april, april)
@@ -219,6 +258,62 @@ describe('createRsdSiteSource', () => {
     expect(accepted.length).toBeGreaterThanOrEqual(165)
   })
 
+  it('still matches from the original table page', async () => {
+    const unlocker = fakeUnlocker({ [eventUrl(601)]: html601 }, html600)
+    const source = createRsdSiteSource({
+      seasonId: '2026-april',
+      unlocker,
+      events: EVENTS,
+      log: vi.fn(),
+    })
+    await source.prepare(april, april)
+    const accepted = april.filter((r) => source.accepted(r.id) !== null)
+    console.log(`rsd-site 601 table vs 2026-april: ${accepted.length} / ${april.length} accepted`)
+    expect(accepted.length).toBeGreaterThanOrEqual(335)
+  })
+
+  it('retries an incomplete (JS-rendered) listing once, then skips without partial matching', async () => {
+    const urls: string[] = []
+    const unlocker: Unlocker = {
+      async fetchPage(url: string): Promise<string> {
+        urls.push(url)
+        return rendered601
+      },
+      requestsMade: () => urls.length,
+    }
+    const log = vi.fn()
+    const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events: EVENTS, log })
+    await source.prepare(april, april)
+    expect(urls).toEqual([eventUrl(601), eventUrl(601)])
+    expect(log).toHaveBeenCalledWith(
+      'rsd-site: listing for 2026-april looks incomplete (50 entries); skipping',
+    )
+    expect(
+      april.some((r) => source.accepted(r.id) !== null || source.suggestions(r.id).length > 0),
+    ).toBe(false)
+  })
+
+  it('uses the retry when it comes back complete', async () => {
+    const pages = [rendered601, viewAll601]
+    let calls = 0
+    const unlocker: Unlocker = {
+      async fetchPage(): Promise<string> {
+        calls += 1
+        return pages[calls - 1] ?? html600
+      },
+      requestsMade: () => calls,
+    }
+    const source = createRsdSiteSource({
+      seasonId: '2026-april',
+      unlocker,
+      events: EVENTS,
+      log: vi.fn(),
+    })
+    await source.prepare(april, april)
+    expect(calls).toBe(2)
+    expect(april.filter((r) => source.accepted(r.id) !== null).length).toBeGreaterThanOrEqual(335)
+  })
+
   it('logs once and accepts nothing without Bright Data', async () => {
     const log = vi.fn()
     const source = createRsdSiteSource({
@@ -234,17 +329,20 @@ describe('createRsdSiteSource', () => {
     expect(april.some((r) => source.accepted(r.id) !== null)).toBe(false)
   })
 
-  it('skips a mapped event whose anchor is for another season', async () => {
+  it('skips a mapped event whose release dates are for another season', async () => {
     const unlocker = fakeUnlocker({ [eventUrl(601)]: html599 }, html600)
     const log = vi.fn()
     const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events: EVENTS, log })
     await source.prepare(april, april)
     expect(april.some((r) => source.accepted(r.id) !== null)).toBe(false)
-    expect(log).toHaveBeenCalledWith(expect.stringContaining('BLACK FRIDAY 2025'))
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('2025-november'))
   })
 
   it('discovers an unmapped event by probing ids above the last known one', async () => {
-    const unlocker = fakeUnlocker({ [eventUrl(599)]: html599, [eventUrl(601)]: html601 }, html600)
+    const unlocker = fakeUnlocker(
+      { [eventUrl(599)]: html599, [eventUrl(601)]: viewAll601 },
+      html600,
+    )
     const log = vi.fn()
     const events = { '2024-november': 596, '2025-april': 597 }
     const source = createRsdSiteSource({ seasonId: '2026-april', unlocker, events, log })
