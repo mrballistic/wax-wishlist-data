@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 import { createGeminiExtractor, GEMINI_MODEL } from '../../scripts/extract/gemini.js'
 
@@ -22,7 +22,9 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
-const extractor = createGeminiExtractor({ apiKey: 'test-key' })
+const sleep = vi.fn<(ms: number) => Promise<void>>(async () => {})
+afterEach(() => sleep.mockClear())
+const extractor = createGeminiExtractor({ apiKey: 'test-key', sleep })
 const pdf = Buffer.from('%PDF-1.7 fake')
 
 describe('gemini extractor', () => {
@@ -66,6 +68,88 @@ describe('gemini extractor', () => {
   it('throws on a non-2xx reply, including the status', async () => {
     server.use(http.post(ENDPOINT, () => HttpResponse.json({ error: { message: 'quota' } }, { status: 429 })))
     await expect(extractor.extract(pdf)).rejects.toThrow(/HTTP 429/)
+  })
+
+  it('retries a 503 once after 30s and succeeds', async () => {
+    let calls = 0
+    server.use(
+      http.post(ENDPOINT, () => {
+        calls++
+        return calls === 1
+          ? HttpResponse.json({ error: { message: 'overloaded' } }, { status: 503 })
+          : HttpResponse.json(reply(JSON.stringify(ROWS)))
+      }),
+    )
+    expect(await extractor.extract(pdf)).toEqual(ROWS.rows)
+    expect(calls).toBe(2)
+    expect(sleep).toHaveBeenCalledTimes(1)
+    expect(sleep).toHaveBeenCalledWith(30_000)
+  })
+
+  it('honours a numeric Retry-After on 429', async () => {
+    let calls = 0
+    server.use(
+      http.post(ENDPOINT, () => {
+        calls++
+        return calls === 1
+          ? HttpResponse.json({ error: { message: 'quota' } }, { status: 429, headers: { 'Retry-After': '7' } })
+          : HttpResponse.json(reply(JSON.stringify(ROWS)))
+      }),
+    )
+    expect(await extractor.extract(pdf)).toEqual(ROWS.rows)
+    expect(sleep).toHaveBeenCalledWith(7000)
+  })
+
+  it('caps a long Retry-After at 300s', async () => {
+    let calls = 0
+    server.use(
+      http.post(ENDPOINT, () => {
+        calls++
+        return calls === 1
+          ? HttpResponse.json({}, { status: 429, headers: { 'Retry-After': '3600' } })
+          : HttpResponse.json(reply(JSON.stringify(ROWS)))
+      }),
+    )
+    await extractor.extract(pdf)
+    expect(sleep).toHaveBeenCalledWith(300_000)
+  })
+
+  it('gives up after three 503s with the status in the error', async () => {
+    let calls = 0
+    server.use(
+      http.post(ENDPOINT, () => {
+        calls++
+        return HttpResponse.json({ error: { message: 'overloaded' } }, { status: 503 })
+      }),
+    )
+    await expect(extractor.extract(pdf)).rejects.toThrow(/HTTP 503/)
+    expect(calls).toBe(3)
+    expect(sleep.mock.calls).toEqual([[30_000], [120_000]])
+  })
+
+  it('does not retry a 400', async () => {
+    let calls = 0
+    server.use(
+      http.post(ENDPOINT, () => {
+        calls++
+        return HttpResponse.json({ error: { message: 'bad request' } }, { status: 400 })
+      }),
+    )
+    await expect(extractor.extract(pdf)).rejects.toThrow(/HTTP 400/)
+    expect(calls).toBe(1)
+    expect(sleep).not.toHaveBeenCalled()
+  })
+
+  it('retries a network error', async () => {
+    let calls = 0
+    server.use(
+      http.post(ENDPOINT, () => {
+        calls++
+        return calls === 1 ? HttpResponse.error() : HttpResponse.json(reply(JSON.stringify(ROWS)))
+      }),
+    )
+    expect(await extractor.extract(pdf)).toEqual(ROWS.rows)
+    expect(sleep).toHaveBeenCalledWith(30_000)
   })
 
   it('throws when the reply was cut off at the token limit', async () => {
