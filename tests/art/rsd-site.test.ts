@@ -178,7 +178,7 @@ describe('createRsdSiteSource', () => {
 
     const accepted = april.filter((r) => source.accepted(r.id) !== null)
     console.log(`rsd-site 601 vs 2026-april: ${accepted.length} / ${april.length} accepted`)
-    expect(accepted.length).toBeGreaterThanOrEqual(330)
+    expect(accepted.length).toBeGreaterThanOrEqual(335)
     const aha = april.find((r) => /analogue/i.test(r.title) && /a-ha/i.test(r.artist))
     expect(aha && source.accepted(aha.id)).toMatchObject({
       source: 'rsd-site',
@@ -203,7 +203,20 @@ describe('createRsdSiteSource', () => {
     await source.prepare(november, november)
     const accepted = november.filter((r) => source.accepted(r.id) !== null)
     console.log(`rsd-site 599 vs 2025-november: ${accepted.length} / ${november.length} accepted`)
-    expect(accepted.length).toBeGreaterThanOrEqual(160)
+    // "2 x LP" vs "2 x CD" rows of one title: each release takes its own format's photo.
+    const dead = 'grateful-dead-the-warfield-san-francisco-ca-oct-4-6-1980'
+    const lp = parseListing(html599).find(
+      (e) => e.artist === 'Grateful Dead' && e.format === '2 x LP',
+    )
+    const cd = parseListing(html599).find(
+      (e) => e.artist === 'Grateful Dead' && e.format === '2 x CD',
+    )
+    expect(lp && cd && lp.photoId !== cd.photoId).toBe(true)
+    expect(source.accepted(dead)?.photoId).toBe(lp?.photoId)
+    expect(source.accepted(`${dead}-2`)?.photoId).toBe(cd?.photoId)
+    expect(source.accepted('bobby-womack-live-in-london')?.format).toBe('2 x LP')
+    expect(source.accepted('bobby-womack-live-in-london-2')?.format).toBe('2 x CD')
+    expect(accepted.length).toBeGreaterThanOrEqual(165)
   })
 
   it('logs once and accepts nothing without Bright Data', async () => {

@@ -148,7 +148,9 @@ describe('matchReleases — site formats', () => {
     const r = relF('x', 'Jeff Buckley', "Live À L'Olympia", '2 x LP')
     expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 1, '2 x LP'), 1)).toBeCloseTo(1)
     expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 2, 'CD'), 1)).toBeCloseTo(0.85)
-    expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 3, 'LP'), 1)).toBeCloseTo(0.85 + 0.15 / 3)
+    // Quantity ("2 x") is not format: "2 x LP" and "LP" are the same format.
+    expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 3, 'LP'), 1)).toBeCloseTo(1)
+    expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 5, '2 x CD'), 1)).toBeCloseTo(0.85)
     expect(scoreCandidate(r, siteF('Jeff Buckley', "Live À L'Olympia", 4, ''), 1)).toBeCloseTo(1)
   })
 

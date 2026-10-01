@@ -80,8 +80,16 @@ const shared = (a: Set<string>, b: Set<string>): number => {
 }
 const subset = (a: Set<string>, b: Set<string>): boolean => a.size > 0 && shared(a, b) === a.size
 const artistKey = (artist: string): string => [...tokens(artist)].sort().join(' ')
-/** Format words, keeping lp/cd/ep/vinyl (which `tokens()` drops as stopwords). */
-const formatTokens = (format: string): Set<string> => new Set(normalize(format).split(' ').filter((t) => t !== ''))
+/**
+ * Format words, keeping lp/cd/ep/vinyl (which `tokens()` drops as stopwords) but
+ * not quantity: "2 x LP" vs "2 x CD" must differ, "2 x LP" vs "LP" must not.
+ */
+const formatTokens = (format: string): Set<string> =>
+  new Set(
+    normalize(format)
+      .split(' ')
+      .filter((t) => t !== '' && t !== 'x' && !/^\d+$/.test(t)),
+  )
 
 /** Score one candidate for one release. `artistReleaseCount` = releases in the season by this artist. */
 export function scoreCandidate(release: RawRelease, candidate: ArtCandidate, artistReleaseCount: number): number {
