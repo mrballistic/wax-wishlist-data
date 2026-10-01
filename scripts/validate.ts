@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 
 import type { ZodTypeAny } from 'zod'
 
+import { ART_CANDIDATES_FILE, ArtCandidatesSchema } from './art/candidates.js'
 import { CurrentSeasonSchema, ReleaseListSchema, SeasonsListSchema } from './types.js'
 import { CalendarSchema } from './watch/calendar.js'
 import { SourcesSchema } from './watch/sources.js'
@@ -81,6 +82,7 @@ async function validateReleases(): Promise<Problem[]> {
     const dir = resolve(RELEASES_DIR, entry)
     const info = await stat(dir).catch(() => null)
     if (!info?.isDirectory()) continue
+    problems.push(...(await validateOptional(resolve(dir, ART_CANDIDATES_FILE), ArtCandidatesSchema)))
     const releasesPath = resolve(dir, 'releases.json')
     try {
       const raw = await readFile(releasesPath, 'utf8')

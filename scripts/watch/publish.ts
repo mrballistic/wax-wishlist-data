@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
+import { writeArtCandidates } from '../art/candidates.js'
 import { enrichDiscogs } from '../enrich-discogs.js'
 import { formatCoverageSummary, runArtCascade } from '../fetch-art.js'
 import { writeReleases } from '../generate-json.js'
@@ -29,8 +30,16 @@ async function fetchArt(releases: RawRelease[], seasonId: string, repoRoot: stri
     discogsConsumerKey: process.env['DISCOGS_CONSUMER_KEY'],
     discogsConsumerSecret: process.env['DISCOGS_CONSUMER_SECRET'],
     metabrainzAccessToken: process.env['METABRAINZ_ACCESS_TOKEN'],
+    seasonId,
   })
   console.log(formatCoverageSummary(summary))
+  // Suggestions are a convenience for art-admin; never let them block a publish.
+  try {
+    const outcome = await writeArtCandidates(resolve(repoRoot, 'releases', seasonId), summary.suggestions)
+    console.log(`art-candidates.json: ${outcome} (${summary.suggestions.size} releases with suggestions)`)
+  } catch (err) {
+    console.warn(`art-candidates.json: not written (${(err as Error).message})`)
+  }
 }
 
 export const defaultPublishDeps: PublishDeps = {

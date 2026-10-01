@@ -1,6 +1,11 @@
 import { access, mkdir, writeFile } from 'node:fs/promises'
 import { dirname, resolve as resolvePath } from 'node:path'
 
+import { writeArtCandidates } from './art/candidates.js'
+import type { IndexedArtSource } from './art/indexed-source.js'
+import type { ScoredCandidate } from './art/match.js'
+import { normalizeArtImage } from './art/normalize.js'
+import { createRsdBucketSource } from './art/rsd-bucket.js'
 import { createDiscogsSource } from './sources/discogs.js'
 import {
   createManualSource,
@@ -63,6 +68,16 @@ export interface CascadeOptions {
     discogs?: ArtSource
     musicbrainz?: ArtSource
   }
+  /**
+   * Season id (e.g. "2025-november"). Enables the RSD tiers; the year is its
+   * first four characters.
+   */
+  seasonId?: string | undefined
+  /**
+   * Override the indexed RSD sources (for tests). Replaces the defaults, and
+   * unlike the defaults they're still prepared in dry-run mode.
+   */
+  indexedSources?: IndexedArtSource[]
   /** Inject fetch (for tests). */
   fetchImpl?: typeof fetch
   /** Inject the resize-and-copy function (for tests). */
@@ -80,6 +95,37 @@ export interface CascadeSummary {
   kept: number
   /** Files in manual-art/ that didn't match any release id in this run. */
   orphanManualFiles: string[]
+  /**
+   * Releases that ended with no art → their top RSD candidates (≤ 3, best
+   * first). Feeds `art-candidates.json` for wax-wishlist-art-admin.
+   */
+  suggestions: Map<string, ScoredCandidate[]>
+}
+
+/** Top-N suggestions shown to a human for a release with no accepted art. */
+const MAX_SUGGESTIONS = 3
+
+/**
+ * The indexed (whole-season) RSD sources, in cascade order. Empty without a
+ * season id.
+ */
+export function buildDefaultIndexedSources(options: Pick<CascadeOptions, 'seasonId'>): IndexedArtSource[] {
+  if (!options.seasonId) return []
+  return [createRsdBucketSource({ year: options.seasonId.slice(0, 4) })]
+}
+
+/** Merge every source's suggestions: best first, one per image URL, at most 3. */
+function topSuggestions(indexed: IndexedArtSource[], releaseId: string): ScoredCandidate[] {
+  const all = indexed.flatMap((src) => src.suggestions(releaseId)).sort((a, b) => b.score - a.score)
+  const seen = new Set<string>()
+  const out: ScoredCandidate[] = []
+  for (const c of all) {
+    if (seen.has(c.imageUrl)) continue
+    seen.add(c.imageUrl)
+    out.push(c)
+    if (out.length === MAX_SUGGESTIONS) break
+  }
+  return out
 }
 
 export function buildDefaultSources(
@@ -101,8 +147,8 @@ export function buildDefaultSources(
 }
 
 /**
- * Run the four-tier art cascade (FR-F-001/FR-F-002) across `releases`
- * sequentially. Resolves to a summary suitable for printing (FR-F-004).
+ * Run the art cascade (FR-F-001/FR-F-002) across `releases` sequentially.
+ * Resolves to a summary suitable for printing (FR-F-004).
  *
  * Cascade order per release (short-circuits on first match):
  *   1. manual (tier 3) — highest priority, wins over auto-sourced art
@@ -110,9 +156,13 @@ export function buildDefaultSources(
  *   -  existing file in `artDir` — kept as-is, no network lookups. This is
  *      what makes re-runs safe for art committed by wax-wishlist-art-admin,
  *      which writes straight into `art/` rather than `manual-art/`.
- *   2. discogs (tier 1)
- *   3. musicbrainz (tier 2)
- *   4. none (tier 4) — `artFilename: null`
+ *   2. rsd-site, rsd-bucket — indexed sources matched across the whole
+ *      season at once (prepared once, before the per-release loop). A hit
+ *      whose image can't be fetched or decoded falls through to the next tier.
+ *   3. discogs (tier 1)
+ *   4. musicbrainz (tier 2)
+ *   5. none (tier 4) — `artFilename: null`; the release's best RSD
+ *      suggestions are recorded in `summary.suggestions`.
  */
 export async function runArtCascade(
   releases: RawRelease[],
@@ -130,100 +180,161 @@ export async function runArtCascade(
   }
   const base = dryRun ? dryRunStubs : defaults
   const sources = { ...base, ...(options.sources ?? {}) }
+  // Same rule for the indexed RSD sources: the defaults hit the network, so
+  // dry-run skips them; explicitly passed ones always run.
+  const indexed = options.indexedSources ?? (dryRun ? [] : buildDefaultIndexedSources(options))
   const fetchImpl = options.fetchImpl ?? fetch
   const resize = options.resizeImpl ?? resizeManualArt
 
   const counts: Record<ArtTier, number> = {
     manual: 0,
+    'rsd-site': 0,
+    'rsd-bucket': 0,
     discogs: 0,
     musicbrainz: 0,
     none: 0,
   }
   const results: ArtLookupResult[] = []
+  const suggestions = new Map<string, ScoredCandidate[]>()
   let kept = 0
 
   const seenReleaseIds = new Set<string>()
   const total = releases.length
   const pad = String(total).length
 
+  // Pre-pass: manual (always wins), then an existing file on disk. Whatever
+  // is left is `pending` and goes to the indexed sources and the remote tiers.
+  const manualHits = new Map<string, ArtLookupResult>()
+  const keptIds = new Set<string>()
+  const pending: RawRelease[] = []
+  for (const release of releases) {
+    seenReleaseIds.add(release.id)
+    const manualHit = await sources.manual.lookup(release)
+    if (manualHit?.artFilename) {
+      manualHits.set(release.id, manualHit)
+    } else if (await exists(resolvePath(options.artDir, `${release.id}.jpg`))) {
+      keptIds.add(release.id)
+    } else {
+      pending.push(release)
+    }
+  }
+
+  // Prepare each indexed source once for the whole season, in order; a later
+  // source isn't asked about releases an earlier one already accepted.
+  const acceptedIds = new Set<string>()
+  for (const src of indexed) {
+    try {
+      await src.prepare(
+        pending.filter((r) => !acceptedIds.has(r.id)),
+        releases,
+      )
+    } catch (err) {
+      console.warn(`art: ${src.name} prepare failed: ${(err as Error).message}`)
+      continue
+    }
+    for (const r of pending) if (src.accepted(r.id)) acceptedIds.add(r.id)
+  }
+
+  /** Fetch + normalize an RSD image into `destPath`. False (logged) on any failure. */
+  const materializeRsd = async (url: string, destPath: string, releaseId: string, tier: ArtTier): Promise<boolean> => {
+    try {
+      const res = await fetchImpl(url)
+      if (!res.ok) throw new Error(`HTTP ${res.status} from ${url}`)
+      const jpeg = await normalizeArtImage(Buffer.from(await res.arrayBuffer()))
+      await mkdir(dirname(destPath), { recursive: true })
+      await writeFile(destPath, jpeg)
+      return true
+    } catch (err) {
+      console.warn(`art: failed to materialize ${releaseId} (tier=${tier}), trying next tier: ${(err as Error).message}`)
+      return false
+    }
+  }
+
+  const recordNone = (releaseId: string): void => {
+    results.push({ releaseId, tier: 'none', sourceUrl: null, artFilename: null })
+    counts.none += 1
+    const top = topSuggestions(indexed, releaseId)
+    if (top.length > 0) suggestions.set(releaseId, top)
+  }
+
   for (let i = 0; i < total; i++) {
     const release = releases[i]
     if (!release) continue
     const n = String(i + 1).padStart(pad, ' ')
     const label = `${release.artist} – ${release.title}`
-    seenReleaseIds.add(release.id)
 
-    // Order: manual (always wins), then an existing file on disk, then
-    // discogs, then musicbrainz.
-    const manualHit = await sources.manual.lookup(release)
-    let hit: ArtLookupResult | null = manualHit?.artFilename ? manualHit : null
-
-    if (!hit && (await exists(resolvePath(options.artDir, `${release.id}.jpg`)))) {
+    if (keptIds.has(release.id)) {
       kept += 1
       console.log(`[${n}/${total}] ${label} → kept existing file`)
       continue
     }
 
-    const remoteTiers: ArtSource[] = [sources.discogs, sources.musicbrainz]
-    for (const src of remoteTiers) {
-      if (hit) break
-      const res = await src.lookup(release)
-      if (res && res.artFilename) hit = res
+    const destPath = resolvePath(options.artDir, `${release.id}.jpg`)
+    let hit: ArtLookupResult | null = manualHits.get(release.id) ?? null
+
+    // Indexed RSD tiers. Materialized here so a broken image demotes to the
+    // next tier rather than straight to no-art.
+    if (!hit) {
+      for (const src of indexed) {
+        const candidate = src.accepted(release.id)
+        if (!candidate) continue
+        if (dryRun || (await materializeRsd(candidate.imageUrl, destPath, release.id, src.name))) {
+          hit = {
+            releaseId: release.id,
+            tier: src.name,
+            sourceUrl: candidate.imageUrl,
+            artFilename: `${release.id}.jpg`,
+          }
+          break
+        }
+      }
+    }
+    const rsdHit = hit !== null && hit.tier !== 'manual'
+
+    if (!hit) {
+      const remoteTiers: ArtSource[] = [sources.discogs, sources.musicbrainz]
+      for (const src of remoteTiers) {
+        const res = await src.lookup(release)
+        if (res && res.artFilename) {
+          hit = res
+          break
+        }
+      }
     }
 
     if (!hit) {
-      const noArt: ArtLookupResult = {
-        releaseId: release.id,
-        tier: 'none',
-        sourceUrl: null,
-        artFilename: null,
-      }
-      results.push(noArt)
-      counts.none += 1
+      recordNone(release.id)
       console.log(`[${n}/${total}] ${label} → no art (tier 4)`)
       continue
     }
 
-    // Materialize the art file unless we're in dry-run mode.
-    const destPath = resolvePath(options.artDir, hit.artFilename as string)
-    if (!dryRun) {
+    // Materialize the art file unless we're in dry-run mode (RSD hits were
+    // already written above).
+    const hitPath = resolvePath(options.artDir, hit.artFilename as string)
+    if (!dryRun && !rsdHit) {
       try {
         if (hit.tier === 'manual') {
           const manualSrc = await findManualArtForRelease(options.manualArtDir, release.id)
           if (manualSrc) {
-            await mkdir(dirname(destPath), { recursive: true })
-            await resize(manualSrc.sourcePath, destPath)
+            await mkdir(dirname(hitPath), { recursive: true })
+            await resize(manualSrc.sourcePath, hitPath)
           }
         } else if (hit.sourceUrl) {
           const res = await fetchImpl(hit.sourceUrl)
           if (res.ok) {
             const buf = Buffer.from(await res.arrayBuffer())
-            await mkdir(dirname(destPath), { recursive: true })
-            await writeFile(destPath, buf)
+            await mkdir(dirname(hitPath), { recursive: true })
+            await writeFile(hitPath, buf)
           } else {
             // Source promised a URL but it 404'd — demote to no-art.
-            const noArt: ArtLookupResult = {
-              releaseId: release.id,
-              tier: 'none',
-              sourceUrl: null,
-              artFilename: null,
-            }
-            results.push(noArt)
-            counts.none += 1
+            recordNone(release.id)
             continue
           }
         }
       } catch (err) {
         console.warn(`art: failed to materialize ${release.id} (tier=${hit.tier}): ${(err as Error).message}`)
         // Record as no-art on failure rather than aborting the run.
-        const noArt: ArtLookupResult = {
-          releaseId: release.id,
-          tier: 'none',
-          sourceUrl: null,
-          artFilename: null,
-        }
-        results.push(noArt)
-        counts.none += 1
+        recordNone(release.id)
         continue
       }
     }
@@ -235,7 +346,9 @@ export async function runArtCascade(
         ? 'tier 1 discogs'
         : hit.tier === 'musicbrainz'
           ? 'tier 2 musicbrainz'
-          : 'tier 3 manual'
+          : hit.tier === 'manual'
+            ? 'tier 3 manual'
+            : hit.tier
     console.log(`[${n}/${total}] ${label} → ${tierLabel} (${hit.artFilename})`)
   }
 
@@ -244,7 +357,7 @@ export async function runArtCascade(
   const seenLower = new Set(Array.from(seenReleaseIds).map((id) => id.toLowerCase()))
   const orphanManualFiles = basenames.filter((name) => !seenLower.has(name))
 
-  return { total: releases.length, counts, kept, results, orphanManualFiles }
+  return { total: releases.length, counts, kept, results, orphanManualFiles, suggestions }
 }
 
 /**
@@ -256,7 +369,8 @@ export function formatCoverageSummary(summary: CascadeSummary): string {
     if (total === 0) return '0%'
     return `${Math.round((n / total) * 100)}%`
   }
-  const covered = counts.manual + counts.discogs + counts.musicbrainz + kept
+  const covered =
+    counts.manual + counts['rsd-site'] + counts['rsd-bucket'] + counts.discogs + counts.musicbrainz + kept
   const pad = (n: number, width: number): string => String(n).padStart(width, ' ')
   // Width matches the FR-F-004 example: 2 digits fits 0–99 releases; larger
   // seasons get whatever the actual digit count is.
@@ -267,6 +381,8 @@ export function formatCoverageSummary(summary: CascadeSummary): string {
   return [
     '=== Art Coverage Summary ===',
     `Total releases: ${total}`,
+    `  RSD site:               ${pad(counts['rsd-site'], w)} (${pct(counts['rsd-site'])})`,
+    `  RSD bucket:             ${pad(counts['rsd-bucket'], w)} (${pct(counts['rsd-bucket'])})`,
     `  Tier 1 (Discogs):      ${pad(counts.discogs, w)} (${pct(counts.discogs)})`,
     `  Tier 2 (MusicBrainz):  ${pad(counts.musicbrainz, w)} (${pct(counts.musicbrainz)})`,
     `  Tier 3 (Manual):        ${pad(counts.manual, w)} (${pct(counts.manual)})`,
@@ -322,9 +438,14 @@ async function cliMain(): Promise<void> {
     discogsConsumerSecret: process.env['DISCOGS_CONSUMER_SECRET'],
     metabrainzAccessToken: process.env['METABRAINZ_ACCESS_TOKEN'],
     dryRun,
+    seasonId,
   })
 
   console.log(formatCoverageSummary(summary))
+  if (!dryRun) {
+    const outcome = await writeArtCandidates(resolvePath(repoRoot, 'releases', seasonId), summary.suggestions)
+    console.log(`art-candidates.json: ${outcome} (${summary.suggestions.size} releases with suggestions)`)
+  }
   if (summary.orphanManualFiles.length > 0) {
     console.warn('\nOrphan manual-art files (no matching release id in this season):')
     for (const name of summary.orphanManualFiles) {

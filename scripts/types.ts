@@ -102,7 +102,7 @@ export type RawRelease = z.infer<typeof RawReleaseSchema>
  * has a non-null `artFilename`; a miss has `artFilename: null` and the cascade
  * continues to the next tier.
  */
-export type ArtTier = 'manual' | 'discogs' | 'musicbrainz' | 'none'
+export type ArtTier = 'manual' | 'rsd-site' | 'rsd-bucket' | 'discogs' | 'musicbrainz' | 'none'
 
 export interface ArtLookupResult {
   releaseId: string
