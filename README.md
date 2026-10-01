@@ -100,7 +100,7 @@ pnpm format               # prettier --write .
 export DISCOGS_CONSUMER_KEY=...
 export DISCOGS_CONSUMER_SECRET=...
 
-pnpm tsx scripts/ingest.ts <season-id> <pdfUrl-or-local-path>
+pnpm tsx scripts/ingest.ts <season-id> <pdfUrl-or-local-path> <YYYY-MM-DD> [--label="..."] [--dry-run]
 ```
 
 Writes `releases/<season-id>/releases.json`, sorted stably by artist then
@@ -127,6 +127,47 @@ pnpm tsx scripts/bundle-season.ts <season-id> <destination-dir>
 This copies `releases.json` and the `art/` directory into the caller's
 destination so the iOS app bundle can seed SwiftData on first launch with
 zero network calls.
+
+## Automatic ingest (`watch-rsd`)
+
+A daily workflow (`.github/workflows/watch-rsd.yml`, 13:30 UTC) lists RSD's
+public S3 bucket and ingests new or revised release-list PDFs with no human
+step. Design: `docs/superpowers/specs/2026-09-30-automatic-season-ingest-design.md`.
+
+- **Extraction:** the positional parser first, then Gemini Flash
+  (`GEMINI_API_KEY`), then Claude (`ANTHROPIC_API_KEY`, optional). The first
+  result that passes the quality gate wins.
+- **Quality gate:** at least 25 complete rows, a size within 0.6–1.6× of the
+  last same-kind season, bounded revisions (≤ 15% removed, ≤ 25% count
+  change), and LLM rows that actually appear in the PDF's text.
+- **Failures** publish nothing and open a `watch-rsd:` issue, which closes
+  itself once the season is published (by the watcher or manual `ingest`).
+- **State:** `sources.json` records every bucket PDF seen and what happened
+  to it; `calendar.json` holds April dates (add each year's once RSD
+  announces it; Black Friday is computed).
+- **Publishing switch:** scheduled runs are dry runs (report in the step
+  summary) unless the repository variable `WATCH_RSD_PUBLISH` is `true`.
+  Manual runs take a `publish` checkbox and an `only` extractor choice.
+
+Local dry run (reads `.env` for `GEMINI_API_KEY`):
+
+```sh
+pnpm tsx --env-file=.env scripts/watch-rsd.ts --dry-run
+pnpm tsx --env-file=.env scripts/watch-rsd.ts --dry-run --prefix=2025/ --sources=/tmp/sources.json --only=gemini
+```
+
+Manual `ingest` now takes the date as a third argument and runs the same
+cascade and gate:
+
+```sh
+pnpm tsx scripts/ingest.ts 2026-november <pdf-url-or-path> 2026-11-27 [--label="..."] [--dry-run]
+```
+
+Live-check one LLM extractor against a real PDF (spends API quota):
+
+```sh
+pnpm tsx --env-file=.env scripts/check-llm-extractors.ts gemini tests/fixtures/2025-november.pdf 2025-november
+```
 
 ## Season promotion flow
 
