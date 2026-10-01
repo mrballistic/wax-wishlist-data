@@ -1,17 +1,15 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
-import { enrichDiscogs } from './enrich-discogs.js'
-import { writeCurrent, writeReleases, writeSeasons } from './generate-json.js'
-import { parsePdf } from './parse-pdf.js'
-import {
-  type CurrentSeason,
-  CurrentSeasonSchema,
-  type Season,
-  SeasonsListSchema,
-} from './types.js'
+import { defaultExtractors, runCascade } from './extract/index.js'
+import { pdfTextLayer } from './extract/pdf-text.js'
+import { publishSeason } from './watch/publish.js'
+import { loadGateContext } from './watch/season-context.js'
+import { writeStepSummary } from './watch/summary.js'
 
 const REPO_ROOT = resolve(process.cwd())
+const USAGE =
+  'Usage: pnpm tsx scripts/ingest.ts <season-id> <pdfUrl-or-path> <yyyy-mm-dd> [--label="..."] [--dry-run]'
 
 async function fetchPdfBuffer(source: string): Promise<Buffer> {
   if (source.startsWith('http://') || source.startsWith('https://')) {
@@ -24,53 +22,67 @@ async function fetchPdfBuffer(source: string): Promise<Buffer> {
   return readFile(resolve(REPO_ROOT, source))
 }
 
-async function loadCurrent(): Promise<CurrentSeason> {
-  const raw = await readFile(resolve(REPO_ROOT, 'current.json'), 'utf8')
-  return CurrentSeasonSchema.parse(JSON.parse(raw))
+interface Args {
+  seasonId: string
+  pdfSource: string
+  date: string
+  label: string | undefined
+  dryRun: boolean
 }
 
-async function loadSeasons(): Promise<Season[]> {
-  const raw = await readFile(resolve(REPO_ROOT, 'seasons.json'), 'utf8')
-  return SeasonsListSchema.parse(JSON.parse(raw))
+function parseArgs(argv: string[]): Args | null {
+  const positional = argv.filter((a) => !a.startsWith('--'))
+  const labelArg = argv.find((a) => a.startsWith('--label='))
+  const [seasonId, pdfSource, date] = positional
+  if (!seasonId || !pdfSource || !date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null
+  return {
+    seasonId,
+    pdfSource,
+    date,
+    label: labelArg ? labelArg.slice('--label='.length) || undefined : undefined,
+    dryRun: argv.includes('--dry-run'),
+  }
 }
 
+/**
+ * Manual ingest. Same path as the watcher: extractor cascade → quality gate
+ * → publish. A list the gate rejects is not written; the job fails with the
+ * gate report so a human can look.
+ */
 async function main(): Promise<void> {
-  const [, , seasonId, pdfSource] = process.argv
-  if (!seasonId || !pdfSource) {
-    console.error('Usage: pnpm tsx scripts/ingest.ts <season-id> <pdfUrl-or-path>')
+  const args = parseArgs(process.argv.slice(2))
+  if (!args) {
+    console.error(USAGE)
     process.exit(1)
     return
   }
+  const { seasonId, pdfSource, date, label, dryRun } = args
 
-  console.log(`Ingesting season=${seasonId} from ${pdfSource}`)
-  const pdfBuffer = await fetchPdfBuffer(pdfSource)
-  const raw = await parsePdf(pdfBuffer)
-  console.log(`Parsed ${raw.length} raw releases`)
+  console.log(`Ingesting season=${seasonId} from ${pdfSource}${dryRun ? ' (dry run)' : ''}`)
+  const pdf = await fetchPdfBuffer(pdfSource)
+  const pdfText = await pdfTextLayer(pdf).catch(() => '')
+  const context = await loadGateContext(REPO_ROOT, seasonId)
+  const result = await runCascade({
+    pdf,
+    pdfText,
+    extractors: defaultExtractors(),
+    ...context,
+    title: `${seasonId} from ${pdfSource}`,
+  })
+  await writeStepSummary(result.report)
 
-  const releases = await enrichDiscogs(raw)
-  const discogsConfigured = Boolean(
-    process.env['DISCOGS_CONSUMER_KEY'] && process.env['DISCOGS_CONSUMER_SECRET'],
-  )
-  console.log(
-    `Enriched ${releases.length} releases (Discogs auth ${discogsConfigured ? 'set' : 'absent'})`,
-  )
-
-  const releasesPath = resolve(REPO_ROOT, 'releases', seasonId, 'releases.json')
-  await writeReleases(releasesPath, releases)
-  console.log(`Wrote ${releasesPath}`)
-
-  // Refresh seasons.json entry if it already tracks this id.
-  const seasons = await loadSeasons()
-  const current = await loadCurrent()
-  const idx = seasons.findIndex((s) => s.id === seasonId)
-  if (idx >= 0 && seasons[idx]) {
-    await writeSeasons(resolve(REPO_ROOT, 'seasons.json'), seasons)
+  if (!result.passed || !result.releases) {
+    console.error('No extractor produced a list that passes the quality gate. Nothing was written.')
+    process.exit(1)
+    return
   }
-  if (current.id === seasonId) {
-    await writeCurrent(resolve(REPO_ROOT, 'current.json'), current)
+  if (dryRun) {
+    console.log(`Dry run: would publish ${result.releases.length} releases (${result.extractor}).`)
+    return
   }
 
-  console.log('Ingest complete.')
+  await publishSeason({ repoRoot: REPO_ROOT, seasonId, date, label, releases: result.releases })
+  console.log(`Ingest complete: ${result.releases.length} releases via ${result.extractor}.`)
 }
 
 main().catch((err: unknown) => {

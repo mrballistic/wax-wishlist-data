@@ -25,6 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      # Closes watch-rsd issues for this season after publishing.
+      issues: write
+    env:
+      SEASON_ID: ${{ inputs.season-id }}
+      PDF_URL: ${{ inputs.pdfUrl }}
+      SEASON_DATE: ${{ inputs.date }}
+      SEASON_LABEL: ${{ inputs.label }}
     steps:
       - uses: actions/checkout@v7
 
@@ -40,26 +47,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Extractor cascade → quality gate → Discogs ids, releases.json, art,
+      # register-season. Fails (writing nothing) if the gate rejects the list.
       - name: Ingest season PDF
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
           DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
           METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
-        run: pnpm tsx scripts/ingest.ts "${{ inputs.season-id }}" "${{ inputs.pdfUrl }}"
-
-      - name: Fetch album art
-        env:
-          DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
-          DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
-          METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
-        run: pnpm tsx scripts/fetch-art.ts "${{ inputs.season-id }}"
-
-      - name: Register season (announce to clients)
         run: |
-          if [ -n "${{ inputs.label }}" ]; then
-            pnpm tsx scripts/register-season.ts "${{ inputs.season-id }}" "${{ inputs.date }}" --label="${{ inputs.label }}"
+          if [ -n "$SEASON_LABEL" ]; then
+            pnpm tsx scripts/ingest.ts "$SEASON_ID" "$PDF_URL" "$SEASON_DATE" --label="$SEASON_LABEL"
           else
-            pnpm tsx scripts/register-season.ts "${{ inputs.season-id }}" "${{ inputs.date }}"
+            pnpm tsx scripts/ingest.ts "$SEASON_ID" "$PDF_URL" "$SEASON_DATE"
           fi
 
       - name: Validate JSON
@@ -74,7 +75,7 @@ jobs:
             echo "No changes to commit."
             exit 0
           fi
-          git commit -m "chore: ingest ${{ inputs.season-id }}"
+          git commit -m "chore: ingest $SEASON_ID"
           # Retry a few times to survive concurrent pushes (e.g. someone merging
           # to main while this long-running job was staging art downloads).
           for attempt in 1 2 3 4 5; do
@@ -86,3 +87,8 @@ jobs:
           done
           echo "Exhausted push retries." >&2
           exit 1
+
+      - name: Close watch-rsd issues for this season
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: pnpm tsx scripts/close-season-issues.ts "$SEASON_ID" "$(git rev-parse HEAD)"
