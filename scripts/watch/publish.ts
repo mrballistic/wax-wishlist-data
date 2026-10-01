@@ -1,10 +1,11 @@
+import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import { enrichDiscogs } from '../enrich-discogs.js'
 import { formatCoverageSummary, runArtCascade } from '../fetch-art.js'
 import { writeReleases } from '../generate-json.js'
 import { registerSeason } from '../register-season.js'
-import type { RawRelease, Release } from '../types.js'
+import { type RawRelease, type Release, ReleaseListSchema } from '../types.js'
 
 export interface PublishInput {
   repoRoot: string
@@ -38,14 +39,34 @@ export const defaultPublishDeps: PublishDeps = {
   register: (seasonId, date, label, repoRoot) => registerSeason(seasonId, date, label, repoRoot),
 }
 
+/** The season's current releases.json, or [] for a new season. */
+async function loadExisting(path: string): Promise<Release[]> {
+  let raw: string
+  try {
+    raw = await readFile(path, 'utf8')
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return []
+    throw err
+  }
+  return ReleaseListSchema.parse(JSON.parse(raw))
+}
+
 /**
  * Publish a gate-passed list: Discogs ids, releases.json, the art cascade
  * (empty slots only), then announce the season in seasons.json/current.json.
  * The caller validates and commits.
+ *
+ * On a revision, a Discogs id that was found before is carried forward when
+ * this lookup comes back empty (rate limit, missing credentials, flaky
+ * search), so a revision never loses enrichment it already had.
  */
 export async function publishSeason(input: PublishInput, deps: PublishDeps = defaultPublishDeps): Promise<void> {
-  const enriched = await deps.enrich(input.releases)
-  await writeReleases(resolve(input.repoRoot, 'releases', input.seasonId, 'releases.json'), enriched)
+  const path = resolve(input.repoRoot, 'releases', input.seasonId, 'releases.json')
+  const previousIds = new Map((await loadExisting(path)).map((r) => [r.id, r.discogsMasterId]))
+  const enriched = (await deps.enrich(input.releases)).map((r) =>
+    r.discogsMasterId === null ? { ...r, discogsMasterId: previousIds.get(r.id) ?? null } : r,
+  )
+  await writeReleases(path, enriched)
   await deps.fetchArt(input.releases, input.seasonId, input.repoRoot)
   await deps.register(input.seasonId, input.date, input.label, input.repoRoot)
 }
