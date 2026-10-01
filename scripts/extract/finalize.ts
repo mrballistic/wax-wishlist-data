@@ -49,8 +49,9 @@ function clean(s: string): string {
  * different formats of the same title (Jeff Buckley "Live À L'Olympia" as
  * 2xLP and CD) survive as distinct products.
  *
- * Incomplete rows are kept on purpose: the gate reports them instead of
- * this function silently dropping them.
+ * Rows with an empty field are kept on purpose so the gate reports them,
+ * with one exception: a row whose artist + title slug is empty is dropped,
+ * because it has no usable id.
  */
 export function finalizeRows(rows: ExtractedRow[]): RawRelease[] {
   const releases: RawRelease[] = []
