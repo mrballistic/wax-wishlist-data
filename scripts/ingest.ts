@@ -1,8 +1,11 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
+import { unlockerFromEnv } from './art/brightdata.js'
 import { defaultExtractors, runCascade } from './extract/index.js'
 import { pdfTextLayer } from './extract/pdf-text.js'
+import { repairRows } from './rsd/repair.js'
+import { getSiteIndex } from './rsd/site-index.js'
 import { publishSeason } from './watch/publish.js'
 import { recordManualPublish } from './watch/record-manual.js'
 import { loadGateContext } from './watch/season-context.js'
@@ -67,11 +70,15 @@ async function main(): Promise<void> {
     return ''
   })
   const context = await loadGateContext(REPO_ROOT, seasonId)
+  const expectedCount = context.previousSameSeason?.length ?? context.lastComparableCount ?? 0
+  const log = (line: string): void => console.log(line)
+  const index = await getSiteIndex({ seasonId, expectedCount, unlocker: unlockerFromEnv(), log })
   const result = await runCascade({
     pdf,
     pdfText,
     extractors: defaultExtractors(),
     ...context,
+    repair: index ? (rows, partial) => repairRows(rows, partial, index.entries, log).rows : undefined,
     title: `${seasonId} from ${pdfSource}`,
   })
   await writeStepSummary(result.report)

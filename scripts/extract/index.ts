@@ -5,7 +5,7 @@ import { finalizeRows } from './finalize.js'
 import { checkCandidate } from './gate.js'
 import { createGeminiExtractor } from './gemini.js'
 import { parserExtractor } from './parser.js'
-import type { Extractor, ExtractorName } from './types.js'
+import type { ExtractedRow, Extractor, ExtractorName } from './types.js'
 
 export interface ExtractorAttempt {
   name: ExtractorName
@@ -23,6 +23,12 @@ export interface CascadeInput {
   lastComparableCount: number | null
   /** Heading for the report, e.g. "2026-november from `<key>`". */
   title: string
+  /**
+   * Row repair (scripts/rsd/repair.ts): given an extractor's rows and its
+   * partial rows, returns the rows to finalize. Absent: partial rows are
+   * dropped, as before.
+   */
+  repair?: ((rows: ExtractedRow[], partial: ExtractedRow[]) => ExtractedRow[]) | undefined
 }
 
 export interface CascadeResult {
@@ -86,7 +92,8 @@ export async function runCascade(input: CascadeInput): Promise<CascadeResult> {
   for (const extractor of input.extractors) {
     let releases: RawRelease[]
     try {
-      releases = finalizeRows(await extractor.extract(input.pdf))
+      const rows = await extractor.extract(input.pdf)
+      releases = finalizeRows(input.repair ? input.repair(rows, extractor.partialRows?.() ?? []) : rows)
     } catch (err) {
       const message = err instanceof Error ? err.message : JSON.stringify(err)
       attempts.push({ name: extractor.name, outcome: 'error', rowCount: null, failures: [message], report: '' })

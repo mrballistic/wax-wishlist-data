@@ -73,6 +73,7 @@ function deps(listing: BucketObject[], extractors: Extractor[], overrides: Parti
     git: { commitAndPush: vi.fn(async () => 'abc1234') },
     summary: vi.fn(async () => {}),
     log: () => {},
+    siteIndex: async () => null,
     ...overrides,
   }
   return d
@@ -81,6 +82,45 @@ const opts = (dryRun = false) => ({ repoRoot: repo, sourcesPath, dryRun })
 const sourcesOnDisk = async (): Promise<SourceEntry[]> => JSON.parse(await readFile(sourcesPath, 'utf8'))
 
 describe('runWatch', () => {
+  it('repairs parser-dropped rows from the site index before the gate', async () => {
+    const partial: ExtractedRow = { category: 'E', artist: 'Zed Nine Lives Live', title: '', label: 'Lab', format: 'LP' }
+    const parser: Extractor = { ...extractor('parser', async () => novemberRows), partialRows: () => [partial] }
+    const siteIndex = vi.fn(async (seasonId: string) => ({
+      seasonId,
+      eventId: 1,
+      entries: [
+        {
+          releaseId: '1',
+          artist: 'Zed',
+          title: 'Nine Lives Live',
+          photoId: 1,
+          format: 'LP',
+          label: 'Lab',
+          description: '',
+          tracklist: [],
+          quantity: null,
+          upc: null,
+          pageUrl: 'https://recordstoreday.com/SpecialRelease/1',
+        },
+      ],
+    }))
+    const d = deps([APRIL, BF], [parser], { siteIndex })
+    await runWatch(opts(), d)
+
+    expect(siteIndex).toHaveBeenCalledWith('2026-november', 173)
+    const published = vi.mocked(d.publish).mock.calls[0]?.[0].releases ?? []
+    expect(published).toHaveLength(174)
+    expect(published.find((r) => r.id === 'zed-nine-lives-live')).toMatchObject({ artist: 'Zed', title: 'Nine Lives Live' })
+  })
+
+  it('drops partial rows when the site index is unavailable', async () => {
+    const partial: ExtractedRow = { category: 'E', artist: 'Zed Nine Lives Live', title: '', label: 'Lab', format: 'LP' }
+    const parser: Extractor = { ...extractor('parser', async () => novemberRows), partialRows: () => [partial] }
+    const d = deps([APRIL, BF], [parser])
+    await runWatch(opts(), d)
+    expect(vi.mocked(d.publish).mock.calls[0]?.[0].releases).toHaveLength(173)
+  })
+
   it('publishes a new Black Friday list', async () => {
     const d = deps([APRIL, BF], [extractor('parser', async () => novemberRows)])
     const out = await runWatch(opts(), d)

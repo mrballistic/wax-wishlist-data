@@ -28,4 +28,9 @@ export interface Extractor {
   extract(pdf: Buffer): Promise<ExtractedRow[]>
   /** Short note about the last extract() call, e.g. which model answered; null if none. */
   detail?(): string | null
+  /**
+   * Rows the last extract() call left out for a missing field (missing
+   * fields as ""), for row repair. Only the parser has these.
+   */
+  partialRows?(): ExtractedRow[]
 }

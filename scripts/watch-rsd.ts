@@ -1,8 +1,10 @@
 import { resolve } from 'node:path'
 
+import { unlockerFromEnv } from './art/brightdata.js'
 import { defaultExtractors, EXTRACTOR_ENV } from './extract/index.js'
 import { pdfTextLayer } from './extract/pdf-text.js'
 import type { ExtractorName } from './extract/types.js'
+import { getSiteIndex } from './rsd/site-index.js'
 import { fetchPdf, listPdfs } from './watch/bucket.js'
 import { createGitOps } from './watch/git.js'
 import { createGitHubIssueClient, noopIssueClient } from './watch/issues.js'
@@ -71,6 +73,8 @@ async function main(): Promise<void> {
         git: createGitOps(repoRoot),
         summary: writeStepSummary,
         log: (line) => console.log(line),
+        siteIndex: (seasonId, expectedCount) =>
+          getSiteIndex({ seasonId, expectedCount, unlocker: unlockerFromEnv() }),
       },
     )
   } catch (err) {

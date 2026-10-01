@@ -3,6 +3,8 @@ import { resolve } from 'node:path'
 import { droppedLines } from '../extract/gate.js'
 import { runCascade } from '../extract/index.js'
 import type { Extractor, ExtractorName } from '../extract/types.js'
+import { repairRows } from '../rsd/repair.js'
+import type { SiteIndex } from '../rsd/site-index.js'
 
 import { prefixesFor } from './bucket.js'
 import { loadCalendar, seasonDate } from './calendar.js'
@@ -37,6 +39,8 @@ export interface WatchDeps {
   git: GitOps
   summary: (markdown: string) => Promise<void>
   log: (line: string) => void
+  /** recordstoreday.com listing for row repair; null when unavailable (repair is skipped). */
+  siteIndex: (seasonId: string, expectedCount: number) => Promise<SiteIndex | null>
 }
 
 export interface WatchOptions {
@@ -159,11 +163,17 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
     })
     const context = await loadGateContext(opts.repoRoot, seasonId)
     const extractors = opts.only ? deps.extractors.filter((e) => e.name === opts.only) : deps.extractors
+    const expectedCount = context.previousSameSeason?.length ?? context.lastComparableCount ?? 0
+    const index = await deps.siteIndex(seasonId, expectedCount).catch((err: unknown) => {
+      deps.log(`repair: skipped (${message(err)})`)
+      return null
+    })
     const result = await runCascade({
       pdf,
       pdfText,
       extractors,
       ...context,
+      repair: index ? (rows, partial) => repairRows(rows, partial, index.entries, deps.log).rows : undefined,
       title: `${seasonId} from \`${obj.key}\``,
     })
     await deps.summary(result.report)

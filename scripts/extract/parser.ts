@@ -136,10 +136,14 @@ function detectColumnGrid(allRows: TextFragment[][]): ColumnGrid | null {
  * detected column grid. Only rows that begin with a recognized category
  * code (E/L/F) near the category column are emitted.
  */
-function extractRowsFromPage(items: TextFragment[], grid: ColumnGrid): ExtractedRow[] {
+function extractRowsFromPage(
+  items: TextFragment[],
+  grid: ColumnGrid,
+): { rows: ExtractedRow[]; partial: ExtractedRow[] } {
   const rows = groupIntoRows(items)
 
   const out: ExtractedRow[] = []
+  const partial: ExtractedRow[] = []
   for (const row of rows) {
     const first = row[0]
     if (!first) continue
@@ -188,11 +192,16 @@ function extractRowsFromPage(items: TextFragment[], grid: ColumnGrid): Extracted
       }
     }
 
-    if (!artist || !title || !label || !format) continue
+    // Incomplete rows are kept aside for repair (scripts/rsd/repair.ts); they
+    // never reach the gate unrepaired.
+    if (!artist || !title || !label || !format) {
+      partial.push({ category: cat, artist, title, label, format })
+      continue
+    }
 
     out.push({ category: cat, artist, title, label, format })
   }
-  return out
+  return { rows: out, partial }
 }
 
 /**
@@ -212,6 +221,17 @@ function extractRowsFromPage(items: TextFragment[], grid: ColumnGrid): Extracted
  * detected, which the cascade records as "parser found no rows".
  */
 export async function parseRows(pdfBuffer: Buffer): Promise<ExtractedRow[]> {
+  return (await parseRowsDetailed(pdfBuffer)).rows
+}
+
+/**
+ * `parseRows`, plus the rows it skips for a missing artist, title, label or
+ * format (`partial`, missing fields as ""), so row repair can try to recover
+ * them from recordstoreday.com.
+ */
+export async function parseRowsDetailed(
+  pdfBuffer: Buffer,
+): Promise<{ rows: ExtractedRow[]; partial: ExtractedRow[] }> {
   const data = new Uint8Array(pdfBuffer)
   const doc = await getDocument({ data, verbosity: 0 }).promise
 
@@ -238,7 +258,19 @@ export async function parseRows(pdfBuffer: Buffer): Promise<ExtractedRow[]> {
     )
   }
 
-  return pages.flatMap((fragments) => extractRowsFromPage(fragments, grid))
+  const perPage = pages.map((fragments) => extractRowsFromPage(fragments, grid))
+  return { rows: perPage.flatMap((p) => p.rows), partial: perPage.flatMap((p) => p.partial) }
 }
 
-export const parserExtractor: Extractor = { name: 'parser', extract: parseRows }
+let lastPartial: ExtractedRow[] = []
+
+export const parserExtractor: Extractor = {
+  name: 'parser',
+  async extract(pdf) {
+    lastPartial = []
+    const { rows, partial } = await parseRowsDetailed(pdf)
+    lastPartial = partial
+    return rows
+  },
+  partialRows: () => lastPartial,
+}
