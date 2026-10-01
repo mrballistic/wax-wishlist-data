@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 import { defaultExtractors, runCascade } from './extract/index.js'
 import { pdfTextLayer } from './extract/pdf-text.js'
 import { publishSeason } from './watch/publish.js'
+import { recordManualPublish } from './watch/record-manual.js'
 import { loadGateContext } from './watch/season-context.js'
 import { writeStepSummary } from './watch/summary.js'
 
@@ -47,7 +48,8 @@ function parseArgs(argv: string[]): Args | null {
 /**
  * Manual ingest. Same path as the watcher: extractor cascade → quality gate
  * → publish. A list the gate rejects is not written; the job fails with the
- * gate report so a human can look.
+ * gate report so a human can look. A publish from an RSD bucket URL is also
+ * recorded in sources.json so the watcher treats that PDF as handled.
  */
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2))
@@ -74,7 +76,7 @@ async function main(): Promise<void> {
   })
   await writeStepSummary(result.report)
 
-  if (!result.passed || !result.releases) {
+  if (!result.passed || !result.releases || !result.extractor) {
     console.error('No extractor produced a list that passes the quality gate. Nothing was written.')
     process.exit(1)
     return
@@ -85,6 +87,12 @@ async function main(): Promise<void> {
   }
 
   await publishSeason({ repoRoot: REPO_ROOT, seasonId, date, label, releases: result.releases })
+  await recordManualPublish({
+    pdfSource,
+    seasonId,
+    extractor: result.extractor,
+    sourcesPath: resolve(REPO_ROOT, 'sources.json'),
+  })
   console.log(`Ingest complete: ${result.releases.length} releases via ${result.extractor}.`)
 }
 
