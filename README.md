@@ -75,7 +75,7 @@ Array of release objects:
   "tracklist": ["A1. Low Tide", "B1. Dawn"],            // optional
   "quantity": 2000,                                     // optional, nullable
   "upc": "075678604034",                                // optional, nullable
-  "rsdUrl": "https://recordstoreday.com/Release/12345"  // optional, nullable
+  "rsdUrl": "https://recordstoreday.com/SpecialRelease/12345"  // optional, nullable
 }
 ```
 
@@ -85,6 +85,8 @@ the release's page on recordstoreday.com. `tracklist` is one string per line as
 printed there, `quantity` is the pressing size, `upc` is 8-14 digits, and
 `rsdUrl` is the release page itself. `quantity`, `upc` and `rsdUrl` are `null`
 when unknown. `description` is now populated from recordstoreday.com too.
+See [Release data from recordstoreday.com](#release-data-from-recordstoredaycom)
+for when they are filled.
 
 ## Prerequisites
 
@@ -189,6 +191,50 @@ Live-check one LLM extractor against a real PDF (spends API quota):
 ```sh
 pnpm tsx --env-file=.env scripts/check-llm-extractors.ts gemini tests/fixtures/2025-november.pdf 2025-november
 ```
+
+## Release data from recordstoreday.com
+
+The PDF decides which releases exist; recordstoreday.com only fills in detail
+for them. Each season's `?view=all` listing (descriptions, tracklists, release
+links) is joined with the event's table page (quantity, UPC) into one site
+index (`scripts/rsd/site-index.ts`), shared by row repair, enrichment and the
+`rsd-site` art tier. Design:
+[`docs/superpowers/specs/2026-10-01-richer-release-data-design.md`](docs/superpowers/specs/2026-10-01-richer-release-data-design.md).
+
+- **What is filled:** `description` (the quickview "MORE INFO" text, RSD's
+  wording verbatim, paragraphs separated by `\n\n`) and the four optional
+  contract fields `tracklist`, `quantity`, `upc` and `rsdUrl`
+  (`scripts/rsd/enrich.ts`). Only releases the art matcher *accepts* are
+  filled; below the bar nothing is written.
+- **Never overwrite:** a field is filled only while it is empty (`""`, `null`,
+  absent, or an empty tracklist). A value from the PDF, an earlier run or a hand
+  edit always stays, and a revision carries every previously found value
+  forward.
+- **Row repair at ingest** (`scripts/rsd/repair.ts`): PDF rows the parser
+  would drop (a fused artist/title, a blank label or format) are completed
+  from the site index on an exact normalized match, and blank labels/formats
+  are filled where every matching site row agrees. Anything ambiguous is left
+  for the gate to drop, as before.
+- **Barcode Discogs:** with a `upc`, the Discogs lookup searches by barcode
+  first and falls back to artist/title. Existing Discogs ids are never
+  replaced.
+- **When:** at every publish (`watch-rsd`, `ingest`), and daily via
+  `refresh-art.yml` for the current upcoming season. A refresh that changes
+  `releases.json` stamps `current.json` `contentUpdatedAt`, which is what makes
+  the apps refetch.
+- **Cost:** 2 Bright Data Unlocker requests per season per run (listing +
+  table page), 3-4 with retries, plus up to 6 when probing an unmapped season.
+- **Failures never block a publish:** no secrets, no event, an incomplete
+  listing or a parse error skips repair/enrichment with one log line.
+
+Live check (2026-10-01, `tests/fixtures/2025-november.pdf` against the live
+site, event 599, 2 Unlocker requests): repair recovered 3 rows (173 to 176);
+enrichment filled 172 of 176 releases: description 163, tracklist 153,
+quantity 171, upc 172, rsdUrl 172. On the recorded 2026-april fixtures it
+fills 342 of 353 (description 324, tracklist 294, quantity 338, upc 342).
+
+The app-side contract for these fields lives in each app repo at
+`docs/data-contract/releases-json.md`.
 
 ## Season promotion flow
 
@@ -307,10 +353,12 @@ to the next tier; art never blocks a publish.
   logs `rsd-site: <season> is PromotionalEvent/<id> — add it to
   rsd-events.json`. **Runbook: when you see that line, add the discovered id
   to `rsd-events.json` and commit it**, so later runs skip the probing.
-- Unlocker requests per run: 1 normally (the whole season is one `?view=all`
-  listing page); 2 when the listing comes back incomplete (under 80% of the
-  season's releases) and is retried once; up to 7 when probing an unmapped
-  season. Hard cap of 400 per run. The product images themselves come
+- Unlocker requests per run: the art tier shares the season's site index with
+  release-data enrichment (see below), so a run costs 2 normally (the
+  `?view=all` listing plus the table page), 3-4 when the listing or the table
+  comes back incomplete and is retried once, and up to 6 more when probing an
+  unmapped season. The index is memoized per season for the process, so
+  repair, enrichment and art never fetch it twice. Hard cap of 400 per run. The product images themselves come
   straight from `img.broadtime.com` and cost nothing.
 - A photo id that appears on rows for different releases is treated as a site
   placeholder and ignored for all of them (logged once per photo).
@@ -340,8 +388,12 @@ shape. The apps never read it; `wax-wishlist-art-admin` does.
 ### Daily refresh
 
 `refresh-art.yml` runs daily at 14:00 UTC (after `watch-rsd`) for the season
-in `current.json` while its date is today or later, and commits any new art
-and the updated `art-candidates.json` (`chore: refresh art for <season-id>`).
+in `current.json` while its date is today or later. It runs
+`scripts/refresh-season.ts`, which fills empty release data from
+recordstoreday.com and Discogs (see
+[Release data from recordstoreday.com](#release-data-from-recordstoredaycom)),
+then the art cascade, and commits any new data and art and the updated
+`art-candidates.json` (`chore: refresh art for <season-id>`).
 Past seasons are skipped. Manual dispatch takes an optional `season-id` and
 works for any season. `ingest.yml` and `watch-rsd.yml` run the same cascade
 when they publish a season.
@@ -357,7 +409,7 @@ leaked key can do little:
 - use a **dedicated Web Unlocker zone** for this repo, not one shared with
   other projects;
 - **restrict its target domains to `recordstoreday.com`**;
-- set a **spend limit** on the zone (a normal run uses one request a day).
+- set a **spend limit** on the zone (a normal day uses two requests).
 
 ### Reviewing suggestions in art-admin
 
