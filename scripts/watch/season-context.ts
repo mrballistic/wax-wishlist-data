@@ -13,8 +13,9 @@ export async function loadReleasesAsRaw(repoRoot: string, seasonId: string): Pro
   let raw: string
   try {
     raw = await readFile(resolve(repoRoot, 'releases', seasonId, 'releases.json'), 'utf8')
-  } catch {
-    return null
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return null
+    throw err
   }
   return ReleaseListSchema.parse(JSON.parse(raw)).map(({ id, artist, title, label, format, category, description }) => ({
     id,

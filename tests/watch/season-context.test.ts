@@ -4,7 +4,7 @@ import { join } from 'node:path'
 
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { loadGateContext, seasonKind } from '../../scripts/watch/season-context.js'
+import { loadGateContext, loadReleasesAsRaw, seasonKind } from '../../scripts/watch/season-context.js'
 import { REPO_ROOT } from '../helpers/releases.js'
 
 let repo: string
@@ -44,5 +44,13 @@ describe('loadGateContext', () => {
       previousSameSeason: null,
       lastComparableCount: null,
     })
+  })
+})
+
+describe('loadReleasesAsRaw', () => {
+  it('returns null for a missing season but throws on other read errors', async () => {
+    expect(await loadReleasesAsRaw(repo, '2099-april')).toBeNull()
+    await mkdir(join(repo, 'releases', '2098-april', 'releases.json'), { recursive: true })
+    await expect(loadReleasesAsRaw(repo, '2098-april')).rejects.toMatchObject({ code: 'EISDIR' })
   })
 })

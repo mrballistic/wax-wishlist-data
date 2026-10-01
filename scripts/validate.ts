@@ -56,8 +56,9 @@ async function validateOptional(path: string, schema: ZodTypeAny): Promise<Probl
   let raw: string
   try {
     raw = await readFile(path, 'utf8')
-  } catch {
-    return []
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return []
+    return [{ path, message: (err as Error).message }]
   }
   try {
     const result = schema.safeParse(JSON.parse(raw))

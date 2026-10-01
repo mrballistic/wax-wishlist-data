@@ -34,6 +34,11 @@ describe('sources', () => {
     expect(await loadSources(join(tmpdir(), 'does-not-exist', 'sources.json'))).toEqual([])
   })
 
+  it('propagates read errors other than a missing file', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'wwd-sources-'))
+    await expect(loadSources(dir)).rejects.toMatchObject({ code: 'EISDIR' })
+  })
+
   it('round-trips sorted by key and validates', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'wwd-sources-'))
     const path = join(dir, 'sources.json')

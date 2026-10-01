@@ -34,14 +34,15 @@ export async function loadSources(path: string): Promise<SourceEntry[]> {
   let raw: string
   try {
     raw = await readFile(path, 'utf8')
-  } catch {
-    return []
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return []
+    throw err
   }
   return SourcesSchema.parse(JSON.parse(raw))
 }
 
 export async function saveSources(path: string, entries: SourceEntry[]): Promise<void> {
-  const sorted = SourcesSchema.parse([...entries].sort((a, b) => a.key.localeCompare(b.key)))
+  const sorted = SourcesSchema.parse([...entries].sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0)))
   await mkdir(dirname(path), { recursive: true })
   await writeFile(path, `${JSON.stringify(sorted, null, 2)}\n`, 'utf8')
 }
