@@ -26,6 +26,31 @@ describe('createUnlocker', () => {
     expect(u.requestsMade()).toBe(1)
   })
 
+  it('decodes the body with the charset from the Content-Type header', async () => {
+    // recordstoreday.com sends charset=ISO-8859-1 (despite a UTF-8 meta tag); 0xC0 is "À".
+    const latin1 = new Uint8Array([0x4c, 0x69, 0x76, 0x65, 0x20, 0xc0, 0x20, 0x4c, 0x27, 0x4f])
+    server.use(
+      http.post(
+        UNLOCKER_ENDPOINT,
+        () => new HttpResponse(latin1, { headers: { 'content-type': 'text/html; charset=ISO-8859-1' } }),
+      ),
+    )
+    const u = createUnlocker({ apiKey: 'k', zone: 'z' })
+    expect(await u.fetchPage(PAGE)).toBe("Live \u00c0 L'O")
+  })
+
+  it('falls back to UTF-8 for a missing or unknown charset', async () => {
+    const utf8 = new TextEncoder().encode('caf\u00e9')
+    server.use(
+      http.post(
+        UNLOCKER_ENDPOINT,
+        () => new HttpResponse(utf8, { headers: { 'content-type': 'text/html; charset=bogus-x' } }),
+      ),
+    )
+    const u = createUnlocker({ apiKey: 'k', zone: 'z' })
+    expect(await u.fetchPage(PAGE)).toBe('caf\u00e9')
+  })
+
   it('throws on HTTP errors without leaking the api key', async () => {
     server.use(http.post(UNLOCKER_ENDPOINT, () => HttpResponse.text('forbidden', { status: 403 })))
     const u = createUnlocker({ apiKey: 'secret-key-123', zone: 'z' })

@@ -19,6 +19,24 @@ export interface UnlockerOptions {
   maxRequests?: number
 }
 
+/**
+ * Decode with the charset the origin declared in Content-Type. `res.text()` always
+ * assumes UTF-8, but recordstoreday.com sends `charset=ISO-8859-1` (its meta tag
+ * says UTF-8), so every accented title would turn into U+FFFD. Unknown or missing
+ * charsets fall back to UTF-8.
+ */
+function decodeBody(bytes: Uint8Array, contentType: string | null): string {
+  const charset = /charset=["']?([^;"'\s]+)/i.exec(contentType ?? '')?.[1]
+  if (charset) {
+    try {
+      return new TextDecoder(charset).decode(bytes)
+    } catch {
+      // RangeError for an unsupported label: fall through to UTF-8.
+    }
+  }
+  return new TextDecoder().decode(bytes)
+}
+
 export function createUnlocker(opts: UnlockerOptions): Unlocker {
   const max = opts.maxRequests ?? UNLOCKER_MAX_REQUESTS
   let made = 0
@@ -38,7 +56,7 @@ export function createUnlocker(opts: UnlockerOptions): Unlocker {
         const detail = (await res.text()).replace(/\s+/g, ' ').slice(0, 160)
         throw new Error(`Bright Data returned HTTP ${res.status} for ${url}: ${detail}`)
       }
-      const body = await res.text()
+      const body = decodeBody(new Uint8Array(await res.arrayBuffer()), res.headers.get('content-type'))
       if (!body.trim()) throw new Error(`Bright Data returned an empty page for ${url}`)
       return body
     },
