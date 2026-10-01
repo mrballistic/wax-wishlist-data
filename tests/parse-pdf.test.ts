@@ -6,6 +6,8 @@ import { describe, expect, it } from 'vitest'
 
 import { parsePdf } from '../scripts/parse-pdf.js'
 
+import { loadRaw } from './helpers/releases.js'
+
 const FIXTURE_DIR = join(dirname(fileURLToPath(import.meta.url)), 'fixtures')
 
 async function loadFixture(name: string): Promise<Buffer> {
@@ -91,5 +93,13 @@ describe('parsePdf — real RSD PDF fixtures', () => {
     )
     const uniqueTuples = new Set(tuples)
     expect(uniqueTuples.size).toBe(tuples.length)
+  })
+
+  it('reproduces the published 2025-november list from the Black Friday 2025 PDF', async () => {
+    const pdf = await loadFixture('2025-november.pdf')
+    const releases = await parsePdf(pdf)
+    const published = await loadRaw('2025-november')
+    // Verified 2026-09-30: 173 parsed, 173 published, identical id sets.
+    expect(new Set(releases.map((r) => r.id))).toEqual(new Set(published.map((r) => r.id)))
   })
 })
