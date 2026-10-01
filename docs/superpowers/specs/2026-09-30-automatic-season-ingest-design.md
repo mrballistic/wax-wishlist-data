@@ -1,7 +1,7 @@
 # Automatic season ingest — design
 
 **Date:** 2026-09-30
-**Status:** Approved in conversation; awaiting written-spec review
+**Status:** Approved (written spec reviewed 2026-09-30)
 **Scope:** Piece 1 of the data-pipeline rethink (see "Context")
 **Target:** In production before the RSD Black Friday 2026 list drops (late October 2026; event 2026-11-27)
 
@@ -299,12 +299,9 @@ every run and used as the issue body on failure.
 
 - **The bucket listing closes.** Detected the same day (issue); fall back to
   manual `ingest` with the PDF URL.
-- **A list with no list signal in its name, a changed template, and no LLM
-  available** (no key, or Gemini rate-limited). Every pending PDF goes through
-  the full cascade before step 5 decides, so normally Gemini reads such a list
-  and it gets published. Only when the parser finds zero category rows *and*
-  no LLM ran does it become `not-a-list` silently. Mitigation: record
-  `not-a-list` only when at least one LLM extractor actually ran; otherwise
-  record `failed`, which opens an issue.
+- **A list with no list signal in its name and a changed template.** Covered
+  by step 5: every pending PDF goes through the full cascade, and `not-a-list`
+  is recorded only when at least one LLM extractor actually ran. If no LLM ran
+  (no key, or every LLM call errored), the key is `failed` and an issue opens.
 - **Free-tier quota changes.** A rate-limited Gemini call is an extractor
   failure: Claude if configured, otherwise an issue.
