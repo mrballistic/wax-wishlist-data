@@ -61,7 +61,7 @@ jobs:
           fi
           echo "season=$season" >> "$GITHUB_OUTPUT"
 
-      - name: Fetch album art
+      - name: Refresh release data and art
         if: steps.pick.outputs.season != ''
         env:
           SEASON_ID: ${{ steps.pick.outputs.season }}
@@ -70,7 +70,7 @@ jobs:
           DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
           DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
           METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
-        run: pnpm tsx scripts/fetch-art.ts "$SEASON_ID"
+        run: pnpm tsx scripts/refresh-season.ts "$SEASON_ID"
 
       - name: Validate JSON
         if: steps.pick.outputs.season != ''
@@ -83,12 +83,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "releases/$SEASON_ID/"
+          git add "releases/$SEASON_ID/" current.json
           if git diff --staged --quiet; then
-            echo "No new art or candidates."
+            echo "No new art, data or candidates."
             exit 0
           fi
-          git commit -m "chore: refresh art for $SEASON_ID"
+          git commit -m "chore: refresh art and data for $SEASON_ID"
           # Retry to survive concurrent pushes (e.g. art-admin commits).
           for attempt in 1 2 3 4 5; do
             if git push origin main; then
