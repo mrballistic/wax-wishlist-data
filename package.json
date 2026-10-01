@@ -17,6 +17,7 @@
     "validate": "tsx scripts/validate.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
     "pdfjs-dist": "^5.6.205",
     "sharp": "^0.34.5",
     "zod": "3.23.8"
