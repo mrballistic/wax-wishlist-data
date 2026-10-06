@@ -1,5 +1,13 @@
 [
   {
+    "id": "2026-november",
+    "label": "Black Friday Drop 2026",
+    "date": "2026-11-27",
+    "status": "upcoming",
+    "releasesUrl": "https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/main/releases/2026-november/releases.json",
+    "artBaseUrl": "https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/main/releases/2026-november/art/"
+  },
+  {
     "id": "2026-april",
     "label": "April Drop 2026",
     "date": "2026-04-18",

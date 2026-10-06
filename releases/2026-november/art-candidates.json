@@ -1,0 +1,128 @@
+[
+  {
+    "releaseId": "prince-3121-las-vegas-live",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327117:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327117:360",
+        "label": "Prince – 3121 Las Vegas Live",
+        "score": 0.85
+      },
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327118:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327118:360",
+        "label": "Prince – 3121 Las Vegas Live",
+        "score": 0.85
+      }
+    ]
+  },
+  {
+    "releaseId": "prince-3121-las-vegas-live-2",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327117:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327117:360",
+        "label": "Prince – 3121 Las Vegas Live",
+        "score": 0.85
+      },
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327118:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327118:360",
+        "label": "Prince – 3121 Las Vegas Live",
+        "score": 0.85
+      }
+    ]
+  },
+  {
+    "releaseId": "soul-jazz-records-presents-studio-one-djs-2",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327100:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327100:360",
+        "label": "Soul Jazz Records Presents – Studio One DJ's 2",
+        "score": 0.85
+      },
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327101:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327101:360",
+        "label": "Soul Jazz Records Presents – Studio One Dub Vol. 2",
+        "score": 0.72
+      }
+    ]
+  },
+  {
+    "releaseId": "tangerine-dream-live-at-paramount-theatre-portland-or-1977",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327027:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327027:360",
+        "label": "Tangerine Dream – Live at Paramount Theatre - Portland, OR 1977",
+        "score": 0.85
+      },
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327028:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327028:360",
+        "label": "Tangerine Dream – Live at Paramount Theatre - Portland, OR 1977",
+        "score": 0.85
+      }
+    ]
+  },
+  {
+    "releaseId": "tangerine-dream-live-at-paramount-theatre-portland-or-1977-2",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327027:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327027:360",
+        "label": "Tangerine Dream – Live at Paramount Theatre - Portland, OR 1977",
+        "score": 0.85
+      },
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327028:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327028:360",
+        "label": "Tangerine Dream – Live at Paramount Theatre - Portland, OR 1977",
+        "score": 0.85
+      }
+    ]
+  },
+  {
+    "releaseId": "the-brian-setzer-orchestra-christms-comes-alive",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467327002:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467327002:360",
+        "label": "The Brian Setzer Orchestra – Christmas Comes Alive!",
+        "score": 0.68
+      }
+    ]
+  },
+  {
+    "releaseId": "the-music-machine-the-sound-of-gloves",
+    "candidates": [
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467326985:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467326985:360",
+        "label": "The Music Machine – The Sound of Gloves",
+        "score": 0.85
+      },
+      {
+        "source": "rsd-site",
+        "imageUrl": "https://img.broadtime.com/Photo/418467326984:800",
+        "thumbUrl": "https://img.broadtime.com/Photo/418467326984:360",
+        "label": "The Music Machine – The Sound of Gloves",
+        "score": 0.85
+      }
+    ]
+  }
+]
