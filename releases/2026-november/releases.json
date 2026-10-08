@@ -2984,15 +2984,15 @@
     "artFilename": "prince-3121-las-vegas-live-2.jpg"
   },
   {
-    "id": "r-l-burnside-jumper-on-the-line-live-on-r-l-farm",
+    "id": "r-l-burnside-jumper-on-the-line-live-on-r-l-s-farm",
     "artist": "R.L. Burnside",
-    "title": "Jumper on the Line (Live on R.L. Farm)",
+    "title": "Jumper on the Line (Live on R.L.'s Farm)",
     "label": "Lomax Archive",
     "format": "7\" Single",
     "category": "exclusive",
     "description": "With over 11M views on YouTube, Alan Lomax's recording of R.L. Burnside performing \"Jumper on the Line\" has impacted music fans all over the world. Now, for the first time, this seminal recording is being released on a limited, numbered 7\" with audio restored and remastered from the original tapes. In 1978, Alan Lomax traveled to Burnside's farm in Independence, Mississippi to film one of the most important artists in blues history. Now you can bring it home.",
     "discogsMasterId": null,
-    "artFilename": "r-l-burnside-jumper-on-the-line-live-on-r-l-farm.jpg",
+    "artFilename": "r-l-burnside-jumper-on-the-line-live-on-r-l-s-farm.jpg",
     "tracklist": [
       "A: Jumper on the Line B: On the Tractor"
     ],
@@ -3304,6 +3304,19 @@
     ],
     "quantity": 6000,
     "rsdUrl": "https://recordstoreday.com/SpecialRelease/20376"
+  },
+  {
+    "id": "shawn-mendes-mtv-unplugged",
+    "artist": "Shawn Mendes",
+    "title": "MTV Unplugged",
+    "label": "Island",
+    "format": "2xLP",
+    "category": "exclusive",
+    "description": "First ever retail release of Shawn Mendes' 2017 MTV Unplugged performance. Includes songs from his hit album Illuminate, and continues the celebration of its ten year anniversary! Pressed for RSD Black Friday on Bubblegum Pink vinyl.\n\n1. There’s Nothing Holdin’ Me Back - MTV Unplugged 2. Ruin - MTV Unplugged 3. Stitches - MTV Unplugged 4. Three Empty Words - MTV Unplugged 5. Patience - MTV Unplugged 6. Bad Reputation - MTV Unplugged 7. Don’t Be A Fool - MTV Unplugged 8. Roses - MTV Unplugged 9. Mercy - MTV Unplugged 10. Never Be Alone - MTV Unplugged 11. Use Somebody/Treat You Better - MTV Unplugged",
+    "discogsMasterId": 1265240,
+    "artFilename": "shawn-mendes-mtv-unplugged.jpg",
+    "quantity": 5000,
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20508"
   },
   {
     "id": "shwayze-and-cisco-adler-island-in-the-sun",
@@ -4228,7 +4241,7 @@
   {
     "id": "various-artists-who-is-he-and-what-is-he-to-you",
     "artist": "Various Artists",
-    "title": "Who Is He (And What Is He To You?)",
+    "title": "Who Is He And What Is He To You?",
     "label": "Flatiron Recordings",
     "format": "2xLP",
     "category": "exclusive",
