@@ -13,7 +13,7 @@ import { BucketError } from '../../scripts/watch/bucket.js'
 import type { IssueClient } from '../../scripts/watch/issues.js'
 import { runWatch, type WatchDeps } from '../../scripts/watch/run.js'
 import type { BucketObject, SourceEntry } from '../../scripts/watch/sources.js'
-import { loadRaw, REPO_ROOT, toRows } from '../helpers/releases.js'
+import { DATA_ROOT, loadRaw, REPO_ROOT, toRows } from '../helpers/releases.js'
 
 const NOW = new Date('2026-10-29T13:30:00Z') // lists 2026/ and 2027/
 const APRIL_KEY = '2026/RSD 2026_v2/2026_RSD_PUBLIC_PDF.pdf'
@@ -46,10 +46,10 @@ const seeded: SourceEntry[] = [
 
 beforeEach(async () => {
   repo = await mkdtemp(join(tmpdir(), 'wwd-watch-'))
-  for (const f of ['seasons.json', 'current.json', 'calendar.json']) await cp(join(REPO_ROOT, f), join(repo, f))
+  for (const f of ['seasons.json', 'current.json', 'calendar.json']) await cp(join(DATA_ROOT, f), join(repo, f))
   for (const season of ['2025-november', '2026-april']) {
     await mkdir(join(repo, 'releases', season), { recursive: true })
-    await cp(join(REPO_ROOT, 'releases', season, 'releases.json'), join(repo, 'releases', season, 'releases.json'))
+    await cp(join(DATA_ROOT, 'releases', season, 'releases.json'), join(repo, 'releases', season, 'releases.json'))
   }
   sourcesPath = join(repo, 'sources.json')
   await writeFile(sourcesPath, `${JSON.stringify(seeded, null, 2)}\n`)

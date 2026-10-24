@@ -18,7 +18,7 @@ import {
   tableUrl,
 } from '../../scripts/rsd/site-index.js'
 import type { RawRelease } from '../../scripts/types.js'
-import { loadRaw, REPO_ROOT } from '../helpers/releases.js'
+import { DATA_ROOT, loadRaw, REPO_ROOT } from '../helpers/releases.js'
 
 const FIXTURES = join(REPO_ROOT, 'tests/fixtures/rsd-site')
 const fixture = (name: string): Promise<string> => readFile(join(FIXTURES, name), 'utf8')
@@ -171,9 +171,9 @@ describe('event pages', () => {
     expect(eventUrl(601)).toBe('https://recordstoreday.com/PromotionalEvent/601?view=all')
   })
 
-  it('loads the committed rsd-events.json', async () => {
-    expect(await loadRsdEvents(join(REPO_ROOT, 'rsd-events.json'))).toEqual(EVENTS)
-    expect(await loadRsdEvents(join(REPO_ROOT, 'no-such-file.json'))).toEqual({})
+  it('loads an rsd-events.json', async () => {
+    expect(await loadRsdEvents(join(DATA_ROOT, 'rsd-events.json'))).toEqual(EVENTS)
+    expect(await loadRsdEvents(join(DATA_ROOT, 'no-such-file.json'))).toEqual({})
   })
 })
 

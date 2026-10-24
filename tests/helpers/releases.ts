@@ -7,6 +7,12 @@ import type { RawRelease } from '../../scripts/types.js'
 
 export const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 
+/**
+ * Frozen copies of the published data files (see tests/fixtures/data/README.md).
+ * Tests read these, never the live files the ingest and art jobs keep updating.
+ */
+export const DATA_ROOT = join(REPO_ROOT, 'tests', 'fixtures', 'data')
+
 const LETTER: Record<string, ExtractedRow['category']> = {
   exclusive: 'E',
   'small-run': 'L',
@@ -15,7 +21,7 @@ const LETTER: Record<string, ExtractedRow['category']> = {
 
 /** A published season's releases.json, stripped to RawRelease fields. */
 export async function loadRaw(seasonId: string): Promise<RawRelease[]> {
-  const raw = await readFile(join(REPO_ROOT, 'releases', seasonId, 'releases.json'), 'utf8')
+  const raw = await readFile(join(DATA_ROOT, 'releases', seasonId, 'releases.json'), 'utf8')
   const list = JSON.parse(raw) as (RawRelease & Record<string, unknown>)[]
   return list.map((r) => ({
     id: r.id,

@@ -9,13 +9,13 @@ import { registerSeason } from '../../scripts/register-season.js'
 import type { SiteIndex } from '../../scripts/rsd/site-index.js'
 import type { Release } from '../../scripts/types.js'
 import { publishSeason } from '../../scripts/watch/publish.js'
-import { makeRelease, REPO_ROOT } from '../helpers/releases.js'
+import { DATA_ROOT, makeRelease } from '../helpers/releases.js'
 
 let repo: string
 beforeEach(async () => {
   repo = await mkdtemp(join(tmpdir(), 'wwd-publish-'))
-  await cp(join(REPO_ROOT, 'seasons.json'), join(repo, 'seasons.json'))
-  await cp(join(REPO_ROOT, 'current.json'), join(repo, 'current.json'))
+  await cp(join(DATA_ROOT, 'seasons.json'), join(repo, 'seasons.json'))
+  await cp(join(DATA_ROOT, 'current.json'), join(repo, 'current.json'))
 })
 
 const enrich = async (raw: DiscogsInput[]): Promise<Release[]> =>

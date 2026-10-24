@@ -5,16 +5,16 @@ import { join } from 'node:path'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { loadGateContext, loadReleasesAsRaw, seasonKind } from '../../scripts/watch/season-context.js'
-import { REPO_ROOT } from '../helpers/releases.js'
+import { DATA_ROOT } from '../helpers/releases.js'
 
 let repo: string
 beforeEach(async () => {
   repo = await mkdtemp(join(tmpdir(), 'wwd-ctx-'))
-  await cp(join(REPO_ROOT, 'seasons.json'), join(repo, 'seasons.json'))
+  await cp(join(DATA_ROOT, 'seasons.json'), join(repo, 'seasons.json'))
   // releases.json only: the art directories are large and irrelevant here.
   for (const season of ['2025-april', '2025-november', '2026-april']) {
     await mkdir(join(repo, 'releases', season), { recursive: true })
-    await cp(join(REPO_ROOT, 'releases', season, 'releases.json'), join(repo, 'releases', season, 'releases.json'))
+    await cp(join(DATA_ROOT, 'releases', season, 'releases.json'), join(repo, 'releases', season, 'releases.json'))
   }
 })
 

@@ -14,7 +14,7 @@ import {
   type SiteIndex,
 } from '../../scripts/rsd/site-index.js'
 import { type Release, ReleaseListSchema } from '../../scripts/types.js'
-import { REPO_ROOT } from '../helpers/releases.js'
+import { DATA_ROOT, REPO_ROOT } from '../helpers/releases.js'
 
 const AHA = 'a-ha-analogue-20th-anniversary-deluxe-edition'
 const FIXTURES = join(REPO_ROOT, 'tests/fixtures/rsd-site')
@@ -33,7 +33,7 @@ beforeAll(async () => {
   }))
   index = { seasonId: '2026-april', eventId: 601, entries }
   april = ReleaseListSchema.parse(
-    JSON.parse(await readFile(join(REPO_ROOT, 'releases/2026-april/releases.json'), 'utf8')),
+    JSON.parse(await readFile(join(DATA_ROOT, 'releases/2026-april/releases.json'), 'utf8')),
   )
 })
 
