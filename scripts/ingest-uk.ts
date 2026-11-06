@@ -16,6 +16,7 @@ import {
 import { loadUkList, loadUkOverrides, writeUkList } from './uk/files.js'
 import { formatUkReport, mergeUk, type UkMatchResult } from './uk/merge.js'
 import { parseUkPdf } from './uk/parse.js'
+import { createUkSite, enrichFromUkSite, type UkSite } from './uk/site.js'
 
 /** Fewer rows than this means the parse went wrong, not a short list (2026 Black Friday: 151). */
 export const MIN_UK_ROWS = 20
@@ -27,6 +28,8 @@ export interface IngestUkDeps {
   art: (opts: { repoRoot: string; seasonId: string; releases: RawRelease[] }) => Promise<void>
   now: () => string
   log: (line: string) => void
+  /** recordstoreday.co.uk, for UK exclusives' descriptions, links and covers. */
+  ukSite: () => UkSite
 }
 
 const defaultDeps: IngestUkDeps = {
@@ -57,6 +60,7 @@ const defaultDeps: IngestUkDeps = {
   },
   now: () => new Date().toISOString(),
   log: (line) => console.log(line),
+  ukSite: () => createUkSite(),
 }
 
 export interface IngestUkOptions {
@@ -70,8 +74,9 @@ export interface IngestUkOptions {
 
 /**
  * Merge recordstoreday.co.uk's list into a published season: tag every
- * release with `regions`, append the UK exclusives, look up Discogs ids and
- * art for the new ones, and stamp current.json. The season's US list must
+ * release with `regions`, append the UK exclusives, fill them from
+ * recordstoreday.co.uk (description, page link, cover), look up Discogs ids
+ * and the rest of their art, and stamp current.json. The season's US list must
  * already be published. Returns the match result for reporting.
  */
 export async function ingestUk(
@@ -136,6 +141,16 @@ export async function ingestUk(
       d.log(`discogs lookup failed: ${err instanceof Error ? err.message : JSON.stringify(err)}`)
     }
   }
+
+  // Before the cascade, so the official UK cover wins over a Discogs guess.
+  releases = (
+    await enrichFromUkSite(releases, {
+      repoRoot: opts.repoRoot,
+      seasonId: opts.seasonId,
+      site: d.ukSite(),
+      log: d.log,
+    })
+  ).releases
 
   await writeUkList(opts.repoRoot, opts.seasonId, uk)
   await writeReleases(releasesPath, releases)

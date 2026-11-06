@@ -194,7 +194,12 @@ describe('refreshSeason', () => {
     ])
     await refreshSeason(
       { repoRoot: root, seasonId: '2026-november', now: () => NOW },
-      { siteIndex: async () => siteIndexFor('From the site'), discogs: async (r) => r, art: async () => {} },
+      {
+        siteIndex: async () => siteIndexFor('From the site'),
+        discogs: async (r) => r,
+        art: async () => {},
+        ukSite: () => ({ slugs: async () => [], page: async () => null, image: async () => Buffer.alloc(0) }),
+      },
     )
     const out = JSON.parse(await readFile(releasesPath(), 'utf8'))
     expect(out.find((r: { id: string }) => r.id === 'alpha-bravo').description).toBe('From the site')

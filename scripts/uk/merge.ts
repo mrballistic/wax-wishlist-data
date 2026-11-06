@@ -79,6 +79,18 @@ function overlap(a: string, b: string): number {
   return short.filter((t) => long.some((u) => tokenEq(t, u))).length / short.length
 }
 
+/**
+ * Dice similarity of two token lists (hyphens count as spaces), for
+ * shortlisting recordstoreday.co.uk page slugs against "artist title".
+ */
+export function slugSimilarity(slug: string, text: string): number {
+  const a = tokens(slug.replace(/-/g, ' '))
+  const b = tokens(text)
+  if (a.length === 0 || b.length === 0) return 0
+  const common = a.filter((t) => b.some((u) => tokenEq(t, u))).length
+  return (2 * common) / (a.length + b.length)
+}
+
 function artistSim(a: string, b: string): number {
   const x = artistKey(a)
   const y = artistKey(b)
@@ -98,8 +110,8 @@ const formatGroup = (f: string): string => {
 }
 
 /** Both artist and title must clear these for a pair to count as the same release. */
-const MIN_ARTIST = 0.6
-const MIN_TITLE = 0.5
+export const MIN_ARTIST = 0.6
+export const MIN_TITLE = 0.5
 /** Matches scoring below this are reported for a human to confirm. */
 const CONFIDENT = 0.8
 

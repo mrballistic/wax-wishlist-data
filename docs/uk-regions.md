@@ -19,10 +19,12 @@ Once a season has a UK list, **every** release in it has `regions`.
 UK exclusives are ordinary release objects otherwise:
 
 - `category` is always `exclusive`.
-- `description` is usually empty, and there's no `tracklist`, `quantity`,
-  `upc` or `rsdUrl`. The UK PDF has only artist, title, label and format.
-- `artFilename` is `<id>.jpg` like every release; art arrives through the
-  usual cascade (Discogs, MusicBrainz, art-admin).
+- `description` and `rsdUrl` come from the release's recordstoreday.co.uk
+  page, so `rsdUrl` points at the **UK** site for these. There's no
+  `tracklist`, `quantity` or `upc`.
+- `artFilename` is `<id>.jpg` like every release. The cover comes from the
+  same UK page first, then the usual cascade (Discogs, MusicBrainz,
+  art-admin) for anything still missing.
 - Ids follow the US scheme (`slugify(artist + title)`), with `-uk` appended
   when that id is already taken by a US release.
 
@@ -71,6 +73,15 @@ stay on the wishlist, badged, rather than silently disappear.
   `pnpm tsx scripts/ingest-uk.ts <season> <pdf-url> [--dry-run]`. Omit the URL
   to re-merge the saved `uk.json` after editing overrides. Prints (and writes
   to the step summary) the matches to check and the UK exclusives.
+- `scripts/uk/site.ts`: fills UK exclusives from recordstoreday.co.uk. Pages
+  are found through `sitemap.xml` (the site's slugs are its own, e.g.
+  `coral-butterfly-house-acoustic-version`), shortlisted by slug similarity,
+  and accepted only when the page's schema.org `MusicAlbum` JSON-LD matches
+  the release's artist and title and its date is in the season. It fills an
+  empty description and `rsdUrl`, and writes the `og:image` cover (500×500
+  WebP, normalized to JPEG) into an empty art slot; it never replaces art or
+  a filled field. Runs in `ingest-uk` (before the cascade, so the official
+  cover wins) and in the daily refresh for whatever is still missing.
 - The gate and site repair see only US releases, and the daily refresh never
   matches a UK exclusive against recordstoreday.com, so neither can misfire on
   UK rows.
@@ -79,14 +90,11 @@ stay on the wishlist, badged, rather than silently disappear.
 
 151 UK rows: 111 on both lists, 40 UK exclusives, 75 US-only. One match flagged
 for review (Cher "Christmas EP" 12" → "Christmas – DJ Party Edition").
+recordstoreday.co.uk had a verified page for all 40 UK exclusives
+(description, link and cover), found in about 13 seconds.
 
 ## Not built yet
 
 - **Discovery.** The PDF URL is an unguessable id, but
   `https://www.recordstoreday.co.uk/black-friday` links it in plain HTML (not
   blocked, `robots.txt` allows it), so a watcher could find it.
-- **Art and descriptions for UK exclusives.** Every release has a page at
-  `https://www.recordstoreday.co.uk/release/<slug>` whose `og:image` is the
-  cover (500×500 WebP) and which carries a description. Slugs are the site's
-  own (`coral-butterfly-house-acoustic-version`), but `sitemap.xml` lists them
-  all, so the merge matcher can pair rows with slugs.

@@ -65,6 +65,11 @@ function deps(rows: UkRow[], over: Partial<IngestUkDeps> = {}) {
     art: vi.fn(async () => {}),
     now: () => NOW,
     log: () => {},
+    ukSite: () => ({
+      slugs: async () => [],
+      page: async () => null,
+      image: async () => Buffer.alloc(0),
+    }),
     ...over,
   } satisfies IngestUkDeps
 }
@@ -98,6 +103,30 @@ describe('ingestUk', () => {
       fetchedAt: NOW,
     })
     expect((await read(join(root, 'current.json'))).contentUpdatedAt).toBe(NOW)
+  })
+
+  it('fills UK exclusives from recordstoreday.co.uk before writing', async () => {
+    const d = deps(ukRows(1), {
+      ukSite: () => ({
+        slugs: async () => ['brit-1-song-1'],
+        page: async () => ({
+          url: 'https://www.recordstoreday.co.uk/release/brit-1-song-1',
+          artist: 'Brit 1',
+          title: 'Song 1',
+          label: 'Lab',
+          date: '2026-11-27',
+          image: null,
+          description: 'From the UK site',
+        }),
+        image: async () => Buffer.alloc(0),
+      }),
+    })
+    await ingestUk({ repoRoot: root, seasonId: SEASON, pdfUrl: 'https://example.com/uk.pdf' }, d)
+    const written: Release[] = await read(releasesPath())
+    expect(written.find((r) => r.id === 'brit-1-song-1')).toMatchObject({
+      description: 'From the UK site',
+      rsdUrl: 'https://www.recordstoreday.co.uk/release/brit-1-song-1',
+    })
   })
 
   it('re-merges the saved uk.json without a URL, applying overrides', async () => {
