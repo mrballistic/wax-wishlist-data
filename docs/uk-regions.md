@@ -43,8 +43,11 @@ Minimum app work:
 1. Decode `regions` as an optional string array (`[String]?` /
    `List<String>?`). Unknown region values should be ignored, not fail.
 2. A region preference (US / UK), defaulting from the device locale/region.
-3. Filter Browse to releases whose `regions` include the user's region
-   (absent `regions` counts as `["us"]`).
+3. A Region filter in Browse: "Available here" (default: the user's region,
+   including `["us","uk"]`), "Only in the UK" / "Only in the US" (just the
+   user's exclusives, `["uk"]` or `["us"]`), and "All regions". Absent
+   `regions` counts as `["us"]`. The app notes in each repo's
+   `docs/data-contract/uk-regions.md` spell this out.
 4. Badge cross-region items when showing them at all: e.g. "UK exclusive"
    for `["uk"]` to US users, "US only" for `["us"]` to UK users.
 
