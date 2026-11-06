@@ -19,9 +19,11 @@ Once a season has a UK list, **every** release in it has `regions`.
 UK exclusives are ordinary release objects otherwise:
 
 - `category` is always `exclusive`.
-- `description` and `rsdUrl` come from the release's recordstoreday.co.uk
-  page, so `rsdUrl` points at the **UK** site for these. There's no
-  `tracklist`, `quantity` or `upc`.
+- `description`, `tracklist` and `rsdUrl` come from the release's
+  recordstoreday.co.uk page, so `rsdUrl` points at the **UK** site for these.
+  The UK site has no structured tracklist: it's split out of the description
+  when the page prints one (a "Track list" heading, or a trailing numbered
+  run), so most UK exclusives have none. There's no `quantity` or `upc`.
 - `artFilename` is `<id>.jpg` like every release. The cover comes from the
   same UK page first, then the usual cascade (Discogs, MusicBrainz,
   art-admin) for anything still missing.
@@ -95,6 +97,17 @@ stay on the wishlist, badged, rather than silently disappear.
 for review (Cher "Christmas EP" 12" → "Christmas – DJ Party Edition").
 recordstoreday.co.uk had a verified page for all 40 UK exclusives
 (description, link and cover), found in about 13 seconds.
+
+## Sample
+
+`docs/samples/2026-november-releases-with-uk.json` is a real merge (2026-11-06):
+the 186-release US list plus the UK list, 226 releases. All 40 UK exclusives
+have a description, `rsdUrl` and cover from recordstoreday.co.uk; 4 have a
+tracklist (the only ones whose UK page prints one). Discogs ids for the UK
+exclusives are null (no Discogs keys where it was generated). Use it as an
+app-side fixture; it isn't served to the apps.
+
+Raw URL: `https://raw.githubusercontent.com/mrballistic/wax-wishlist-data/feat/uk-regions/docs/samples/2026-november-releases-with-uk.json`
 
 ## Watcher
 

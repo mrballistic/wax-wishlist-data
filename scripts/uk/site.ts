@@ -128,6 +128,55 @@ function isSameRelease(release: Release, page: UkPage, seasonId: string): boolea
   return s.artist >= MIN_ARTIST && s.title >= MIN_TITLE && inSeason(page.date, seasonId)
 }
 
+/** "Track list", "Tracklisting:", "Tracks - Goza, …": a heading, optionally with the first entry after a colon or dash. */
+const TRACKLIST_HEADING = /^(?:track[\s-]*list(?:ing)?|tracks)(?:\s*[:\-–—]\s*(.*)|\s*:?\s*)$/i
+/** Where an unheaded tracklist starts: "1. …", "A1 …", "Side A", "Disc 1", "LP1". */
+const TRACKLIST_START =
+  /^(?:1[.)]\s|a1\b|side\s+(?:a|1|one)\b|disc\s+(?:1|one)\b|lp\s*1\b|cd\s*1\b)/i
+/** A line that looks like a track or a side/disc heading. */
+const TRACKISH = /^(?:\d{1,2}[.)]\s|[a-h]\d{1,2}\b|side\s|disc\s|lp\s*\d|cd\s*\d)/i
+/** A line that ends a sentence, so the next line starts a new paragraph. */
+const SENTENCE_END = /[.!?:”"')\]]$/
+
+/**
+ * Split a recordstoreday.co.uk description into prose and tracklist, in the
+ * data contract's shape: paragraphs joined by a blank line, the tracklist one
+ * entry per line as printed. The tracklist starts at a "Track list" heading,
+ * or failing that at a trailing run of numbered lines ("1. …", "Side A") of
+ * which most look like tracks. Lines that wrap mid-sentence are re-joined.
+ * Exported for tests.
+ */
+export function splitUkDescription(text: string): { description: string; tracklist: string[] } {
+  const lines = text
+    .split(/\r?\n/)
+    .map((l) => l.replace(/\s+/g, ' ').trim())
+    .filter((l) => l !== '')
+
+  let cut = lines.findIndex((l) => TRACKLIST_HEADING.test(l))
+  const tracklist: string[] = []
+  if (cut >= 0) {
+    const first = TRACKLIST_HEADING.exec(lines[cut] as string)?.[1]?.trim()
+    if (first) tracklist.push(first)
+    tracklist.push(...lines.slice(cut + 1))
+  } else {
+    cut = lines.findIndex((l, i) => {
+      if (!TRACKLIST_START.test(l)) return false
+      const tail = lines.slice(i)
+      return tail.length >= 3 && tail.filter((t) => TRACKISH.test(t)).length / tail.length >= 0.6
+    })
+    if (cut >= 0) tracklist.push(...lines.slice(cut))
+  }
+
+  const prose = cut >= 0 ? lines.slice(0, cut) : lines
+  const paragraphs: string[] = []
+  for (const [i, line] of prose.entries()) {
+    const prev = prose[i - 1]
+    if (prev === undefined || SENTENCE_END.test(prev)) paragraphs.push(line)
+    else paragraphs[paragraphs.length - 1] += ` ${line}`
+  }
+  return { description: paragraphs.join('\n\n'), tracklist }
+}
+
 const exists = (p: string) =>
   access(p).then(
     () => true,
@@ -143,8 +192,8 @@ export interface UkSiteResult {
 }
 
 /**
- * Fill UK exclusives from recordstoreday.co.uk: description and page link
- * where empty, and the cover into `art/<id>.jpg` when that slot has no file
+ * Fill UK exclusives from recordstoreday.co.uk: description, tracklist (split
+ * out of the description) and page link where empty, and the cover into `art/<id>.jpg` when that slot has no file
  * (art already there, e.g. from wax-wishlist-art-admin, is never replaced).
  * Releases already complete are skipped without a request. Never throws: a
  * site failure is logged and the releases come back unchanged.
@@ -207,7 +256,15 @@ export async function enrichFromUkSite(
     }
 
     const next: Release = { ...release }
-    if (!next.description && page.description) next.description = page.description
+    const split = page.description ? splitUkDescription(page.description) : null
+    if (!next.description && split?.description) next.description = split.description
+    if (
+      (next.tracklist === undefined || next.tracklist.length === 0) &&
+      split &&
+      split.tracklist.length > 0
+    ) {
+      next.tracklist = split.tracklist
+    }
     if (!next.rsdUrl && URL.canParse(page.url)) next.rsdUrl = page.url
     let gotArt = false
     if (needsArt && page.image && !opts.dryRun) {

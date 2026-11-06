@@ -10,6 +10,7 @@ import {
   createUkSite,
   enrichFromUkSite,
   parseReleasePage,
+  splitUkDescription,
   type UkPage,
   type UkSite,
 } from '../../scripts/uk/site.js'
@@ -100,6 +101,63 @@ describe('parseReleasePage', () => {
   })
 })
 
+describe('splitUkDescription (shapes seen on the 2026 Black Friday pages)', () => {
+  it('splits at a "Track list" heading and keeps side headings as entries', () => {
+    const r = splitUkDescription(
+      'x4 Black LP Vinyl - Recorded live in 1975, this 4-LP set captures the set.\n' +
+        'Including “Jungleland” plus powerhouse hits\n“Born To Run” and more.\n' +
+        'Track list\nSIDE A\n1. Night\n2. Tenth Avenue Freeze-Out\nCD Track list\nDISC 1\n1. Night',
+    )
+    expect(r.description).toBe(
+      'x4 Black LP Vinyl - Recorded live in 1975, this 4-LP set captures the set.\n\n' +
+        'Including “Jungleland” plus powerhouse hits “Born To Run” and more.',
+    )
+    expect(r.tracklist).toEqual([
+      'SIDE A',
+      '1. Night',
+      '2. Tenth Avenue Freeze-Out',
+      'CD Track list',
+      'DISC 1',
+      '1. Night',
+    ])
+  })
+
+  it('reads "Tracklisting:" with unnumbered entries', () => {
+    const r = splitUkDescription('Only 500 copies.\nTracklisting:\nSide A:\nCity Killer\nOne Stone')
+    expect(r).toEqual({
+      description: 'Only 500 copies.',
+      tracklist: ['Side A:', 'City Killer', 'One Stone'],
+    })
+  })
+
+  it('keeps an inline "Tracks - a, b, c" as one entry', () => {
+    const r = splitUkDescription(
+      "Yellow vinyl. Landmark album from 1954.\nTracks - Goza, Mambo Inn, Bernie's Tune",
+    )
+    expect(r).toEqual({
+      description: 'Yellow vinyl. Landmark album from 1954.',
+      tracklist: ["Goza, Mambo Inn, Bernie's Tune"],
+    })
+  })
+
+  it('finds an unheaded numbered list at the end', () => {
+    const r = splitUkDescription(
+      'A garage classic.\nRecorded in 1966.\n1. GLORIA’S DREAM\n2. MIDNIGHT TRAIN\n3. BABY BLUE',
+    )
+    expect(r.description).toBe('A garage classic.\n\nRecorded in 1966.')
+    expect(r.tracklist).toEqual(['1. GLORIA’S DREAM', '2. MIDNIGHT TRAIN', '3. BABY BLUE'])
+  })
+
+  it('leaves prose alone when there is no tracklist, even with a stray number', () => {
+    expect(
+      splitUkDescription('2LP set of the full concert (23.12.80)\n1. It sold out in an hour.'),
+    ).toEqual({
+      description: '2LP set of the full concert (23.12.80)\n\n1. It sold out in an hour.',
+      tracklist: [],
+    })
+  })
+})
+
 describe('createUkSite', () => {
   it('lists release slugs from the sitemap and 404s to null', async () => {
     const fetchImpl = vi.fn(async (url: string | URL | Request) => {
@@ -143,6 +201,20 @@ describe('enrichFromUkSite', () => {
     expect(res.art).toEqual([r.id])
     const meta = await sharp(await readFile(artPath(r.id))).metadata()
     expect(meta).toMatchObject({ format: 'jpeg', width: 600, height: 600 })
+  })
+
+  it('fills the tracklist split out of the description', async () => {
+    const r = exclusive('bravo-yankee', 'Bravo', 'Yankee')
+    const site = fakeSite(['bravo-yankee'], {
+      'bravo-yankee': page('Bravo', 'Yankee', {
+        description: 'Red vinyl.\nTrack list\n1. One\n2. Two',
+      }),
+    })
+    const res = await run([r], site, true)
+    expect(res.releases[0]).toMatchObject({
+      description: 'Red vinyl.',
+      tracklist: ['1. One', '2. Two'],
+    })
   })
 
   it('rejects a shortlisted page for a different release and tries the next', async () => {
