@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 
 import { unlockerFromEnv } from '../art/brightdata.js'
 import { writeArtCandidates } from '../art/candidates.js'
+import { applyDiscogsOverrides, loadDiscogsOverrides } from '../discogs-overrides.js'
 import { type DiscogsInput, enrichDiscogs } from '../enrich-discogs.js'
 import { formatCoverageSummary, runArtCascade } from '../fetch-art.js'
 import { writeReleases } from '../generate-json.js'
@@ -124,8 +125,16 @@ export async function publishSeason(input: PublishInput, deps: PublishDeps = def
     if (merged.result) console.log(formatUkReport(merged.result, input.seasonId))
   }
 
-  const enriched = (await deps.enrich(releases)).map((r) =>
-    r.discogsMasterId === null ? { ...r, discogsMasterId: previous.get(r.id)?.discogsMasterId ?? null } : r,
+  // Hand fixes: before the lookup (pinned ids aren't searched, rejected ones
+  // are searched again) and after the carry-forward, which could restore a
+  // rejected id from the previous list.
+  const overrides = await loadDiscogsOverrides(input.repoRoot, input.seasonId)
+  const looked = await deps.enrich(applyDiscogsOverrides(releases, overrides))
+  const enriched = applyDiscogsOverrides(
+    looked.map((r) =>
+      r.discogsMasterId === null ? { ...r, discogsMasterId: previous.get(r.id)?.discogsMasterId ?? null } : r,
+    ),
+    overrides,
   )
   await writeReleases(path, enriched)
   await deps.fetchArt(uk ? enriched.map(toRawRelease) : input.releases, input.seasonId, input.repoRoot)

@@ -163,6 +163,22 @@ describe('ingestUk', () => {
     expect(await readFile(releasesPath(), 'utf8')).toBe(before)
   })
 
+  it('applies discogs-overrides.json to UK exclusives', async () => {
+    await writeFile(
+      join(root, 'releases', SEASON, 'discogs-overrides.json'),
+      JSON.stringify({ pin: { 'brit-1-song-1': 5 }, reject: { 'brit-2-song-2': [777] } }),
+    )
+    const d = deps(ukRows(2))
+    await ingestUk({ repoRoot: root, seasonId: SEASON, pdfUrl: 'https://example.com/uk.pdf' }, d)
+    expect(vi.mocked(d.discogs).mock.calls[0]?.[0].map((r: Release) => r.id)).toEqual([
+      'brit-2-song-2',
+    ])
+    const written: Release[] = await read(releasesPath())
+    expect(written.find((r) => r.id === 'brit-1-song-1')?.discogsMasterId).toBe(5)
+    // The fake lookup answers 777, which is rejected for this release.
+    expect(written.find((r) => r.id === 'brit-2-song-2')?.discogsMasterId).toBeNull()
+  })
+
   it('saves the ETag it was given', async () => {
     await ingestUk(
       { repoRoot: root, seasonId: SEASON, pdfUrl: 'https://example.com/uk.pdf', etag: '"abc"' },

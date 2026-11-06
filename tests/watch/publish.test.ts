@@ -222,4 +222,26 @@ describe('publishSeason', () => {
       expect(fetchArt.mock.calls[0]?.[0]).toHaveLength(3)
     })
   })
+
+  it('keeps a rejected Discogs id out even when the previous list had it', async () => {
+    const dir = join(repo, 'releases/2026-november')
+    await mkdir(dir, { recursive: true })
+    await writeFile(
+      join(dir, 'releases.json'),
+      JSON.stringify([{ ...makeRelease(1), discogsMasterId: 51329, artFilename: 'artist-1-title-1.jpg' }]),
+    )
+    await writeFile(
+      join(dir, 'discogs-overrides.json'),
+      JSON.stringify({ pin: { 'artist-2-title-2': 7 }, reject: { 'artist-1-title-1': [51329] } }),
+    )
+    await publishSeason(
+      { repoRoot: repo, seasonId: '2026-november', date: '2026-11-27', releases: [makeRelease(1), makeRelease(2)] },
+      { enrich, fetchArt: async () => {}, register: async () => {}, siteIndex: noSite },
+    )
+    const written: Release[] = JSON.parse(await readFile(join(dir, 'releases.json'), 'utf8'))
+    expect(written.map((r) => [r.id, r.discogsMasterId])).toEqual([
+      ['artist-1-title-1', null],
+      ['artist-2-title-2', 7],
+    ])
+  })
 })

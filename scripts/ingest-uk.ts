@@ -2,6 +2,7 @@ import { appendFile, readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import { writeArtCandidates } from './art/candidates.js'
+import { applyDiscogsOverrides, isPinned, loadDiscogsOverrides } from './discogs-overrides.js'
 import { enrichDiscogs } from './enrich-discogs.js'
 import { formatCoverageSummary, runArtCascade } from './fetch-art.js'
 import { writeCurrent, writeReleases } from './generate-json.js'
@@ -149,18 +150,27 @@ export async function ingestUk(
   if (opts.dryRun) return result
 
   // Discogs only for UK exclusives without an id; the US list is the
-  // watcher's and the daily refresh's business.
-  const needing = merged.filter(
-    (r) => r.regions?.length === 1 && r.regions[0] === 'uk' && r.discogsMasterId === null,
+  // watcher's and the daily refresh's business. Hand fixes in
+  // discogs-overrides.json apply before and after, as in publish.
+  const overrides = await loadDiscogsOverrides(opts.repoRoot, opts.seasonId)
+  let releases = applyDiscogsOverrides(merged, overrides)
+  const needing = releases.filter(
+    (r) =>
+      r.regions?.length === 1 &&
+      r.regions[0] === 'uk' &&
+      r.discogsMasterId === null &&
+      !isPinned(r.id, overrides),
   )
-  let releases = merged
   if (needing.length > 0) {
     try {
       const found = new Map((await d.discogs(needing)).map((r) => [r.id, r]))
-      releases = merged.map((r) => {
-        const f = found.get(r.id)
-        return f ? { ...r, discogsMasterId: f.discogsMasterId } : r
-      })
+      releases = applyDiscogsOverrides(
+        releases.map((r) => {
+          const f = found.get(r.id)
+          return f ? { ...r, discogsMasterId: f.discogsMasterId } : r
+        }),
+        overrides,
+      )
     } catch (err) {
       d.log(`discogs lookup failed: ${err instanceof Error ? err.message : JSON.stringify(err)}`)
     }

@@ -205,4 +205,34 @@ describe('refreshSeason', () => {
     expect(out.find((r: { id: string }) => r.id === 'alpha-bravo').description).toBe('From the site')
     expect(out.find((r: { id: string }) => r.id === 'alpha-bravo-uk').description).toBe('')
   })
+
+  it('applies discogs-overrides.json: clears a rejected id, never searches a pinned one', async () => {
+    await setup('2026-november', [
+      release({ id: 'wrong', artFilename: 'wrong.jpg', discogsMasterId: 51329 }),
+      release({ id: 'pinned', artFilename: 'pinned.jpg', discogsMasterId: null }),
+    ])
+    await writeFile(
+      join(root, 'releases', '2026-november', 'discogs-overrides.json'),
+      JSON.stringify({ pin: { pinned: 7 }, reject: { wrong: [51329] } }),
+    )
+    const searched: string[] = []
+    await refreshSeason(
+      { repoRoot: root, seasonId: '2026-november', now: () => NOW },
+      {
+        siteIndex: async () => null,
+        // The search lands on the rejected master again.
+        discogs: async (rs) => {
+          searched.push(...rs.map((r) => r.id))
+          return rs.map((r) => ({ ...r, discogsMasterId: 51329 }))
+        },
+        art: async () => {},
+      },
+    )
+    expect(searched).toEqual(['wrong'])
+    const out = JSON.parse(await readFile(releasesPath(), 'utf8'))
+    expect(out.map((r: { id: string; discogsMasterId: number | null }) => [r.id, r.discogsMasterId])).toEqual([
+      ['wrong', null],
+      ['pinned', 7],
+    ])
+  })
 })
