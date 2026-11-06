@@ -1,4 +1,4 @@
-import { cp, mkdir, mkdtemp } from 'node:fs/promises'
+import { cp, mkdir, mkdtemp, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -29,6 +29,22 @@ describe('loadGateContext', () => {
   it('treats an existing season as a revision', async () => {
     const ctx = await loadGateContext(repo, '2025-november')
     expect(ctx.previousSameSeason).toHaveLength(173)
+  })
+
+  it('leaves UK exclusives out of the previous list', async () => {
+    const dir = join(repo, 'releases', '2026-november')
+    await mkdir(dir, { recursive: true })
+    const base = { label: 'L', format: 'LP', category: 'exclusive', description: '', discogsMasterId: null }
+    await writeFile(
+      join(dir, 'releases.json'),
+      JSON.stringify([
+        { ...base, id: 'a-x', artist: 'A', title: 'X', artFilename: 'a-x.jpg', regions: ['us', 'uk'] },
+        { ...base, id: 'b-y', artist: 'B', title: 'Y', artFilename: 'b-y.jpg', regions: ['us'] },
+        { ...base, id: 'c-z', artist: 'C', title: 'Z', artFilename: 'c-z.jpg', regions: ['uk'] },
+      ]),
+    )
+    const ctx = await loadGateContext(repo, '2026-november')
+    expect(ctx.previousSameSeason?.map((r) => r.id)).toEqual(['a-x', 'b-y'])
   })
 
   it('compares a new season with the latest one of the same kind', async () => {

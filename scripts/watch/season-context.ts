@@ -1,14 +1,14 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
-import { type RawRelease, ReleaseListSchema, SeasonsListSchema } from '../types.js'
+import { isUsRelease, type RawRelease, ReleaseListSchema, SeasonsListSchema, toRawRelease } from '../types.js'
 
 /** `2026-november` → `november`. "Same kind" means same suffix. */
 export function seasonKind(seasonId: string): string {
   return seasonId.split('-').slice(1).join('-')
 }
 
-/** A published season's releases as RawRelease, or null if it has none. */
+/** A published season's US releases as RawRelease, or null if it has none. */
 export async function loadReleasesAsRaw(repoRoot: string, seasonId: string): Promise<RawRelease[] | null> {
   let raw: string
   try {
@@ -17,15 +17,9 @@ export async function loadReleasesAsRaw(repoRoot: string, seasonId: string): Pro
     if ((err as NodeJS.ErrnoException).code === 'ENOENT') return null
     throw err
   }
-  return ReleaseListSchema.parse(JSON.parse(raw)).map(({ id, artist, title, label, format, category, description }) => ({
-    id,
-    artist,
-    title,
-    label,
-    format,
-    category,
-    description,
-  }))
+  // UK exclusives aren't on the US PDF: leaving them in would make every US
+  // revision look like it dropped them.
+  return ReleaseListSchema.parse(JSON.parse(raw)).filter(isUsRelease).map(toRawRelease)
 }
 
 /**
