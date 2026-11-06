@@ -93,8 +93,27 @@ for review (Cher "Christmas EP" 12" → "Christmas – DJ Party Edition").
 recordstoreday.co.uk had a verified page for all 40 UK exclusives
 (description, link and cover), found in about 13 seconds.
 
-## Not built yet
+## Watcher
 
-- **Discovery.** The PDF URL is an unguessable id, but
-  `https://www.recordstoreday.co.uk/black-friday` links it in plain HTML (not
-  blocked, `robots.txt` allows it), so a watcher could find it.
+`watch-uk` (daily, 15:00 UTC, after `watch-rsd` and `refresh-art`) runs
+`scripts/watch-uk.ts` for the upcoming season in `current.json`:
+
+1. Waits until the season's US list is published.
+2. Reads the season's UK event page (`/black-friday` for November,
+   `/record-store-day` for April) for the linked catalogue PDF, and HEADs it
+   for its ETag and Last-Modified.
+3. Merges it (as `ingest-uk` does) when its URL or ETag differs from
+   `uk.json`, then commits to `main`.
+
+It waits quietly, without failing, while the page links no PDF, and while it
+still links an earlier event's list. The UK site keeps last year's PDF linked
+until the new one is out, and re-uploads it (the 2026 April PDF shows
+Last-Modified 2026-10-06), so age alone can't tell. The check that does is
+overlap: a list where under 30% of rows match the season's US list is treated
+as another event's (`UkListMismatchError`). A real failure (site down,
+unparseable PDF) opens one issue per season,
+`watch-uk: could not merge the UK list for <season>`, closed by the next
+clean run.
+
+Schedules only run from `main`, so the watcher goes live when this branch is
+merged.

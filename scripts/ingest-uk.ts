@@ -20,6 +20,13 @@ import { createUkSite, enrichFromUkSite, type UkSite } from './uk/site.js'
 
 /** Fewer rows than this means the parse went wrong, not a short list (2026 Black Friday: 151). */
 export const MIN_UK_ROWS = 20
+/** Share of UK rows that must match the US list (2026 Black Friday: 74%). */
+export const MIN_MATCH_SHARE = 0.3
+
+/** The UK list barely overlaps the US one: almost certainly another event's PDF. */
+export class UkListMismatchError extends Error {
+  override name = 'UkListMismatchError'
+}
 
 export interface IngestUkDeps {
   fetchPdf: (url: string) => Promise<Buffer>
@@ -70,6 +77,8 @@ export interface IngestUkOptions {
   pdfUrl?: string | undefined
   /** Report only: write nothing. */
   dryRun?: boolean
+  /** The PDF's ETag (from the watcher's HEAD), saved in uk.json to spot revisions. */
+  etag?: string | undefined
 }
 
 /**
@@ -103,7 +112,12 @@ export async function ingestUk(
         `Parsed only ${rows.length} rows from ${opts.pdfUrl} (expected at least ${MIN_UK_ROWS}); nothing written.`,
       )
     }
-    uk = { sourceUrl: opts.pdfUrl, fetchedAt: d.now(), rows }
+    uk = {
+      sourceUrl: opts.pdfUrl,
+      ...(opts.etag ? { etag: opts.etag } : {}),
+      fetchedAt: d.now(),
+      rows,
+    }
   } else {
     const saved = await loadUkList(opts.repoRoot, opts.seasonId)
     if (!saved) throw new Error(`${opts.seasonId} has no uk.json yet: pass the UK PDF URL.`)
@@ -121,6 +135,16 @@ export async function ingestUk(
   d.log(
     `${uk.rows.length} UK rows: ${result.matches.length} on both lists, ${result.ukOnly.length} UK exclusives`,
   )
+
+  // A list that barely overlaps the US one is the wrong event (e.g. last
+  // year's PDF still linked), not a list of mostly UK exclusives.
+  const share = result.matches.length / uk.rows.length
+  if (opts.pdfUrl && share < MIN_MATCH_SHARE) {
+    throw new UkListMismatchError(
+      `Only ${result.matches.length} of ${uk.rows.length} UK rows match ${opts.seasonId}'s US list ` +
+        `(${Math.round(share * 100)}%, need ${MIN_MATCH_SHARE * 100}%): probably another event's PDF; nothing written.`,
+    )
+  }
 
   if (opts.dryRun) return result
 

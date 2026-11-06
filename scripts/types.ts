@@ -127,6 +127,8 @@ export type UkRow = z.infer<typeof UkRowSchema>
 export const UkListSchema = z
   .object({
     sourceUrl: z.string().url(),
+    /** The PDF's ETag when fetched; the watcher re-merges when it changes. */
+    etag: z.string().min(1).optional(),
     fetchedAt: z.string().datetime(),
     rows: z.array(UkRowSchema).min(1),
   })

@@ -4,7 +4,12 @@ import { join } from 'node:path'
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { ingestUk, type IngestUkDeps, MIN_UK_ROWS } from '../scripts/ingest-uk.js'
+import {
+  ingestUk,
+  type IngestUkDeps,
+  MIN_UK_ROWS,
+  UkListMismatchError,
+} from '../scripts/ingest-uk.js'
 import type { Release, UkRow } from '../scripts/types.js'
 
 const SEASON = '2026-november'
@@ -155,6 +160,31 @@ describe('ingestUk', () => {
         deps(ukRows(0).slice(0, MIN_UK_ROWS - 1)),
       ),
     ).rejects.toThrow(/Parsed only 19 rows/)
+    expect(await readFile(releasesPath(), 'utf8')).toBe(before)
+  })
+
+  it('saves the ETag it was given', async () => {
+    await ingestUk(
+      { repoRoot: root, seasonId: SEASON, pdfUrl: 'https://example.com/uk.pdf', etag: '"abc"' },
+      deps(ukRows(0)),
+    )
+    expect((await read(join(root, 'releases', SEASON, 'uk.json'))).etag).toBe('"abc"')
+  })
+
+  it('refuses a list that barely overlaps the US one, writing nothing', async () => {
+    const before = await readFile(releasesPath(), 'utf8')
+    const other = Array.from({ length: 25 }, (_, i) => ({
+      artist: `Other ${i + 1}`,
+      title: `Record ${i + 1}`,
+      label: 'L',
+      format: 'LP',
+    }))
+    await expect(
+      ingestUk(
+        { repoRoot: root, seasonId: SEASON, pdfUrl: 'https://example.com/uk.pdf' },
+        deps(other),
+      ),
+    ).rejects.toBeInstanceOf(UkListMismatchError)
     expect(await readFile(releasesPath(), 'utf8')).toBe(before)
   })
 
