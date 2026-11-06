@@ -1,6 +1,6 @@
 # wax-wishlist-data
 
-Public, static data pipeline for the consuming iOS app. This repository is a
+Public, static data pipeline for the Wax Wishlist iOS and Android apps. This repository is a
 fan-made project and is **not affiliated with, endorsed by, or sponsored by**
 Record Store Day or any participating label, artist, or store.
 
@@ -9,7 +9,7 @@ The repo holds:
 - Per-season release metadata JSON
 - Album art assets
 - TypeScript scripts that build those artifacts from a source PDF
-- Zod schemas that guarantee the JSON shape matches the consuming iOS app's data contract
+- Zod schemas that guarantee the JSON shape matches the apps' data contract
 
 Artifacts are served via `raw.githubusercontent.com` — there is no backend,
 no API, no analytics, no user data of any kind.
@@ -19,20 +19,29 @@ no API, no analytics, no user data of any kind.
 ```
 current.json              # the active season (downloaded on app launch/refresh)
 seasons.json              # history of all seasons, newest first
+sources.json              # watch-rsd state: every RSD bucket PDF seen and its outcome
+calendar.json             # April event dates (Black Friday is computed)
+rsd-events.json           # season id → recordstoreday.com PromotionalEvent id
 releases/
   <season-id>/
     releases.json         # full release list for the season
     art/                  # album art (one file per release, name matches artFilename)
+    art-candidates.json   # art suggestions for wax-wishlist-art-admin (optional)
+    discogs-overrides.json  # hand fixes for Discogs matches (optional)
+    uk.json               # the parsed recordstoreday.co.uk list (optional)
+    uk-overrides.json     # hand fixes for UK↔US matching (optional)
+manual-art/               # hand-curated art overrides, named by release id
 scripts/                  # TypeScript ingestion + validation tooling
-tests/                    # Vitest suite for schemas + generators
-.github/workflows/        # validate / ingest / watch-rsd / status / art pipelines
+tests/                    # Vitest suite (reads frozen fixtures, never the live files)
+docs/                     # design specs, the UK contract (uk-regions.md), samples/
+.github/workflows/        # validate / ingest / watch-rsd / watch-uk / status / art pipelines
 ```
 
 ## Data contract
 
 The schemas in [`scripts/types.ts`](scripts/types.ts) are the single source
-of truth for the JSON shape. They mirror the consuming iOS app's Swift
-`Decodable` DTOs one-to-one. Renaming a field, changing a type, or adding
+of truth for the JSON shape. They mirror the iOS app's Swift `Decodable`
+DTOs and the Android app's DTOs one-to-one. Renaming a field, changing a type, or adding
 a required key here is a breaking change for every shipped version of the
 app — treat the schema file as a public API.
 
@@ -68,14 +77,15 @@ Array of release objects:
   "title": "Low Tide at Dawn",
   "label": "Halcyon Pressing Co.",
   "format": "LP, 180g, Translucent Blue",
-  "category": "Exclusive Release",
+  "category": "exclusive",           // exclusive | rsd-first | small-run
   "description": "Debut reissue on translucent blue vinyl, limited to 2,000 copies.",
   "discogsMasterId": 1048576,       // nullable
   "artFilename": "2026-april-001.jpg", // nullable; joined with artBaseUrl by the app
   "tracklist": ["A1. Low Tide", "B1. Dawn"],            // optional
   "quantity": 2000,                                     // optional, nullable
   "upc": "075678604034",                                // optional, nullable
-  "rsdUrl": "https://recordstoreday.com/SpecialRelease/12345"  // optional, nullable
+  "rsdUrl": "https://recordstoreday.com/SpecialRelease/12345", // optional, nullable
+  "regions": ["us", "uk"]                               // optional
 }
 ```
 
@@ -87,6 +97,11 @@ printed there, `quantity` is the pressing size, `upc` is 8-14 digits, and
 when unknown. `description` is now populated from recordstoreday.com too.
 See [Release data from recordstoreday.com](#release-data-from-recordstoredaycom)
 for when they are filled.
+
+`regions` is optional too: absent means the season has no UK list (read it as
+`["us"]`). Once a season's UK list is merged, every release has it: `["us"]`,
+`["us","uk"]`, or `["uk"]` for a UK exclusive, which is an extra release that
+isn't on the US list. See [UK list and regions](#uk-list-and-regions).
 
 ## Prerequisites
 
@@ -144,7 +159,7 @@ zero network calls.
 
 ## Automatic ingest (`watch-rsd`)
 
-A daily workflow (`.github/workflows/watch-rsd.yml`, 13:30 UTC) lists RSD's
+A daily workflow (`.github/workflows/watch-rsd.yml`, 13:30 UTC) watches RSD's
 public S3 bucket and ingests new or revised release-list PDFs with no human
 step. Design: `docs/superpowers/specs/2026-09-30-automatic-season-ingest-design.md`.
 
@@ -161,6 +176,14 @@ step. Design: `docs/superpowers/specs/2026-09-30-automatic-season-ingest-design.
   `watch-rsd: <season-id> published without incomplete rows` issue.
 - **Failures** publish nothing and open a `watch-rsd:` issue, which closes
   itself once the season is published (by the watcher or manual `ingest`).
+- **Bucket listing denied:** RSD revoked anonymous listing of the bucket
+  around 2026-11-04 (it now answers 403), while downloading a known key still
+  works. On a 403 the watcher HEADs every key already in `sources.json` and
+  reprocesses any whose ETag changed, so **revisions to known lists are still
+  caught, but a brand-new PDF (a new season's list) is not**: ingest it by
+  hand with the `ingest` workflow. The `watch-rsd: bucket unreachable` issue
+  stays open while listing is denied and closes itself when it works again.
+  Any other listing failure still fails the run.
 - **State:** `sources.json` records every bucket PDF seen and what happened
   to it; `calendar.json` holds April dates (add each year's once RSD
   announces it; Black Friday is computed).
@@ -222,7 +245,20 @@ index (`scripts/rsd/site-index.ts`), shared by row repair, enrichment and the
   recovered before are recovered again.
 - **Barcode Discogs:** with a `upc`, the Discogs lookup searches by barcode
   first and falls back to artist/title. Existing Discogs ids are never
-  replaced.
+  replaced, except by a hand fix (below).
+- **Discogs hand fixes:** `releases/<season-id>/discogs-overrides.json`
+  (optional, checked by `pnpm validate`), keyed by release id:
+
+  ```json
+  { "pin": { "some-release-id": 123456 }, "reject": { "other-release-id": [51329] } }
+  ```
+
+  `pin` sets the release's master and stops lookups for it. `reject` lists
+  masters known to be wrong: a lookup that lands on one counts as a miss, so
+  the daily refresh keeps trying for a better match. Applied by every
+  publish, the daily refresh and `ingest-uk`. If a wrong master also brought
+  a wrong cover, replace `art/<id>.jpg` by hand (the cascade never
+  overwrites art).
 - **When:** at every publish (`watch-rsd`, `ingest`), and daily via
   `refresh-art.yml` for the current upcoming season. A refresh that changes
   `releases.json` stamps `current.json` `contentUpdatedAt`, which is what makes
@@ -244,12 +280,60 @@ quantity 171, upc 172, rsdUrl 172 (the format tie-break, added after, makes it
 The app-side contract for these fields lives in each app repo at
 `docs/data-contract/releases-json.md`.
 
+## UK list and regions
+
+recordstoreday.co.uk publishes its own list for each event. The pipeline
+merges it into the season as `regions` on every release, plus the UK
+exclusives as extra releases. Full details: [`docs/uk-regions.md`](docs/uk-regions.md);
+the app-side contract is `docs/data-contract/uk-regions.md` in each app repo.
+
+- **Parse and match** (`scripts/uk/parse.ts`, `scripts/uk/merge.ts`): the UK
+  PDF is a four-column table. Rows are fuzzy-matched to US releases one to
+  one (artist and title, format as a tie-break); matched releases get
+  `["us","uk"]`, the rest of the US list `["us"]`, and unmatched UK rows
+  become UK exclusives (`["uk"]`, category `exclusive`, artist written the US
+  way, e.g. "The Coral"). The report lists borderline matches to check.
+- **State:** `releases/<season-id>/uk.json` holds the parsed rows, source URL
+  and ETag. Every US publish re-applies it, so a US revision keeps the
+  regions and the UK exclusives. `uk-overrides.json` fixes the matcher:
+  `{"match": {"<uk-row-key>": "<release-id>"}, "ukOnly": ["<uk-row-key>"]}`
+  (row keys are printed in the report).
+- **Hydration** (`scripts/uk/site.ts`): each UK exclusive's page on
+  recordstoreday.co.uk is found through its `sitemap.xml` and accepted only
+  when the page's schema.org `MusicAlbum` data matches the release's artist,
+  title and season. It fills an empty description, tracklist (split out of
+  the description when the page prints one), `rsdUrl` (a UK URL) and the
+  cover, into empty slots only. No proxy is needed; the site doesn't block
+  plain requests and `robots.txt` allows it.
+- **Safety:** the quality gate, row repair and recordstoreday.com enrichment
+  see only US releases, so the UK exclusives can't trip them.
+- **Watcher** (`watch-uk.yml`, daily 15:00 UTC): reads the season's UK event
+  page (`/black-friday` or `/record-store-day`) for the linked PDF and merges
+  it when its URL or ETag changes. It waits quietly for the US list, for the
+  page to link a PDF, and while it still links last year's (detected by
+  under 30% overlap with the US list). Real failures open one
+  `watch-uk: could not merge the UK list for <season-id>` issue.
+- **Manual:** the `ingest-uk` workflow, or
+
+  ```sh
+  pnpm tsx scripts/ingest-uk.ts <season-id> <uk-pdf-url> [--dry-run]
+  pnpm tsx scripts/ingest-uk.ts <season-id>     # re-merge uk.json after editing overrides
+  ```
+
+**Status (2026-11-06):** merged, but `watch-uk` is **disabled** until the iOS
+build with region support (1.4.0) is live in the App Store; Android already
+supports it. Enable it with `gh workflow enable watch-uk.yml` and run it once
+by hand. Until then no season has a `uk.json`, so nothing above changes the
+published data. A real merged sample for app testing is in
+[`docs/samples/2026-november-releases-with-uk.json`](docs/samples/2026-november-releases-with-uk.json).
+
 ## Season promotion flow
 
 1. A new PDF drops. **watch-rsd** picks it up on its next daily run and
-   publishes it if it passes the gate. If it doesn't (or publishing is still
-   switched off), run the **Actions -> ingest** workflow with the
-   `season-id`, the PDF URL and the season `date` (`yyyy-MM-dd`; required).
+   publishes it if it passes the gate. If it doesn't (or the bucket can't be
+   listed, which currently hides new PDFs from it), run the **Actions ->
+   ingest** workflow with the `season-id`, the PDF URL and the season `date`
+   (`yyyy-MM-dd`; required).
 2. Either path registers the season itself via `register-season`: the entry
    is upserted into `seasons.json` (new seasons start `upcoming`; an existing
    entry keeps its status), and `current.json` is pointed at it if its date
@@ -261,13 +345,17 @@ The app-side contract for these fields lives in each app repo at
 3. The daily **auto-status** workflow moves the season through
    `upcoming -> active -> past` as the calendar advances (**update-status**
    is the manual override).
-4. The consuming iOS app polls `current.json` — a change in `id` prompts
-   a download; a change in `status` updates silently.
+4. Once the US list is published, **watch-uk** merges the UK list when
+   recordstoreday.co.uk links it (see [UK list and regions](#uk-list-and-regions)).
+5. The apps poll `current.json`: a change in `id` prompts a download, a newer
+   `contentUpdatedAt` refetches the season's releases, and a change in
+   `status` updates silently.
 
 ## CI
 
-- **validate.yml** — on every push and PR: `pnpm install`, lint, typecheck,
-  tests, and schema validation of every shipped JSON file.
+- **validate.yml** — on pushes to `main` and on PRs: `pnpm install`, lint,
+  typecheck, tests, and schema validation of every shipped JSON file
+  (including the optional override and candidate files).
 - **ingest.yml** — manual dispatch only. Inputs: `season-id`, `pdfUrl`,
   `date` (`yyyy-MM-dd`, required so the season can be registered) and an
   optional `label`. Runs `ingest.ts` (cascade, gate, publish,
@@ -287,6 +375,13 @@ The app-side contract for these fields lives in each app repo at
   empty art slots, and rewrites `art-candidates.json`. Existing files
   (including ones committed by `wax-wishlist-art-admin`) are never
   overwritten. See [Album art](#album-art).
+- **watch-uk.yml** — daily cron (15:00 UTC) plus manual dispatch. Merges the
+  upcoming season's recordstoreday.co.uk list when it's new or revised and
+  commits to `main`; see [UK list and regions](#uk-list-and-regions).
+  Currently disabled (see the status note there).
+- **ingest-uk.yml** — manual dispatch only. Inputs: `season-id` and an
+  optional `pdfUrl` (blank re-merges the saved `uk.json`). Merges, validates
+  and commits to the branch it was run from.
 
 `artFilename` is always `<id>.jpg`: it names the release's art slot, not a
 promise the file exists. `pnpm validate` prints per-season art coverage.
@@ -295,8 +390,8 @@ promise the file exists. `pnpm validate` prints per-season art coverage.
 
 Album art and release metadata in this repository are assembled from
 several independent public sources, combined in a fallback cascade by
-the ingest pipeline. Neither this repository nor the consuming Wax
-Wishlist iOS app is affiliated with, endorsed by, or sponsored by any
+the ingest pipeline. Neither this repository nor the Wax Wishlist apps
+are affiliated with, endorsed by, or sponsored by any
 of the organizations below.
 
 | Tier | Source | Used for | Terms of Use |
@@ -307,11 +402,12 @@ of the organizations below.
 | 4 | RSD release list PDF | Release metadata (artist, title, format, etc.), parsed locally | [Record Store Day](https://recordstoreday.com/) |
 | — | [recordstoreday.com](https://recordstoreday.com/) event listings + product images | Album art (`rsd-site` tier) | [Record Store Day](https://recordstoreday.com/) |
 | — | RSD's public S3 bucket (distributor art packs) | Album art (`rsd-bucket` tier) | [Record Store Day](https://recordstoreday.com/) |
+| — | [recordstoreday.co.uk](https://www.recordstoreday.co.uk/) list PDFs + release pages | UK list (`regions`, UK exclusives) and UK exclusives' description, tracklist and cover | [Record Store Day UK](https://www.recordstoreday.co.uk/) |
 
 The tier numbers above are the historical labels used in the coverage
 summary; the order the cascade actually tries sources in is described
 under [Album art](#album-art). Releases with no match in any tier have no
-file in their art slot and the iOS app renders its placeholder. See
+file in their art slot and the apps render a placeholder. See
 [`docs/FEATURE_PRD_multi_source_art.md`](docs/FEATURE_PRD_multi_source_art.md)
 and [`docs/superpowers/specs/2026-10-01-art-coverage-design.md`](docs/superpowers/specs/2026-10-01-art-coverage-design.md)
 for the full specifications.
@@ -326,6 +422,10 @@ already there.
 ### Cascade order
 
 Per release, the first tier that produces an image wins:
+
+UK exclusives get their cover from recordstoreday.co.uk before this cascade
+runs (see [UK list and regions](#uk-list-and-regions)); the cascade then fills
+anything still missing.
 
 1. **manual** — a file in `manual-art/` named after the release id. Always
    wins, even over an existing file.
@@ -374,6 +474,8 @@ to the next tier; art never blocks a publish.
 
 ### `rsd-bucket`: RSD's S3 bucket
 
+- **Effectively off since RSD revoked anonymous bucket listing
+  (around 2026-11-04):** the listing fails and the tier skips itself.
 - Needs nothing: it lists `<year>/` in the same public bucket `watch-rsd`
   watches and matches image filenames (`.jpg .jpeg .png .webp .tif .tiff`,
   skipping `logos/`, `__MACOSX/`, files over 25 MB) against the season.
@@ -398,9 +500,10 @@ shape. The apps never read it; `wax-wishlist-art-admin` does.
 `refresh-art.yml` runs daily at 14:00 UTC (after `watch-rsd`) for the season
 in `current.json` while its date is today or later. It runs
 `scripts/refresh-season.ts`, which fills empty release data from
-recordstoreday.com and Discogs (see
-[Release data from recordstoreday.com](#release-data-from-recordstoredaycom)),
-then the art cascade, and commits any new data and art and the updated
+recordstoreday.com and Discogs (applying `discogs-overrides.json`), fills
+UK exclusives that still lack data from recordstoreday.co.uk (see
+[Release data from recordstoreday.com](#release-data-from-recordstoredaycom)
+and [UK list and regions](#uk-list-and-regions)), then the art cascade, and commits any new data and art and the updated
 `art-candidates.json` (`chore: refresh art and data for <season-id>`).
 Past seasons are skipped. Manual dispatch takes an optional `season-id` and
 works for any season. `ingest.yml` and `watch-rsd.yml` run the same cascade
