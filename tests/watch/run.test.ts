@@ -69,6 +69,7 @@ function deps(listing: BucketObject[], extractors: Extractor[], overrides: Parti
   const d: WatchDeps = {
     now: () => NOW,
     listBucket: vi.fn(async (prefix: string) => listing.filter((o) => o.key.startsWith(prefix))),
+    headObject: vi.fn(async (key: string) => listing.find((o) => o.key === key) ?? null),
     fetchPdf: vi.fn(async () => Buffer.from('%PDF fake')),
     pdfText: async () => '',
     extractors,
@@ -356,14 +357,75 @@ describe('runWatch', () => {
     expect(d.git.commitAndPush).toHaveBeenCalledWith('chore: watch-rsd state', ['sources.json'])
   })
 
-  it('opens the bucket issue and rethrows when listing fails', async () => {
+  it('opens the bucket issue and rethrows when listing fails other than 403', async () => {
     const d = deps([], [], {
       listBucket: vi.fn(async () => {
-        throw new BucketError('HTTP 403 listing 2026/')
+        throw new BucketError('HTTP 500 listing 2026/', 500)
       }),
     })
-    await expect(runWatch(opts(), d)).rejects.toThrow(/403/)
-    expect(d.issues.ensure).toHaveBeenCalledWith('watch-rsd: bucket unreachable', expect.stringContaining('403'))
+    await expect(runWatch(opts(), d)).rejects.toThrow(/500/)
+    expect(d.issues.ensure).toHaveBeenCalledWith('watch-rsd: bucket unreachable', expect.stringContaining('500'))
+    expect(d.headObject).not.toHaveBeenCalled()
+  })
+
+  describe('when listing is denied (403)', () => {
+    const denied = vi.fn(async (prefix: string): Promise<BucketObject[]> => {
+      throw new BucketError(`HTTP 403 listing ${prefix}`, 403)
+    })
+    const bfPublished: SourceEntry = {
+      key: BF_KEY,
+      etag: BF.etag,
+      lastModified: BF.lastModified,
+      seasonId: '2026-november',
+      outcome: 'published',
+      extractor: 'parser',
+      processedAt: '2026-10-28T16:00:00.000Z',
+    }
+    beforeEach(async () => {
+      await writeFile(sourcesPath, `${JSON.stringify([...seeded, bfPublished], null, 2)}\n`)
+    })
+
+    it('HEADs the known keys and publishes a revision', async () => {
+      const revised = { ...BF, etag: '"bf27bf27"', lastModified: '2026-11-05T00:00:00.000Z' }
+      const d = deps([APRIL, revised], [extractor('parser', async () => novemberRows)], { listBucket: denied })
+      const out = await runWatch(opts(), d)
+
+      expect(d.headObject).toHaveBeenCalledWith(APRIL_KEY)
+      expect(d.headObject).toHaveBeenCalledWith(BF_KEY)
+      expect(out).toEqual([{ key: BF_KEY, seasonId: '2026-november', outcome: 'published', extractor: 'parser' }])
+      expect(d.issues.ensure).toHaveBeenCalledWith(
+        'watch-rsd: bucket unreachable',
+        expect.stringContaining('checks the keys already in `sources.json`'),
+      )
+      expect(d.issues.close).not.toHaveBeenCalledWith('watch-rsd: bucket unreachable', expect.anything())
+      expect((await sourcesOnDisk()).find((s) => s.key === BF_KEY)).toMatchObject({ etag: revised.etag })
+    })
+
+    it('succeeds quietly when nothing changed', async () => {
+      const d = deps([APRIL, BF], [extractor('parser', async () => novemberRows)], { listBucket: denied })
+      await expect(runWatch(opts(), d)).resolves.toEqual([])
+      expect(d.fetchPdf).not.toHaveBeenCalled()
+      expect(d.git.commitAndPush).not.toHaveBeenCalled()
+    })
+
+    it('skips a known key that is no longer readable', async () => {
+      const log = vi.fn()
+      const d = deps([BF], [], { listBucket: denied, log })
+      await expect(runWatch(opts(), d)).resolves.toEqual([])
+      expect(log).toHaveBeenCalledWith(`known key no longer readable: ${APRIL_KEY}`)
+    })
+
+    it('only checks keys under the listed prefixes', async () => {
+      const d = deps([APRIL, BF], [], { listBucket: denied })
+      await runWatch({ ...opts(), prefixes: ['2027/'] }, d)
+      expect(d.headObject).not.toHaveBeenCalled()
+    })
+
+    it('files no issue on a dry run', async () => {
+      const d = deps([APRIL, BF], [], { listBucket: denied })
+      await runWatch(opts(true), d)
+      expect(d.issues.ensure).not.toHaveBeenCalled()
+    })
   })
 
   it('repeat failure with same ETag opens no new state commit', async () => {

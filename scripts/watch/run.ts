@@ -6,7 +6,7 @@ import type { Extractor, ExtractorName } from '../extract/types.js'
 import { repairEntries, repairRows } from '../rsd/repair.js'
 import type { SiteIndex } from '../rsd/site-index.js'
 
-import { prefixesFor } from './bucket.js'
+import { BucketError, prefixesFor } from './bucket.js'
 import { loadCalendar, seasonDate } from './calendar.js'
 import { classifyKey, hasListSignal } from './classify.js'
 import type { GitOps } from './git.js'
@@ -31,6 +31,8 @@ import {
 export interface WatchDeps {
   now: () => Date
   listBucket: (prefix: string) => Promise<BucketObject[]>
+  /** HEAD one known key; null when it's gone. The fallback when listing is denied. */
+  headObject: (key: string) => Promise<BucketObject | null>
   fetchPdf: (key: string) => Promise<Buffer>
   pdfText: (pdf: Buffer) => Promise<string>
   extractors: Extractor[]
@@ -82,7 +84,8 @@ export class WatchPublishError extends Error {
 }
 
 /**
- * One watcher run: list the bucket, find new/revised/failed PDFs, try each
+ * One watcher run: list the bucket (or, if listing is denied, HEAD the keys
+ * already in sources.json), find new/revised/failed PDFs, try each
  * season's candidates newest-first until one publishes or fails (skipping
  * not-a-list PDFs), and publish or file an issue. All side effects go
  * through `deps`. Rejects with `WatchPublishError` after the state commit if
@@ -92,12 +95,20 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
   const live = !opts.dryRun
   const startedAt = deps.now().toISOString()
 
-  const objects: BucketObject[] = []
+  const prefixes = opts.prefixes ?? prefixesFor(deps.now())
+  let sources = await loadSources(opts.sourcesPath)
+
+  let objects: BucketObject[] = []
+  let listingDenied = false
   try {
-    for (const prefix of opts.prefixes ?? prefixesFor(deps.now())) {
+    for (const prefix of prefixes) {
       objects.push(...(await deps.listBucket(prefix)))
     }
   } catch (err) {
+    // RSD revoked anonymous listing in 2026-11. Known keys can still be
+    // HEADed, so revisions to lists already in sources.json are still caught;
+    // only brand-new keys go unseen. Any other listing failure stays fatal.
+    listingDenied = err instanceof BucketError && err.status === 403
     if (live) {
       await deps.issues.ensure(
         BUCKET_ISSUE_TITLE,
@@ -106,15 +117,31 @@ export async function runWatch(opts: WatchOptions, deps: WatchDeps): Promise<Wat
           '',
           `    ${message(err)}`,
           '',
+          ...(listingDenied
+            ? [
+                'Listing is denied, so the watcher checks the keys already in `sources.json` for revisions instead.',
+                'New PDFs (a new season’s list) are not detected until listing works again or another discovery source exists.',
+                '',
+              ]
+            : []),
           'Manual `ingest` with a PDF URL still works. This issue closes itself after the next successful listing.',
         ].join('\n'),
       )
     }
-    throw err
+    if (!listingDenied) throw err
+    const known = sources.filter((s) => prefixes.some((p) => s.key.startsWith(p)))
+    deps.log(`bucket listing denied (${message(err)}); checking ${known.length} known keys instead`)
+    objects = []
+    for (const s of known) {
+      const found = await deps.headObject(s.key)
+      if (found) objects.push(found)
+      else deps.log(`known key no longer readable: ${s.key}`)
+    }
   }
-  if (live) await deps.issues.close(BUCKET_ISSUE_TITLE, `Bucket listing succeeded again at ${startedAt}.`)
+  if (live && !listingDenied) {
+    await deps.issues.close(BUCKET_ISSUE_TITLE, `Bucket listing succeeded again at ${startedAt}.`)
+  }
 
-  let sources = await loadSources(opts.sourcesPath)
   const calendar = await loadCalendar(resolve(opts.repoRoot, 'calendar.json'))
   const outcomes: WatchOutcome[] = []
   let stateChanged = false

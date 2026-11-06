@@ -5,7 +5,7 @@ import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 
-import { BucketError, BUCKET_URL, listPdfs, objectUrl, prefixesFor } from '../../scripts/watch/bucket.js'
+import { BucketError, BUCKET_URL, headObject, listPdfs, objectUrl, prefixesFor } from '../../scripts/watch/bucket.js'
 import { REPO_ROOT } from '../helpers/releases.js'
 
 const server = setupServer()
@@ -53,7 +53,7 @@ describe('listPdfs', () => {
 
   it('throws BucketError on 403', async () => {
     server.use(http.get(BUCKET_URL, () => new HttpResponse('<Error>AccessDenied</Error>', { status: 403 })))
-    await expect(listPdfs('2026/')).rejects.toBeInstanceOf(BucketError)
+    await expect(listPdfs('2026/')).rejects.toMatchObject({ name: 'BucketError', status: 403 })
   })
 
   it('throws BucketError on malformed XML', async () => {
@@ -81,6 +81,49 @@ describe('listPdfs', () => {
       ),
     )
     await expect(listPdfs('2026/')).rejects.toBeInstanceOf(BucketError)
+  })
+})
+
+describe('headObject', () => {
+  const KEY = '2026/RSD Black Friday 2026/2026_BLACK_FRIDAY_PUBLIC.pdf'
+
+  it('returns the ETag, ISO lastModified and size', async () => {
+    server.use(
+      http.head(
+        objectUrl(KEY),
+        () =>
+          new HttpResponse(null, {
+            headers: {
+              etag: '"ad23206492e0732ac0f0cfa15816ad9a"',
+              'last-modified': 'Thu, 15 Oct 2026 15:55:44 GMT',
+              'content-length': '77195',
+            },
+          }),
+      ),
+    )
+    await expect(headObject(KEY)).resolves.toEqual({
+      key: KEY,
+      etag: '"ad23206492e0732ac0f0cfa15816ad9a"',
+      lastModified: '2026-10-15T15:55:44.000Z',
+      size: 77195,
+    })
+  })
+
+  it.each([403, 404])('returns null on %i (missing key without list permission)', async (status) => {
+    server.use(http.head(objectUrl(KEY), () => new HttpResponse(null, { status })))
+    await expect(headObject(KEY)).resolves.toBeNull()
+  })
+
+  it('throws BucketError on other errors', async () => {
+    server.use(http.head(objectUrl(KEY), () => new HttpResponse(null, { status: 503 })))
+    await expect(headObject(KEY)).rejects.toMatchObject({ name: 'BucketError', status: 503 })
+  })
+
+  it('throws BucketError when the ETag is missing', async () => {
+    server.use(
+      http.head(objectUrl(KEY), () => new HttpResponse(null, { headers: { 'last-modified': 'Thu, 15 Oct 2026 15:55:44 GMT' } })),
+    )
+    await expect(headObject(KEY)).rejects.toThrow(/missing ETag/)
   })
 })
 

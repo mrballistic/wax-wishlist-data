@@ -1,6 +1,10 @@
 import type { BucketObject } from './sources.js'
 
-/** RSD's public bucket. Anonymous ListObjectsV2 works as of 2026-09-30. */
+/**
+ * RSD's public bucket. Anonymous ListObjectsV2 worked from 2026-09-30 until
+ * RSD revoked it between 2026-11-03 and 2026-11-04 (now 403). Anonymous
+ * GET/HEAD of a known key still works.
+ */
 export const BUCKET_URL = 'https://recordstoreday.s3.us-east-1.amazonaws.com/'
 
 const TIMEOUT_MS = 60_000
@@ -8,6 +12,13 @@ const MAX_PAGES = 50
 
 export class BucketError extends Error {
   override name = 'BucketError'
+  /** HTTP status when the bucket answered with an error response. */
+  constructor(
+    message: string,
+    readonly status?: number,
+  ) {
+    super(message)
+  }
 }
 
 function decodeXml(s: string): string {
@@ -63,7 +74,7 @@ export async function listKeys(
     } catch (err) {
       throw new BucketError(`network error listing ${prefix}: ${err instanceof Error ? err.message : String(err)}`)
     }
-    if (!res.ok) throw new BucketError(`HTTP ${res.status} listing ${prefix}`)
+    if (!res.ok) throw new BucketError(`HTTP ${res.status} listing ${prefix}`, res.status)
 
     let body: string
     try {
@@ -95,6 +106,30 @@ export function prefixesFor(now: Date): string[] {
 
 export function objectUrl(key: string): string {
   return BUCKET_URL + key.split('/').map(encodeURIComponent).join('/')
+}
+
+/**
+ * HEAD one key. Without ListBucket permission S3 answers 403 (not 404) for a
+ * missing key, so both mean "not there": null.
+ */
+export async function headObject(key: string, fetchImpl: typeof fetch = fetch): Promise<BucketObject | null> {
+  let res: Response
+  try {
+    res = await fetchImpl(objectUrl(key), { method: 'HEAD', signal: AbortSignal.timeout(TIMEOUT_MS) })
+  } catch (err) {
+    throw new BucketError(`network error checking ${key}: ${err instanceof Error ? err.message : String(err)}`)
+  }
+  if (res.status === 403 || res.status === 404) return null
+  if (!res.ok) throw new BucketError(`HTTP ${res.status} checking ${key}`, res.status)
+  const etag = res.headers.get('etag')
+  const lastModified = Date.parse(res.headers.get('last-modified') ?? '')
+  if (!etag || Number.isNaN(lastModified)) throw new BucketError(`HEAD ${key}: missing ETag or Last-Modified`)
+  return {
+    key,
+    etag,
+    lastModified: new Date(lastModified).toISOString(),
+    size: Number(res.headers.get('content-length') ?? 0),
+  }
 }
 
 export async function fetchPdf(key: string, fetchImpl: typeof fetch = fetch): Promise<Buffer> {

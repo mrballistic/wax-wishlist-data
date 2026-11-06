@@ -5,7 +5,7 @@ import { defaultExtractors, EXTRACTOR_ENV } from './extract/index.js'
 import { pdfTextLayer } from './extract/pdf-text.js'
 import type { ExtractorName } from './extract/types.js'
 import { getSiteIndex } from './rsd/site-index.js'
-import { fetchPdf, listPdfs } from './watch/bucket.js'
+import { fetchPdf, headObject, listPdfs } from './watch/bucket.js'
 import { createGitOps } from './watch/git.js'
 import { createGitHubIssueClient, noopIssueClient } from './watch/issues.js'
 import { publishSeason } from './watch/publish.js'
@@ -65,6 +65,7 @@ async function main(): Promise<void> {
       {
         now: () => new Date(),
         listBucket: (prefix) => listPdfs(prefix),
+        headObject: (key) => headObject(key),
         fetchPdf: (key) => fetchPdf(key),
         pdfText: pdfTextLayer,
         extractors,
