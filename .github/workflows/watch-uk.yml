@@ -1,0 +1,82 @@
+name: watch-uk
+
+# Daily: find the list PDF recordstoreday.co.uk links for the upcoming
+# season (/black-friday or /record-store-day) and merge it when it's new or
+# revised (scripts/watch-uk.ts). Waits quietly for the US list, for the UK
+# page to link a PDF, and while it still links last year's. A failure opens
+# one issue per season, closed by the next clean run.
+
+on:
+  schedule:
+    # After watch-rsd (13:30) and refresh-art (14:00), so the US list is current.
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+
+concurrency:
+  # Shares the refresh-art group: all of these rewrite releases/<season>/.
+  group: refresh-art
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      issues: write
+      # For the keepalive step below.
+      actions: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Watch the UK list
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
+          DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
+          METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
+        run: pnpm tsx scripts/watch-uk.ts
+
+      - name: Validate JSON
+        run: pnpm tsx scripts/validate.ts
+
+      - name: Commit updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add releases/ current.json
+          if git diff --staged --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          season="$(jq -r .id current.json)"
+          git commit -m "chore: merge UK list into $season"
+          for attempt in 1 2 3 4 5; do
+            if git push origin main; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); rebasing onto latest main..."
+            git pull --rebase origin main
+          done
+          echo "Exhausted push retries." >&2
+          exit 1
+
+      # Scheduled workflows are disabled after 60 days without a commit;
+      # re-enabling through the API resets the timer (same as auto-status).
+      - name: Keep this schedule alive
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/watch-uk.yml/enable"

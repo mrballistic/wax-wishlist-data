@@ -187,6 +187,25 @@ describe('refreshSeason', () => {
     expect(art).toHaveBeenCalledTimes(1)
   })
 
+  it('never fills a UK exclusive from the US site index', async () => {
+    await setup('2026-november', [
+      release({ id: 'alpha-bravo', artist: 'Alpha', title: 'Bravo', artFilename: 'alpha-bravo.jpg', regions: ['us'] }),
+      release({ id: 'alpha-bravo-uk', artist: 'Alpha', title: 'Bravo', artFilename: 'alpha-bravo-uk.jpg', regions: ['uk'] }),
+    ])
+    await refreshSeason(
+      { repoRoot: root, seasonId: '2026-november', now: () => NOW },
+      {
+        siteIndex: async () => siteIndexFor('From the site'),
+        discogs: async (r) => r,
+        art: async () => {},
+        ukSite: () => ({ slugs: async () => [], page: async () => null, image: async () => Buffer.alloc(0) }),
+      },
+    )
+    const out = JSON.parse(await readFile(releasesPath(), 'utf8'))
+    expect(out.find((r: { id: string }) => r.id === 'alpha-bravo').description).toBe('From the site')
+    expect(out.find((r: { id: string }) => r.id === 'alpha-bravo-uk').description).toBe('')
+  })
+
   it('applies discogs-overrides.json: clears a rejected id, never searches a pinned one', async () => {
     await setup('2026-november', [
       release({ id: 'wrong', artFilename: 'wrong.jpg', discogsMasterId: 51329 }),

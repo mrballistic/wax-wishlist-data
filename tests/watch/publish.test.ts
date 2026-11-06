@@ -8,7 +8,7 @@ import type { DiscogsInput } from '../../scripts/enrich-discogs.js'
 import { registerSeason } from '../../scripts/register-season.js'
 import type { SiteIndex } from '../../scripts/rsd/site-index.js'
 import type { Release } from '../../scripts/types.js'
-import { publishSeason } from '../../scripts/watch/publish.js'
+import { type PublishDeps, publishSeason } from '../../scripts/watch/publish.js'
 import { DATA_ROOT, makeRelease } from '../helpers/releases.js'
 
 let repo: string
@@ -168,6 +168,59 @@ describe('publishSeason', () => {
       const written: Release[] = JSON.parse(await readFile(join(repo, 'releases/2026-november/releases.json'), 'utf8'))
       expect(written).toEqual([{ ...makeRelease(1), discogsMasterId: null, artFilename: 'artist-1-title-1.jpg' }])
     }
+  })
+
+  describe('with a UK list', () => {
+    const run = (releases: ReturnType<typeof makeRelease>[], fetchArt: PublishDeps['fetchArt'] = async () => {}) =>
+      publishSeason(
+        { repoRoot: repo, seasonId: '2026-november', date: '2026-11-27', releases },
+        { enrich, fetchArt, register: async () => {}, siteIndex: noSite },
+      )
+    const written = async (): Promise<Release[]> =>
+      JSON.parse(await readFile(join(repo, 'releases/2026-november/releases.json'), 'utf8'))
+
+    beforeEach(async () => {
+      const dir = join(repo, 'releases/2026-november')
+      await mkdir(dir, { recursive: true })
+      await writeFile(
+        join(dir, 'uk.json'),
+        JSON.stringify({
+          sourceUrl: 'https://example.com/uk.pdf',
+          fetchedAt: '2026-11-06T00:00:00.000Z',
+          rows: [
+            { artist: 'Artist 1', title: 'Title 1', label: 'Label', format: 'LP' },
+            { artist: 'Brit, The', title: 'Song', label: 'Label', format: 'LP' },
+          ],
+        }),
+      )
+    })
+
+    it('keeps regions and UK exclusives (with their Discogs ids) through a US revision', async () => {
+      await writeFile(
+        join(repo, 'releases/2026-november/releases.json'),
+        JSON.stringify([
+          { ...makeRelease(1), discogsMasterId: null, artFilename: 'artist-1-title-1.jpg', regions: ['us', 'uk'] },
+          {
+            ...makeRelease(0, { id: 'the-brit-song', artist: 'The Brit', title: 'Song' }),
+            discogsMasterId: 55,
+            artFilename: 'the-brit-song.jpg',
+            regions: ['uk'],
+          },
+        ]),
+      )
+      const fetchArt = vi.fn<PublishDeps['fetchArt']>(async () => {})
+      await run([makeRelease(1), makeRelease(2)], fetchArt)
+
+      const out = await written()
+      expect(out.map((r) => [r.id, r.regions])).toEqual([
+        ['artist-1-title-1', ['us', 'uk']],
+        ['artist-2-title-2', ['us']],
+        ['the-brit-song', ['uk']],
+      ])
+      expect(out.find((r) => r.id === 'the-brit-song')?.discogsMasterId).toBe(55)
+      // Art runs over the UK exclusive too.
+      expect(fetchArt.mock.calls[0]?.[0]).toHaveLength(3)
+    })
   })
 
   it('keeps a rejected Discogs id out even when the previous list had it', async () => {

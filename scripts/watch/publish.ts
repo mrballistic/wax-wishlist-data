@@ -10,7 +10,9 @@ import { writeReleases } from '../generate-json.js'
 import { registerSeason } from '../register-season.js'
 import { enrichFromSite, isEmpty } from '../rsd/enrich.js'
 import { getSiteIndex, type SiteIndex } from '../rsd/site-index.js'
-import { type RawRelease, type Release, ReleaseListSchema } from '../types.js'
+import { type RawRelease, type Release, ReleaseListSchema, toRawRelease } from '../types.js'
+import { loadUkList, loadUkOverrides } from '../uk/files.js'
+import { formatUkReport, mergeUk } from '../uk/merge.js'
 
 export interface PublishInput {
   repoRoot: string
@@ -92,6 +94,9 @@ function withPrevious(raw: RawRelease, previous: Release | undefined): Release {
  * id that was found before is carried forward when the new value is empty, so
  * a revision never loses enrichment it already had. Site enrichment is skipped
  * with one log line when the index is unavailable or fails.
+ *
+ * When the season has a UK list (`uk.json`), it is merged in after site
+ * enrichment, so a US revision keeps the regions and the UK exclusives.
  */
 export async function publishSeason(input: PublishInput, deps: PublishDeps = defaultPublishDeps): Promise<void> {
   const path = resolve(input.repoRoot, 'releases', input.seasonId, 'releases.json')
@@ -111,6 +116,15 @@ export async function publishSeason(input: PublishInput, deps: PublishDeps = def
     console.log(`rsd-site: enrichment skipped (${err instanceof Error ? err.message : String(err)})`)
   }
 
+  // Re-apply the season's UK list (if any) to the new US list: regions on
+  // every release, UK exclusives appended with what they already knew.
+  const uk = await loadUkList(input.repoRoot, input.seasonId)
+  if (uk) {
+    const merged = mergeUk(releases, uk, await loadUkOverrides(input.repoRoot, input.seasonId), previous)
+    releases = merged.releases
+    if (merged.result) console.log(formatUkReport(merged.result, input.seasonId))
+  }
+
   // Hand fixes: before the lookup (pinned ids aren't searched, rejected ones
   // are searched again) and after the carry-forward, which could restore a
   // rejected id from the previous list.
@@ -123,6 +137,6 @@ export async function publishSeason(input: PublishInput, deps: PublishDeps = def
     overrides,
   )
   await writeReleases(path, enriched)
-  await deps.fetchArt(input.releases, input.seasonId, input.repoRoot)
+  await deps.fetchArt(uk ? enriched.map(toRawRelease) : input.releases, input.seasonId, input.repoRoot)
   await deps.register(input.seasonId, input.date, input.label, input.repoRoot)
 }

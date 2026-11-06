@@ -13,3 +13,7 @@ Notes:
   Johansen and the Harry Smiths editions and Larry June, 2 Chainz & The
   Alchemist's *Life Is Beautiful (Chopped Not Slopped)*).
 - Refresh a snapshot only on purpose, together with the tests that pin it.
+- `releases/2026-november/releases.json` (186 releases) was added on
+  2026-11-06 from the live file at `4254a4f`, as the US side of the UK-list
+  tests against `tests/fixtures/2026-november-uk.pdf` (recordstoreday.co.uk's
+  Black Friday 2026 list, 151 rows).

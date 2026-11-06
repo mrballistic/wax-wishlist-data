@@ -53,6 +53,10 @@ export type Season = z.infer<typeof SeasonSchema>
 export const SeasonsListSchema = z.array(SeasonSchema)
 export type SeasonsList = z.infer<typeof SeasonsListSchema>
 
+/** Where a release is sold. `uk` comes from recordstoreday.co.uk's list. */
+export const RegionSchema = z.enum(['us', 'uk'])
+export type Region = z.infer<typeof RegionSchema>
+
 /**
  * Matches Swift `ReleaseDTO`. `discogsMasterId` and `artFilename` are optional
  * (nullable) — the iOS side uses `Int?` and `String?`.
@@ -80,9 +84,69 @@ export const ReleaseSchema = z
       .optional(),
     /** The release's recordstoreday.com page; null when unknown. */
     rsdUrl: z.string().url().nullable().optional(),
+    /**
+     * Where the release is sold. Absent when the season has no UK list
+     * (read as US-only). Present on every release once a UK list has been
+     * merged: `["us"]`, `["uk"]` (a UK exclusive) or `["us","uk"]`.
+     */
+    regions: z.array(RegionSchema).min(1).optional(),
   })
   .strict()
 export type Release = z.infer<typeof ReleaseSchema>
+
+/** True for releases on the US list: no `regions` (pre-UK data) or it includes `us`. */
+export function isUsRelease(r: Pick<Release, 'regions'>): boolean {
+  return r.regions === undefined || r.regions.includes('us')
+}
+
+/** A published Release reduced to the fields the extractors produce. */
+export function toRawRelease(r: Release): RawRelease {
+  return {
+    id: r.id,
+    artist: r.artist,
+    title: r.title,
+    label: r.label,
+    format: r.format,
+    category: r.category,
+    description: r.description ?? '',
+  }
+}
+
+/** One row of recordstoreday.co.uk's list, as printed. */
+export const UkRowSchema = z
+  .object({
+    artist: z.string().min(1),
+    title: z.string().min(1),
+    label: z.string(),
+    format: z.string().min(1),
+  })
+  .strict()
+export type UkRow = z.infer<typeof UkRowSchema>
+
+/** `releases/<season>/uk.json`: the parsed UK list the merge reads. */
+export const UkListSchema = z
+  .object({
+    sourceUrl: z.string().url(),
+    /** The PDF's ETag when fetched; the watcher re-merges when it changes. */
+    etag: z.string().min(1).optional(),
+    fetchedAt: z.string().datetime(),
+    rows: z.array(UkRowSchema).min(1),
+  })
+  .strict()
+export type UkList = z.infer<typeof UkListSchema>
+
+/**
+ * `releases/<season>/uk-overrides.json` (optional): fixes for the fuzzy
+ * matcher, keyed by UK row key (see `ukRowKey`). `match` pins a UK row to a
+ * US release id; `ukOnly` forces a UK row to stay a UK exclusive.
+ */
+export const UkOverridesSchema = z
+  .object({
+    match: z.record(z.string().min(1)).default({}),
+    ukOnly: z.array(z.string().min(1)).default([]),
+  })
+  .strict()
+export type UkOverrides = z.infer<typeof UkOverridesSchema>
 
 export const ReleaseListSchema = z.array(ReleaseSchema)
 export type ReleaseList = z.infer<typeof ReleaseListSchema>

@@ -1,0 +1,93 @@
+name: ingest-uk
+
+# Merge recordstoreday.co.uk's release list into a season whose US list is
+# already published: tags every release with `regions` and appends the UK
+# exclusives (see docs/uk-regions.md). Leave the PDF URL blank to re-merge
+# the saved uk.json after editing releases/<season-id>/uk-overrides.json.
+# Manual only: the UK PDF lives at an unguessable URL, so there's nothing to
+# watch for yet.
+
+on:
+  workflow_dispatch:
+    inputs:
+      season-id:
+        description: 'Season id (e.g. 2026-november)'
+        required: true
+        type: string
+      pdfUrl:
+        description: 'HTTPS URL of the recordstoreday.co.uk list PDF (blank = re-merge the saved uk.json)'
+        required: false
+        type: string
+
+concurrency:
+  # Shares the refresh-art group: both rewrite releases/<season>/releases.json.
+  group: refresh-art
+  cancel-in-progress: false
+
+jobs:
+  ingest-uk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      SEASON_ID: ${{ inputs.season-id }}
+      PDF_URL: ${{ inputs.pdfUrl }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check inputs
+        run: |
+          [[ "$SEASON_ID" =~ ^[0-9]{4}-(april|november)$ ]] || { echo "Invalid season id"; exit 1; }
+          if [ -n "$PDF_URL" ] && [[ ! "$PDF_URL" =~ ^https:// ]]; then
+            echo "pdfUrl must be an https URL"; exit 1
+          fi
+
+      - name: Merge the UK list
+        env:
+          DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
+          DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
+          METABRAINZ_ACCESS_TOKEN: ${{ secrets.METABRAINZ_ACCESS_TOKEN }}
+        run: |
+          if [ -n "$PDF_URL" ]; then
+            pnpm tsx scripts/ingest-uk.ts "$SEASON_ID" "$PDF_URL"
+          else
+            pnpm tsx scripts/ingest-uk.ts "$SEASON_ID"
+          fi
+
+      - name: Validate JSON
+        run: pnpm tsx scripts/validate.ts
+
+      - name: Commit updates
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "releases/$SEASON_ID/" current.json
+          if git diff --staged --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git commit -m "chore: merge UK list into $SEASON_ID"
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:$BRANCH"; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); rebasing onto latest $BRANCH..."
+            git pull --rebase origin "$BRANCH"
+          done
+          echo "Exhausted push retries." >&2
+          exit 1

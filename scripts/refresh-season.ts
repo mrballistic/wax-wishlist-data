@@ -9,16 +9,19 @@ import { formatCoverageSummary, runArtCascade } from './fetch-art.js'
 import { writeCurrent, writeReleases } from './generate-json.js'
 import { enrichFromSite } from './rsd/enrich.js'
 import { getSiteIndex, type SiteIndex } from './rsd/site-index.js'
-import { CurrentSeasonSchema, type RawRelease, type Release, ReleaseListSchema } from './types.js'
+import { CurrentSeasonSchema, isUsRelease, type RawRelease, type Release, ReleaseListSchema, toRawRelease } from './types.js'
+import { createUkSite, enrichFromUkSite, type UkSite } from './uk/site.js'
 
 export interface RefreshDeps {
   siteIndex: (opts: { seasonId: string; expectedCount: number }) => Promise<SiteIndex | null>
   discogs: (releases: Release[]) => Promise<Release[]>
   art: (opts: { repoRoot: string; seasonId: string; releases: RawRelease[] }) => Promise<void>
+  ukSite: () => UkSite
 }
 
 const defaultDeps: RefreshDeps = {
   siteIndex: (o) => getSiteIndex({ ...o, unlocker: unlockerFromEnv() }),
+  ukSite: () => createUkSite(),
   discogs: (releases) => enrichDiscogs(releases),
   art: async ({ repoRoot, seasonId, releases }) => {
     const summary = await runArtCascade(releases, {
@@ -35,18 +38,6 @@ const defaultDeps: RefreshDeps = {
   },
 }
 
-function toRaw(r: Release): RawRelease {
-  return {
-    id: r.id,
-    artist: r.artist,
-    title: r.title,
-    label: r.label,
-    format: r.format,
-    category: r.category,
-    description: r.description ?? '',
-  }
-}
-
 export async function refreshSeason(
   opts: { repoRoot: string; seasonId: string; now?: () => string },
   deps: Partial<RefreshDeps> = {},
@@ -56,13 +47,17 @@ export async function refreshSeason(
   const releasesPath = resolve(opts.repoRoot, 'releases', opts.seasonId, 'releases.json')
   const original = ReleaseListSchema.parse(JSON.parse(await readFile(releasesPath, 'utf8')))
   let releases = original
-  const season = original.map(toRaw)
+  // recordstoreday.com lists US releases only; UK exclusives stay out of the
+  // site match so they can't pick up a US release's data.
+  const usReleases = original.filter(isUsRelease)
+  const season = usReleases.map(toRawRelease)
 
   try {
-    const index = await d.siteIndex({ seasonId: opts.seasonId, expectedCount: original.length })
+    const index = await d.siteIndex({ seasonId: opts.seasonId, expectedCount: usReleases.length })
     if (index) {
-      const res = enrichFromSite(releases, index, season)
-      releases = res.releases
+      const res = enrichFromSite(usReleases, index, season)
+      const filled = new Map(res.releases.map((r) => [r.id, r]))
+      releases = releases.map((r) => filled.get(r.id) ?? r)
       console.log(`site: filled ${res.changed} releases`)
     } else {
       console.log('site: no index available; skipping')
@@ -88,6 +83,12 @@ export async function refreshSeason(
     console.warn(`discogs enrichment failed: ${(err as Error).message}`)
   }
 
+  // UK exclusives: recordstoreday.co.uk pages appear over time, so keep
+  // looking for the ones still missing a description, link or cover. No
+  // request at all when the season has no UK exclusives or they're complete.
+  releases = (await enrichFromUkSite(releases, { repoRoot: opts.repoRoot, seasonId: opts.seasonId, site: d.ukSite() }))
+    .releases
+
   const dataChanged = JSON.stringify(releases) !== JSON.stringify(original)
   let stamped = false
   if (dataChanged) {
@@ -107,7 +108,7 @@ export async function refreshSeason(
   // An art failure must not lose the data changes above: the workflow commits
   // whatever was written as long as this script exits 0.
   try {
-    await d.art({ repoRoot: opts.repoRoot, seasonId: opts.seasonId, releases: releases.map(toRaw) })
+    await d.art({ repoRoot: opts.repoRoot, seasonId: opts.seasonId, releases: releases.map(toRawRelease) })
   } catch (err) {
     console.warn(`art cascade failed: ${err instanceof Error ? err.message : JSON.stringify(err)}`)
   }
