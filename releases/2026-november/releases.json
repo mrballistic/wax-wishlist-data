@@ -2808,7 +2808,7 @@
     "format": "12\" EP",
     "category": "exclusive",
     "description": "",
-    "discogsMasterId": 51329,
+    "discogsMasterId": null,
     "artFilename": "pat-metheny-is-this-america.jpg"
   },
   {
@@ -2819,7 +2819,7 @@
     "format": "CD",
     "category": "small-run",
     "description": "Legendary guitarist Pat Metheny returns with the powerful new EP Is This America?, arriving alongside the nation’s 250th anniversary. A bold reimagining of a familiar theme, it breathes new life into his legacy—echoing past moments with David Bowie—while delivering fresh emotion through new tracks like \"We Shall Overcome\" and \"Peace Universal.\"",
-    "discogsMasterId": 51329,
+    "discogsMasterId": null,
     "artFilename": "pat-metheny-is-this-america-2.jpg",
     "tracklist": [
       "01. Is This America?",

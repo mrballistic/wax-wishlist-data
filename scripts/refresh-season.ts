@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 
 import { unlockerFromEnv } from './art/brightdata.js'
 import { writeArtCandidates } from './art/candidates.js'
+import { applyDiscogsOverrides, isPinned, loadDiscogsOverrides } from './discogs-overrides.js'
 import { enrichDiscogs } from './enrich-discogs.js'
 import { formatCoverageSummary, runArtCascade } from './fetch-art.js'
 import { writeCurrent, writeReleases } from './generate-json.js'
@@ -71,10 +72,17 @@ export async function refreshSeason(
   }
 
   try {
-    const needing = releases.filter((r) => r.discogsMasterId == null)
+    // Hand fixes first (a pin replaces a wrong id; a rejected id is cleared
+    // and searched again), then again on the results.
+    const overrides = await loadDiscogsOverrides(opts.repoRoot, opts.seasonId)
+    releases = applyDiscogsOverrides(releases, overrides)
+    const needing = releases.filter((r) => r.discogsMasterId == null && !isPinned(r.id, overrides))
     if (needing.length > 0) {
       const found = new Map((await d.discogs(needing)).map((r) => [r.id, r]))
-      releases = releases.map((r) => found.get(r.id) ?? r)
+      releases = applyDiscogsOverrides(
+        releases.map((r) => found.get(r.id) ?? r),
+        overrides,
+      )
     }
   } catch (err) {
     console.warn(`discogs enrichment failed: ${(err as Error).message}`)
