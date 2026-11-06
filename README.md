@@ -54,10 +54,10 @@ All field names are camelCase: `releasesUrl`, `artBaseUrl`,
 {
   "id": "2026-april",
   "label": "April Drop 2026",
-  "date": "2026-04-18",             // yyyy-MM-dd, parsed by the app
-  "status": "upcoming",             // upcoming | active | past
-  "releasesUrl": "https://...",     // absolute URL to releases.json
-  "artBaseUrl": "https://..."       // absolute URL to the art/ directory, trailing slash
+  "date": "2026-04-18", // yyyy-MM-dd, parsed by the app
+  "status": "upcoming", // upcoming | active | past
+  "releasesUrl": "https://...", // absolute URL to releases.json
+  "artBaseUrl": "https://...", // absolute URL to the art/ directory, trailing slash
 }
 ```
 
@@ -77,15 +77,15 @@ Array of release objects:
   "title": "Low Tide at Dawn",
   "label": "Halcyon Pressing Co.",
   "format": "LP, 180g, Translucent Blue",
-  "category": "exclusive",           // exclusive | rsd-first | small-run
+  "category": "exclusive", // exclusive | rsd-first | small-run
   "description": "Debut reissue on translucent blue vinyl, limited to 2,000 copies.",
-  "discogsMasterId": 1048576,       // nullable
+  "discogsMasterId": 1048576, // nullable
   "artFilename": "2026-april-001.jpg", // nullable; joined with artBaseUrl by the app
-  "tracklist": ["A1. Low Tide", "B1. Dawn"],            // optional
-  "quantity": 2000,                                     // optional, nullable
-  "upc": "075678604034",                                // optional, nullable
+  "tracklist": ["A1. Low Tide", "B1. Dawn"], // optional
+  "quantity": 2000, // optional, nullable
+  "upc": "075678604034", // optional, nullable
   "rsdUrl": "https://recordstoreday.com/SpecialRelease/12345", // optional, nullable
-  "regions": ["us", "uk"]                               // optional
+  "regions": ["us", "uk"], // optional
 }
 ```
 
@@ -227,7 +227,7 @@ index (`scripts/rsd/site-index.ts`), shared by row repair, enrichment and the
 - **What is filled:** `description` (the quickview "MORE INFO" text, RSD's
   wording verbatim, paragraphs separated by `\n\n`) and the four optional
   contract fields `tracklist`, `quantity`, `upc` and `rsdUrl`
-  (`scripts/rsd/enrich.ts`). Only releases the art matcher *accepts* are
+  (`scripts/rsd/enrich.ts`). Only releases the art matcher _accepts_ are
   filled; below the bar nothing is written. One enrichment-only tie-break:
   when a release ties between a site row whose format equals its own and rows
   with no format at all, it takes the matching row (the art matcher is
@@ -259,6 +259,7 @@ index (`scripts/rsd/site-index.ts`), shared by row repair, enrichment and the
   publish, the daily refresh and `ingest-uk`. If a wrong master also brought
   a wrong cover, replace `art/<id>.jpg` by hand (the cascade never
   overwrites art).
+
 - **When:** at every publish (`watch-rsd`, `ingest`), and daily via
   `refresh-art.yml` for the current upcoming season. A refresh that changes
   `releases.json` stamps `current.json` `contentUpdatedAt`, which is what makes
@@ -337,7 +338,7 @@ published data. A real merged sample for app testing is in
 2. Either path registers the season itself via `register-season`: the entry
    is upserted into `seasons.json` (new seasons start `upcoming`; an existing
    entry keeps its status), and `current.json` is pointed at it if its date
-   is later than the current season's, or if it *is* the current season (a
+   is later than the current season's, or if it _is_ the current season (a
    revision). Every `current.json` write stamps a fresh `contentUpdatedAt`.
    Registering an older season never touches `current.json`. Both commit
    `releases/<season-id>/`, `seasons.json`, `current.json` and `sources.json`
@@ -394,15 +395,15 @@ the ingest pipeline. Neither this repository nor the Wax Wishlist apps
 are affiliated with, endorsed by, or sponsored by any
 of the organizations below.
 
-| Tier | Source | Used for | Terms of Use |
-|---|---|---|---|
-| 1 | [Discogs API](https://www.discogs.com/developers) | Album art + master release IDs | [discogs.com/developers](https://www.discogs.com/developers) |
-| 2 | [MusicBrainz](https://musicbrainz.org/) + [Cover Art Archive](https://coverartarchive.org/) | Album art fallback when Discogs has no match | [MusicBrainz License](https://metabrainz.org/license) · [CAA Terms](https://coverartarchive.org/) |
-| 3 | `manual-art/` (hand-curated) | Maintainer-sourced overrides for specific releases — see [`manual-art/README.md`](manual-art/README.md) | — |
-| 4 | RSD release list PDF | Release metadata (artist, title, format, etc.), parsed locally | [Record Store Day](https://recordstoreday.com/) |
-| — | [recordstoreday.com](https://recordstoreday.com/) event listings + product images | Album art (`rsd-site` tier) | [Record Store Day](https://recordstoreday.com/) |
-| — | RSD's public S3 bucket (distributor art packs) | Album art (`rsd-bucket` tier) | [Record Store Day](https://recordstoreday.com/) |
-| — | [recordstoreday.co.uk](https://www.recordstoreday.co.uk/) list PDFs + release pages | UK list (`regions`, UK exclusives) and UK exclusives' description, tracklist and cover | [Record Store Day UK](https://www.recordstoreday.co.uk/) |
+| Tier | Source                                                                                      | Used for                                                                                                | Terms of Use                                                                                      |
+| ---- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 1    | [Discogs API](https://www.discogs.com/developers)                                           | Album art + master release IDs                                                                          | [discogs.com/developers](https://www.discogs.com/developers)                                      |
+| 2    | [MusicBrainz](https://musicbrainz.org/) + [Cover Art Archive](https://coverartarchive.org/) | Album art fallback when Discogs has no match                                                            | [MusicBrainz License](https://metabrainz.org/license) · [CAA Terms](https://coverartarchive.org/) |
+| 3    | `manual-art/` (hand-curated)                                                                | Maintainer-sourced overrides for specific releases — see [`manual-art/README.md`](manual-art/README.md) | —                                                                                                 |
+| 4    | RSD release list PDF                                                                        | Release metadata (artist, title, format, etc.), parsed locally                                          | [Record Store Day](https://recordstoreday.com/)                                                   |
+| —    | [recordstoreday.com](https://recordstoreday.com/) event listings + product images           | Album art (`rsd-site` tier)                                                                             | [Record Store Day](https://recordstoreday.com/)                                                   |
+| —    | RSD's public S3 bucket (distributor art packs)                                              | Album art (`rsd-bucket` tier)                                                                           | [Record Store Day](https://recordstoreday.com/)                                                   |
+| —    | [recordstoreday.co.uk](https://www.recordstoreday.co.uk/) list PDFs + release pages         | UK list (`regions`, UK exclusives) and UK exclusives' description, tracklist and cover                  | [Record Store Day UK](https://www.recordstoreday.co.uk/)                                          |
 
 The tier numbers above are the historical labels used in the coverage
 summary; the order the cascade actually tries sources in is described
@@ -459,7 +460,7 @@ to the next tier; art never blocks a publish.
   that isn't in the file, the tier probes the six ids above the highest known
   one, takes the first listing whose release dates fall in the season, and
   logs `rsd-site: <season> is PromotionalEvent/<id> — add it to
-  rsd-events.json`. **Runbook: when you see that line, add the discovered id
+rsd-events.json`. **Runbook: when you see that line, add the discovered id
   to `rsd-events.json` and commit it**, so later runs skip the probing.
 - Unlocker requests per run: the art tier shares the season's site index with
   release-data enrichment (see below), so a run costs 2 normally (the
@@ -483,7 +484,7 @@ to the next tier; art never blocks a publish.
   publicly readable. After matching, the tier probes one matched image; if
   the bucket refuses it (401/403) or can't be reached, the whole tier is
   skipped for the run (`rsd-bucket: art images not publicly readable;
-  skipping`), so no 403 URLs reach the cascade or `art-candidates.json`. As
+skipping`), so no 403 URLs reach the cascade or `art-candidates.json`. As
   of 2026-10-01 only `2025/` has art packs, and their objects return 403.
 
 ### `art-candidates.json`
