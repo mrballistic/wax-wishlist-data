@@ -424,21 +424,19 @@ already there.
 
 Per release, the first tier that produces an image wins:
 
-UK exclusives get their cover from recordstoreday.co.uk before this cascade
-runs (see [UK list and regions](#uk-list-and-regions)); the cascade then fills
-anything still missing.
-
 1. **manual** — a file in `manual-art/` named after the release id. Always
    wins, even over an existing file.
 2. **existing file** — a file already in `art/` (an earlier run, or a
    `wax-wishlist-art-admin` commit) is kept, with no network lookups.
-3. **`rsd-site`** — the product images on recordstoreday.com (see below).
-4. **`rsd-bucket`** — distributor art packs in RSD's S3 bucket (see below).
-5. **discogs** — Discogs API (`DISCOGS_CONSUMER_KEY` +
+3. **`uk-site`** — UK exclusives only: the cover from the release's page on
+   recordstoreday.co.uk (see below).
+4. **`rsd-site`** — the product images on recordstoreday.com (see below).
+5. **`rsd-bucket`** — distributor art packs in RSD's S3 bucket (see below).
+6. **discogs** — Discogs API (`DISCOGS_CONSUMER_KEY` +
    `DISCOGS_CONSUMER_SECRET`; skipped without both).
-6. **musicbrainz** — MusicBrainz + Cover Art Archive
+7. **musicbrainz** — MusicBrainz + Cover Art Archive
    (`METABRAINZ_ACCESS_TOKEN` optional; works anonymously at 1 req/s).
-7. **none** — the slot stays empty and the app shows its placeholder.
+8. **none** — the slot stays empty and the app shows its placeholder.
 
 The two RSD tiers are matched across the whole season at once by a shared
 matcher (`scripts/art/match.ts`): a candidate is accepted only at score ≥ 0.85
@@ -448,6 +446,27 @@ Below the bar it never publishes; scores ≥ 0.5 become suggestions (see
 to JPEG (≤ 800×800, never upscaled, EXIF-rotated, mozjpeg quality 85). A
 failure in any tier (network, bad image, budget) is logged and falls through
 to the next tier; art never blocks a publish.
+
+### `uk-site`: recordstoreday.co.uk
+
+- **UK exclusives only** (`regions: ["uk"]`). US releases, including those also
+  sold in the UK, use the tiers below. recordstoreday.com's pages only list US
+  releases, so this is the official source for the rest.
+- Needs nothing: no secrets and no proxy. The site answers plain requests and
+  its `robots.txt` allows `/release/` pages.
+- Each release's page is found through `https://www.recordstoreday.co.uk/sitemap.xml`
+  (the site's slugs are its own, e.g. `coral-butterfly-house-acoustic-version`),
+  shortlisted by slug similarity (up to 3 pages per release, 250 ms apart),
+  and accepted only when the page's schema.org `MusicAlbum` JSON-LD matches the
+  release's artist and title and its date falls in the season. The cover is
+  the JSON-LD `image` (a 500×500 WebP), normalized to JPEG like the RSD tiers.
+- The same page fills the release's empty description, tracklist and `rsdUrl`
+  (`scripts/uk/site.ts`).
+- Strictly speaking it isn't part of `fetch-art.ts`: it runs just before the
+  cascade, in `ingest-uk`, `watch-uk` and the daily refresh, and writes only
+  into empty slots. So it never replaces a manual or art-admin image, and the
+  cascade's coverage summary counts its covers as files already on disk.
+- 2026 Black Friday: a verified page and cover for all 40 UK exclusives.
 
 ### `rsd-site`: recordstoreday.com
 
