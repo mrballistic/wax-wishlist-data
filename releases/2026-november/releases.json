@@ -105,7 +105,11 @@
       "5. RUM AND COCA COLA (Live)"
     ],
     "quantity": 2600,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20288"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20288",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "13th-floor-elevators-the-mono-singles",
@@ -134,7 +138,11 @@
       "Scarlet & Gold"
     ],
     "quantity": 4500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20475"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20475",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "2pac-pacs-life-20th-anniversary-special-edition",
@@ -166,7 +174,26 @@
       "13. Untouchable – feat. Yaki Kadafi, Hussein Fatal, Gravy"
     ],
     "quantity": 4500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20430"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20430",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "affinity-with-linda-hoyle-affinity-with-linda-hoyle",
+    "artist": "Affinity with Linda Hoyle",
+    "title": "Affinity with Linda Hoyle",
+    "label": "Bonfire",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "The first time on vinyl for this collection of rare tracks, rehearsals and live recordings from the UK prog-jazz group, featuring the incredible vocals of Linda Hoyle. Also included is the single they released together in 1970 on Vertigo Records.",
+    "discogsMasterId": null,
+    "artFilename": "affinity-with-linda-hoyle-affinity-with-linda-hoyle.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/affinity-with-linda-hoyle-affinity-with-linda-hoyle",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "albert-ayler-prophecy-completed",
@@ -191,7 +218,41 @@
       "Spirits (Theme)"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20314"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20314",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "allen-ravenstine-on-the-mountain",
+    "artist": "Allen Ravenstine",
+    "title": "On The Mountain",
+    "label": "ORG MUSIC",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "On the Mountain is a new collaborative recording from Allen Ravenstine, legendary synthesizer pioneer and founding member of Pere Ubu. Marking one of his final collaborations with longtime bandmate David Thomas, the release grew out of Ravenstine's return to music after decades away following his departure from the band in 1988.\n\nBuilt from atmospheric synthesizer compositions sent between Ravenstine and Thomas across continents, the title track features one of Thomas' final recorded vocal performances. Expanded across two versions, the release also includes contributions from Mike Watt, guitarist William Blakeney, and fellow Pere Ubu member Robert Wheeler. The B-side also features a new interpretation of \"The World According to Nouns\" originally written by Watt for Minutemen.\n\nMinimal, haunting, and deeply personal, On the Mountain stands as a fitting late-career statement from two of experimental rock's most singular voices.",
+    "discogsMasterId": null,
+    "artFilename": "allen-ravenstine-on-the-mountain.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/allen-ravenstine-on-the-mountain",
+    "regions": [
+      "uk"
+    ]
+  },
+  {
+    "id": "allen-toussaint-artist-producer-songwriter",
+    "artist": "Allen Toussaint",
+    "title": "Artist / Producer / Songwriter",
+    "label": "Sunset Blvd Records",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Without Allen Toussaint's herculean musical contributions, New Orleans' crucial musical heritage would be a footnote confined to '50s Rock & Roll. As a producer, songwriter and artist, Toussaint defined the seminal NOLA funk genre, giving hits not only to favourite sons like Ernie K. Doe and Lee Dorsey, but to Labelle, Robert Palmer, Rod Stewart and many others.",
+    "discogsMasterId": null,
+    "artFilename": "allen-toussaint-artist-producer-songwriter.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/allen-toussaint-artist-producer-songwriter",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "apathy-honkey-kong-15th-anniversary-reissue",
@@ -222,7 +283,25 @@
       "D4. 1:52 A.M."
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20345"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20345",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "archive-orf-vienna-radio-symphony-orchestra-glass-minds-orchestral-fm4-radio-session",
+    "artist": "Archive, ORF Vienna Radio Symphony Orchestra",
+    "title": "Glass Minds (Orchestral FM4 Radio Session)",
+    "label": "Dangervisit",
+    "format": "2xLP",
+    "category": "exclusive",
+    "description": "The London-based music collective Archive teamed up with radio FM4 and the prestigious ORF Radio-Symphonieorchester Wien, conducted by Gottfried Rabl, for a one-off FM4 Radio Session in the historic Großer Sendesaal at the ORF RadioKulturhaus in Vienna.\n\nThis is the full live recording of this memorable evening on February 5th 2026, featuring eight new tracks from their latest album “Glass Minds” and some classics that have never been performed with an orchestra of this size before.\n\n“This is what I imagined the album to be. That's why it's unique. And I'd never in my wildest dreams thought it would be an orchestra of that size… Recording this session was so, so epic, the memories will stay with me for a very long time, and the results are just astounding.” - Darius Keeler, founding member of Archive",
+    "discogsMasterId": null,
+    "artFilename": "archive-orf-vienna-radio-symphony-orchestra-glass-minds-orchestral-fm4-radio-session.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/archive-glass-minds-orchestral-fm4-radio-session",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "art-blakey-the-jazz-messengers-blue-moon-over-paris-ortf-recordings-1963-1968",
@@ -266,7 +345,11 @@
       "Salle Pleyel, Paris, November 6, 1968."
     ],
     "quantity": 3300,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20399"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20399",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "barenaked-ladies-born-on-a-pirate-ship-30th-anniversary",
@@ -284,7 +367,11 @@
       "C1. Just a Toy C2. In the Drink C3. Shoe Box C4. Trust Me C5. Back"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20353"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20353",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "barenaked-ladies-rock-spectacle-30th-anniversary",
@@ -301,7 +388,11 @@
       "B1. Hello City B2. What a Good Boy B3. The Old Apartment B4. Life in a Nutshell B5. These Apples B6. If I Had $1,000,000"
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20354"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20354",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "bazzi-cosmic",
@@ -318,7 +409,11 @@
       "B1. Gone B2. Fantasy B3. BRB B4. Cartier B5. Beautiful B6. Mine B7. Changed B8. Somebody"
     ],
     "quantity": 1100,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20355"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20355",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "benson-boone-walk-me-home",
@@ -343,7 +438,11 @@
       "Work of Art"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20290"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20290",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "bill-evans-trio-across-the-alps-the-lugano-pescara-concerts",
@@ -356,7 +455,11 @@
     "discogsMasterId": null,
     "artFilename": "bill-evans-trio-across-the-alps-the-lugano-pescara-concerts.jpg",
     "quantity": 3750,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20400"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20400",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "bill-summers-and-summer-heat-cayenne",
@@ -372,7 +475,10 @@
       "What's the Mess | Magic | Latican Space Mambo | Don't Fade Away | House Party | Try A Little Tenderness | I've Been Around | Djembe De Fanta | Flying"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20470"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20470",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "bill-withers-bill-withers-in-concert-live-at-the-bbc-1974",
@@ -396,7 +502,11 @@
       "3. Harlem"
     ],
     "quantity": 2600,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20336"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20336",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "bill-withers-bill-withers-in-concert-live-at-the-bbc-1974-2",
@@ -418,7 +528,11 @@
       "7. Harlem"
     ],
     "quantity": 1300,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20337"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20337",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "billy-idol-live-from-the-roxy-1982",
@@ -452,7 +566,11 @@
       "15. Triumph (Live)"
     ],
     "quantity": 3500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20441"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20441",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "billy-joel-billy-joel-tonight",
@@ -465,7 +583,11 @@
     "discogsMasterId": null,
     "artFilename": "billy-joel-billy-joel-tonight.jpg",
     "quantity": 4600,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20350"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20350",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "biz-markie-nobody-beats-the-biz",
@@ -481,7 +603,25 @@
       "Side 1: Nobody Beats the Biz; Side 2: Nobody Beats the Biz DJ Mix"
     ],
     "quantity": 1200,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20327"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20327",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "black-sabbath-technical-ecstasy",
+    "artist": "Black Sabbath",
+    "title": "Technical Ecstasy",
+    "label": "BMG",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "40th anniversary 3-colour splatter vinyl edition.",
+    "discogsMasterId": 4938,
+    "artFilename": "black-sabbath-technical-ecstasy.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/black-sabbath-technical-ecstasy",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "black-veil-brides-black-ep",
@@ -500,7 +640,25 @@
       "Death of Seasons (AFI cover)"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20469"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20469",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "blue-horizon-blue-horizon",
+    "artist": "Blue Horizon",
+    "title": "Blue Horizon",
+    "label": "Bonfire",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Reissued for the first time on vinyl this ultra rare Folk Heritage gem! Beautiful female vocal harmonies for this obscure Uk combo from 1971.",
+    "discogsMasterId": 1612328,
+    "artFilename": "blue-horizon-blue-horizon.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/blue-horizon-blue-horizon",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "blue-mitchell-out-of-the-blue",
@@ -523,7 +681,11 @@
       "6. When The Saints Go Marching In"
     ],
     "quantity": 1750,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20371"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20371",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "boa-duvet-25th-anniversary-7",
@@ -539,7 +701,11 @@
       "Side A | 1. Duvet | | Side B | 2. Walk With Me"
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20503"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20503",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "bob-seger-the-silver-bullet-band-night-moves-50th-anniversary",
@@ -565,7 +731,11 @@
       "9. Mary Lou"
     ],
     "quantity": 4000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20450"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20450",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "bobby-womack-the-preacher-in-paris-live-at-the-elysee-montmartre",
@@ -578,7 +748,11 @@
     "discogsMasterId": null,
     "artFilename": "bobby-womack-the-preacher-in-paris-live-at-the-elysee-montmartre.jpg",
     "quantity": 2600,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20505"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20505",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "brides-of-funkenstein-funk-or-walk",
@@ -600,7 +774,10 @@
       "B3. Amorous"
     ],
     "quantity": 2800,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20310"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20310",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "brigitte-calls-me-baby-live-in-chicago",
@@ -628,7 +805,74 @@
       "B5. Impressively Average"
     ],
     "quantity": 1200,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20427"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20427",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "bruce-springsteen-the-e-street-band-live-at-tower-theater-philly-1975",
+    "artist": "Bruce Springsteen & The E Street Band",
+    "title": "Live at Tower Theater Philly 1975",
+    "label": "Legacy",
+    "format": "LP BOXSET",
+    "category": "exclusive",
+    "description": "x4 Black LP Vinyl - Recorded live on New Year’s Eve during Bruce Springsteen & The E Street Band's legendary stand at Philadelphia's Tower Theater in 1975, this 4-LP set captures the electric 18-song set in its entirety.\n\nIncluding early live favorites, “Tenth Avenue Freeze-Out” and “Jungleland” plus powerhouse hits “Born To Run,” “Rosalita (Come Out Tonight)” and more.",
+    "discogsMasterId": null,
+    "artFilename": "bruce-springsteen-the-e-street-band-live-at-tower-theater-philly-1975.jpg",
+    "tracklist": [
+      "SIDE A",
+      "1. Night",
+      "2. Tenth Avenue Freeze-Out",
+      "3. Spirit In The Night",
+      "SIDE B",
+      "1. Does This Bus Stop At 82nd Street?",
+      "2. It’s My Life",
+      "3. She’s The One",
+      "SIDE C",
+      "1. Born To Run",
+      "2. Pretty Flamingo",
+      "3. Its Hard To Be A Saint In The City",
+      "SIDE D",
+      "1. Backstreets",
+      "2. Mountain Of Love",
+      "3. Jungleland",
+      "SIDE E",
+      "1. Rosalita (Come Out Tonight)",
+      "SIDE F",
+      "1. 4th Of July, Asbury Park (Sandy)",
+      "2. Detroit Medley",
+      "SIDE G",
+      "1. Quarter To Three",
+      "SIDE H",
+      "1. Thunder Road",
+      "2. Twist And Shout",
+      "CD Track list",
+      "DISC 1",
+      "1. Night",
+      "2. Tenth Avenue Freeze-Out",
+      "3. Spirit In The Night",
+      "4. Does This Bus Stop At 82nd Street?",
+      "5. It’s My Life",
+      "6. She’s The One",
+      "7. Born To Run",
+      "8. Pretty Flamingo",
+      "9. It’s Hard To Be A Saint In The City",
+      "10. Backstreets",
+      "11. Mountain Of Love",
+      "DISC 2",
+      "1. Jungleland",
+      "2. Rosalita (Come Out Tonight)",
+      "3. 4th Of July, Asbury Park (Sandy)",
+      "4. Detroit Medley",
+      "5. Quarter To Three",
+      "6. Thunder Road",
+      "7. Twist And Shout"
+    ],
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/bruce-springsteen-the-e-street-band-live-at-tower-theater-philly-1975",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "bunny-wailer-rock-n-groove",
@@ -644,7 +888,10 @@
       "1. Rock N Groove 2. Another Dance 3. Dance Rock 4. Cool Runnings 5. Rootsman Skanking 6. Jammins 7. Ballroom Floor"
     ],
     "quantity": 950,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20291"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20291",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "carcass-swansong",
@@ -673,7 +920,11 @@
       "Go To Hell"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20398"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20398",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "carissas-wierd-you-should-be-at-home-here-25th-anniversary-deluxe-edition",
@@ -705,7 +956,11 @@
       "13. Everything’s Fine (4-track home recording) *previously unreleased"
     ],
     "quantity": 2400,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20502"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20502",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "carly-rae-jepsen-day-and-night-continued",
@@ -730,7 +985,11 @@
       "8. In Pure Faith"
     ],
     "quantity": 4000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20431"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20431",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "cecil-payne-zodiac",
@@ -747,7 +1006,26 @@
       "B1. Follow Me 9:16 B2. Flying Fish 12:20"
     ],
     "quantity": 1250,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20356"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20356",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "charles-brackeen-rhythm-x",
+    "artist": "Charles Brackeen",
+    "title": "Rhythm X",
+    "label": "Strata East",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "In the late 1960s, saxophonist and producer Clifford Jordan recorded 3 albums that would later be known as The Dolphy Series, released by Charles Tolliver & Stanley Cowell’s famed Strata-East Records. That includes saxophonist Charles Brackeen’s Rhythm X, featuring the backing band of another modern giant, Ornette Coleman. With Don Cherry, Charlie Haden and Ed Blackwell, Brackeen’s debut album as a leader stands as a nod to the birth of free jazz and post-bop, spiritual jazz. Featuring audio cut directly from the original analog tapes, mastered by Kevin Gray and pressed on 180-gram vinyl RTI, housed in a deluxe gatefold tip-on package with never-before-seen photos and new liner notes. This edition features a limited edition Strata-East Dolphy Series postcard set (collection #1 of 3) with exclusive artwork exclusively for Record Store Day Black Friday 2026.",
+    "discogsMasterId": 163271,
+    "artFilename": "charles-brackeen-rhythm-x.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/charles-brackeen-rhythm-x",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "charlie-parker-bewitching-bird-bird-at-cafe-society-and-the-sky-bar",
@@ -773,7 +1051,11 @@
       "9 Star Eyes"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20504"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20504",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "charlie-parker-the-all-stars-summit-meeting-at-birdland",
@@ -799,7 +1081,10 @@
       "5. Broadway / Lullaby Of Birdland"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20335"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20335",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "cher-christmas-dj-party-edition",
@@ -826,7 +1111,11 @@
       "DJ Play A Christmas Song (with Kelly Clarkson)"
     ],
     "quantity": 3500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20448"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20448",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "chuck-prophet-temple-beautiful-15th-anniversary",
@@ -848,7 +1137,11 @@
       "G1. Play That Song Again (demo) G2. Castro Halloween (demo) G3. Temple Beautiful (demo) G4. Museum Of Broken Hearts (demo) G5. Willie Mays is Up at Bat (demo) G6. The Left Hand and the Right Hand (demo) G7. I Felt Like Jesus (demo) G8. Who Shot John (demo) G9. He Came From So Far Away (Red Man Speaks) (demo) G10. Little Girl, Little Boy (demo) G11. White Night, Big City (demo) G12. Emperor Norton in the Last Year of His Life (1880) (demo)"
     ],
     "quantity": 850,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20348"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20348",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "clifford-jordan-let-it-ring-live-at-the-jazz-showcase",
@@ -883,7 +1176,11 @@
       "D4. All the Things You Are"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20406"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20406",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "coco-jones-why-not-more-more",
@@ -908,7 +1205,10 @@
       "8. EASY"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20380"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20380",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "cortis-greengreen-playextended-vinyl-rsd-ver",
@@ -934,7 +1234,10 @@
       "9. Message from CORTIS"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20381"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20381",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "cursive-happy-hollow-20-year-anniversary-edition",
@@ -973,7 +1276,11 @@
       "13 Nightmares (Hymns for the Heathen Demo)"
     ],
     "quantity": 1180,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20321"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20321",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "czarface-special-presentation",
@@ -1002,7 +1309,11 @@
       "Goutro"
     ],
     "quantity": 4000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20445"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20445",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "daryl-dmc-mcdaniels-america",
@@ -1018,7 +1329,10 @@
       "1. America 2. D'Garo 3. She Gets Me High (w/special guests) 4. Judas Priest"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20417"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20417",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "david-axelrod-david-axelrod",
@@ -1042,7 +1356,10 @@
       "B4. Loved Boy (feat. Lou Rawls)"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20324"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20324",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "dexter-and-the-moonrocks-freakin-out",
@@ -1062,7 +1379,25 @@
       "(Etching)"
     ],
     "quantity": 1800,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20382"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20382",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "doctor-who-the-day-of-the-troll",
+    "artist": "Doctor Who",
+    "title": "The Day of the Troll",
+    "label": "Demon Records",
+    "format": "2xLP",
+    "category": "exclusive",
+    "description": "Demon Records present an exclusive-to-audio adventure for the Tenth Doctor, written by Simon Messingham and read by David Tennant, accompanied by Murray Gold’s stirring arrangement of the familiar Doctor Who theme. This creepy story on 2LP Trollface coloured vinyl comes in a wide-spine sleeve with illustrated inner sleeves, exclusive to Record Store Day’s Black Friday event.",
+    "discogsMasterId": null,
+    "artFilename": "doctor-who-the-day-of-the-troll.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/doctor-who-the-day-of-the-troll",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "doctor-who-the-rising-night",
@@ -1083,7 +1418,25 @@
       "B. The Day of the Troll"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20412"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20412",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "donald-austin-crazy-legs",
+    "artist": "Donald Austin",
+    "title": "Crazy Legs",
+    "label": "ORG MUSIC",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Originally released in 1973 on Westbound Records, Donald Austin's Crazy Legs is a deep-cut Detroit funk classic produced and arranged by legendary guitarist Dennis Coffey. Blending raw grooves, psychedelic soul, and break-heavy rhythms, the album has become a cult favourite among collectors, DJs, and hip-hop producers.\n\nThis Record Store Day exclusive continues Org Music's ongoing Westbound Records reissue series, bringing Crazy Legs back to vinyl newly remastered from the original analogue tapes. The release restores the warmth and punch of the original sessions while honouring the spirit of the original pressing.",
+    "discogsMasterId": 237562,
+    "artFilename": "donald-austin-crazy-legs.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/donald-austin-crazy-legs",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "eagles-please-come-home-for-christmas-funky-new-year",
@@ -1100,7 +1453,11 @@
       "2. Funky New Year"
     ],
     "quantity": 6000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20294"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20294",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "earth-wind-fire-earth-wind-and-fire",
@@ -1122,7 +1479,25 @@
       "B3. Bad Tune"
     ],
     "quantity": 2700,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20295"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20295",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "edgar-winter-royal-albert-hall-2004",
+    "artist": "Edgar Winter",
+    "title": "Royal Albert Hall 2004",
+    "label": "Charly",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Edgar Winter – Royal Albert Hall 2004 (Black Friday 2026 Metallic Silver Vinyl Edition). A Rock Legend Live at the Royal Albert Hall. Available on vinyl for the first time, this electrifying live album captures Edgar Winter and his band at London’s Royal Albert Hall in a career-spanning performance that showcases one of rock’s most accomplished and innovative musicians at the height of his live powers. Featuring classics including “Free Ride,” “Frankenstein,” and “Tobacco Road,” the set is packed with blazing solos, inspired improvisation, dynamic musicianship, and outstanding lead vocal performances from Winter himself. Recorded in May 2004, the concert highlights Winter’s virtuosity on saxophone, keyboards, and synthesizers, reflecting the pioneering artistry that helped shape the sound of modern rock. From his breakthrough in the late 1960s through decades of acclaimed recordings and unforgettable live performances, Edgar Winter has built a legacy founded on innovation, technical brilliance, and showmanship. Pressed on limited-edition Metallic Silver vinyl, this special release finally brings Edgar Winter’s unforgettable 2004 Royal Albert Hall performance to vinyl for the very first time. Newly remastered, it presents an exceptional live document from one of rock’s most enduring and influential performers in powerful sound.",
+    "discogsMasterId": 1164936,
+    "artFilename": "edgar-winter-royal-albert-hall-2004.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/edgar-winter-royal-albert-hall-2004",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "elmiene-heat-the-streets-some-mo",
@@ -1143,7 +1518,11 @@
       "4. Miss Hot July - feat. Ghostface Killah"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20383"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20383",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "empire-of-the-sun-ask-that-god-afterlife-tor",
@@ -1172,7 +1551,25 @@
       "12. Friends I Know"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20432"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20432",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "fink-2-meter-sessions",
+    "artist": "Fink",
+    "title": "2 Meter Sessions",
+    "label": "Charly | 2 Meter Sessions",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "The definitive collection of intimate live-in-studio performances - available on vinyl for the first time. Spanning recordings made between 2006 and 2024, 2 Meter Sessions captures critically acclaimed British singer-songwriter Fink and his band in their purest form. Recorded live without overdubs and carefully curated from the celebrated 2 Meter Sessions archives, these performances reveal the warmth, nuance and emotional intensity that have made Fink one of contemporary folk and blues’s most distinctive voices. Featuring previously unreleased acoustic versions of fan favourites including \"Perfect Darkness,\" \"Sort Of Revolution,\" \"Warm Shadow\" and \"Looking Too Closely,\" this collection traces nearly two decades of remarkable songwriting and musicianship. Created for Record Store Day Black Friday 2026, this highly collectable first-ever vinyl edition includes a signed postcard by Fin Greenall, liner notes by 2 Meter Sessions founder Jan Douwe Kroeske, and previously unseen photographs documenting the band's sessions across the Netherlands. Blending folk, indie rock and blues, Fink's music is renowned for its cinematic atmosphere and emotional depth, with songs featured in acclaimed television series including The Walking Dead, CSI and House.",
+    "discogsMasterId": null,
+    "artFilename": "fink-2-meter-sessions.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/fink-2-meter-sessions",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "fischerspooner-1",
@@ -1198,7 +1595,11 @@
       "Natural Disaster"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20413"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20413",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "florence-the-machine-everybody-scream-chamber-version",
@@ -1219,7 +1620,11 @@
       "4. Drink Deep (Chamber Version)"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20384"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20384",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "fountains-of-wayne-sky-full-of-holes-15th-anniversary-edition",
@@ -1236,7 +1641,11 @@
       "B1. Cold Comfort Flowers B2. A Road Song B3. Workingman's Hands B4. Hate To See You Like This B5. Radio Bar B6. Firelight Waltz B7. Cemetery Guns"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20357"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20357",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "frank-black-teenager-of-the-year",
@@ -1247,7 +1656,11 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": 32524,
-    "artFilename": "frank-black-teenager-of-the-year.jpg"
+    "artFilename": "frank-black-teenager-of-the-year.jpg",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "frank-black-teenager-of-the-year-2",
@@ -1258,7 +1671,26 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": 32524,
-    "artFilename": "frank-black-teenager-of-the-year-2.jpg"
+    "artFilename": "frank-black-teenager-of-the-year-2.jpg",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "frankie-goes-to-hollywood-relax-the-complete-story",
+    "artist": "Frankie Goes To Hollywood",
+    "title": "Relax: The Complete Story",
+    "label": "UMR",
+    "format": "2xLP",
+    "category": "exclusive",
+    "description": "Relax: The Complete Story compiles all the original officially released versions of one of the best-selling singles of all time over two LP’s including all the 12” and 7” Mixes as well as an unreleased mix of this controversial record. Housed in a single sleeve holding 2 x LPs with replica art and printed inners with notes by DJ Food.",
+    "discogsMasterId": null,
+    "artFilename": "frankie-goes-to-hollywood-relax-the-complete-story.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/frankie-goes-to-hollywood-relax-the-complete-story",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "funk-factory-funk-factory",
@@ -1282,7 +1714,10 @@
       "9. Sinkin' Low"
     ],
     "quantity": 2700,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20296"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20296",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "funkadelic-live-at-meadowbrook-1971",
@@ -1307,7 +1742,11 @@
       "Free Your Mind & Your Ass Will Follow"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20315"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20315",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "genesis-land-of-confusion",
@@ -1329,7 +1768,11 @@
       "3. I'd Rather Be You"
     ],
     "quantity": 1850,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20297"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20297",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "george-harrison-george-harrison",
@@ -1356,7 +1799,11 @@
       "10. If You Believe"
     ],
     "quantity": 2900,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20362"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20362",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "george-harrison-thirty-three-1-3",
@@ -1383,7 +1830,11 @@
       "10. Learning How to Love You"
     ],
     "quantity": 2900,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20363"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20363",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "george-strait-blue-clear-sky",
@@ -1410,7 +1861,10 @@
       "10. Need I Say More"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20385"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20385",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "go-radio-lucky-street-15th-anniversary",
@@ -1445,7 +1899,10 @@
       "20. Forever My Father (feat. Erin and Daniel Lancaster)"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20420"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20420",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "go-radio-lucky-street-15th-anniversary-2",
@@ -1474,7 +1931,11 @@
       "12. The Truth Is"
     ],
     "quantity": 1850,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20421"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20421",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "godsmack-battle-of-the-drums",
@@ -1487,7 +1948,11 @@
     "discogsMasterId": null,
     "artFilename": "godsmack-battle-of-the-drums.jpg",
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20402"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20402",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "goo-goo-dolls-borrowed",
@@ -1518,7 +1983,11 @@
       "7 Catch Me Now I’m Falling"
     ],
     "quantity": 3500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20293"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20293",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "good-charlotte-greetings-from-california",
@@ -1551,7 +2020,11 @@
       "We Are Done (Live from the Motel Du Cap Tour) \""
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20322"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20322",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "grateful-dead-carousel-ballroom-san-francisco-ca-2-14-68-live",
@@ -1590,7 +2063,11 @@
       "Etching"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20298"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20298",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "grateful-dead-on-a-back-porch-vol-4",
@@ -1613,7 +2090,41 @@
       "3. Ballad Of A Thin Man 8:00 (Road Trips Vol. 4 No. 2, from 4/1/88)"
     ],
     "quantity": 5550,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20299"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20299",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "hank-jones-christian-mcbride-jimmy-cobb-west-of-5th",
+    "artist": "Hank Jones, Christian McBride & Jimmy Cobb",
+    "title": "West of 5th",
+    "label": "Chesky Records",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "This is a limited, hand-numbered, first-time LP release on 180g One-Step Pressing half-white/half-grey vinyl LP by a true jazz supergroup. Arriving just in time for its 20th anniversary in 2026, the recording features the rare chemistry of three jazz titans: the legendary Hank Jones on piano, Christian McBride on bass, and Jimmy Cobb – famed as the drummer on Miles Davis's Kind of Blue. The album is a definitive display of jazz mastery across generations, capturing Cobb and Jones’s historic swing alongside McBride’s modern virtuosity.\n\nDespite the critical acclaim for this powerhouse trio, the album has never been released on LP before, and the original CD has been out of print for years, making this an essential acquisition for jazz fans.",
+    "discogsMasterId": 1241815,
+    "artFilename": "hank-jones-christian-mcbride-jimmy-cobb-west-of-5th.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/hank-jones-west-of-5th",
+    "regions": [
+      "uk"
+    ]
+  },
+  {
+    "id": "harold-mcnair-the-fence",
+    "artist": "Harold McNair",
+    "title": "The Fence",
+    "label": "Lantern Heights",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Jamaican jazz saxophonist, flautist and vocalist Harold McNair released his masterpiece The Fence in 1970, blending elements of British blues and jazz-funk. Supported by the Pentangle rhythm section - Terry Cox on drums and Danny Thompson on double bass - alongside Keith Tippett on keyboards, the album was an experiment truly ahead of its time.",
+    "discogsMasterId": 244610,
+    "artFilename": "harold-mcnair-the-fence.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/harold-mcnair-the-fence",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "hiromasa-suzuki-colgen-world",
@@ -1634,7 +2145,10 @@
       "B3: Epilogue"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20428"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20428",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "holly-humberstone-live-from-cruel-world",
@@ -1653,7 +2167,11 @@
       "2. Coming Up Roses (from Live Lounge) (Harry Styles cover)"
     ],
     "quantity": 500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20424"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20424",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "hootie-the-blowfish-mtv-unplugged",
@@ -1678,7 +2196,11 @@
       "10. Hold My Hand"
     ],
     "quantity": 4000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20300"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20300",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "inxs-welcome-to-wherever-you-are",
@@ -1705,7 +2227,10 @@
       "B6. Men And Women"
     ],
     "quantity": 4000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20301"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20301",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "iron-maiden-the-number-of-the-beast-eddie-rsd",
@@ -1718,7 +2243,25 @@
     "discogsMasterId": null,
     "artFilename": "iron-maiden-the-number-of-the-beast-eddie-rsd.jpg",
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20396"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20396",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "jadakiss-kiss-of-death-tour-2005",
+    "artist": "Jadakiss",
+    "title": "Kiss Of Death: Tour 2005",
+    "label": "Charly",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "A landmark live performance from a hip-hop icon. For the first time ever on wax, Jadakiss’s 2005 London performance from his groundbreaking Kiss of Death tour finally drops as Kiss of Death: Tour 2005 - a high-voltage set that captures the Yonkers mic assassin when the crowd was live and the temperature on stage even hotter. Recorded at the Kentish Town Forum during his sold-out European run, this is Jada locked in, feeding off the fans, no filters, no fillers - just bars and fire. With that unmistakable gravel-toned voice and bulletproof pen game, Jadakiss had already cemented his rep with The LOX and Ruff Ryders before hitting solo heights with Kiss tha Game Goodbye (2001) and the chart-topping Kiss of Death (2004). The latter, featuring the Grammy-nominated anthem “Why?”, proved he could balance street grit with conscience and clarity like no one else. But on stage, Jadakiss goes beyond the booth. This 24-track set hits heavy - running through Time’s Up, Knock Yourself Out, U Make Me Wanna, We Gonna Make It, Put Ya Hands Up, and Why - pure East Coast energy meeting London love. The chemistry is undeniable and the delivery flawless. Pressed on limited-edition Ultra Gold vinyl, Kiss of Death: Tour 2005 brings that heat, that hunger, and that moment straight to your speakers - real hip-hop, live and uncut.",
+    "discogsMasterId": 1311592,
+    "artFilename": "jadakiss-kiss-of-death-tour-2005.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/jadakiss-kiss-of-death-tour-2005",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "jailen-josey-serial-romantic",
@@ -1748,7 +2291,10 @@
       "13. I Believe"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20425"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20425",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "jason-falkner-presents-author-unknown",
@@ -1783,7 +2329,11 @@
       "4. Song For Her (4-Track Demo) [Bonus Track]"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20318"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20318",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "jeff-tweedy-twilight-in-paris",
@@ -1823,7 +2373,11 @@
       "6. Enough"
     ],
     "quantity": 4400,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20339"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20339",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "jefferson-airplane-jefferson-airplane-takes-off",
@@ -1862,7 +2416,11 @@
       "3. Blues from an Airplane (Instrumental Track)"
     ],
     "quantity": 2200,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20338"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20338",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "jerry-garcia-band-garcialive-volume-eight-november-23rd-1991-bradley-center",
@@ -1903,7 +2461,25 @@
       "Forever Young"
     ],
     "quantity": 4500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20443"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20443",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "jessie-ware-ride-sauna-extended-versions",
+    "artist": "Jessie Ware",
+    "title": "Ride / Sauna (Extended Versions)",
+    "label": "EMI",
+    "format": "12\"",
+    "category": "exclusive",
+    "description": "A standard black 12” single hand-stamped in a white label sleeve. Side A: Ride - Extended Version Side B: Sauna Extended Version",
+    "discogsMasterId": null,
+    "artFilename": "jessie-ware-ride-sauna-extended-versions.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/jessie-ware-sauna-ride",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "jid-live-from-nprs-tiny-desk",
@@ -1927,7 +2503,10 @@
       "7. Kody Blu 31"
     ],
     "quantity": 4000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20433"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20433",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "joan-jett-the-blackhearts-i-love-rock-n-roll-the-shadow-album",
@@ -1940,7 +2519,26 @@
     "discogsMasterId": null,
     "artFilename": "joan-jett-the-blackhearts-i-love-rock-n-roll-the-shadow-album.jpg",
     "quantity": 4500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20405"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20405",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "john-doe-the-sadies-country-club",
+    "artist": "John Doe & The Sadies",
+    "title": "Country Club",
+    "label": "Yep Roc Records",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "In true honky tonk style, Country Club is the bastard child of a drunken promise. A post show hang-out between X & the Knitters’ John Doe and The Sadies produced the idea to join forces to a make an album of country songs. Both rock n’ roll and country music are littered with the ghosts of broken promises, but this one was destined to become reality. Timeless sounds abound on Country Club, driven by Doe’s gorgeously rough-hewn vocals, the dueling thousand pound chops of the guitar-wielding Good brothers and The Sadies’ world class rhythm section of Mike Belitsky and Sean Dean. Here, the Countrypolitan sound of late 1960s Nashville is filtered through the telecaster-based tonk of Bakersfield, CA and the results are simply stunning. Classic tunes by Merle Haggard and Waylon Jennings stand alongside corkers by Tammy Wynette and Roger Miller, all of them getting unique treatments by Doe and The Sadies. The album also features four originals - three from The Sadies and one courtesy of the timeless pairing of John Doe and Exene Cervenka. On Country Club Doe and The Sadies find the perfect blend of the reverent and the experimental, resulting in a slightly psychedelic brew that just might pass for straight if you’re not lookin’. Country Club has been out of print for years and is now being repressed on limited edition green and blue splatter vinyl. Limited to 1,500 copies worldwide.",
+    "discogsMasterId": 410159,
+    "artFilename": "john-doe-the-sadies-country-club.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/john-doe-the-sadies-country-club",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "joji-piss-in-the-wind-deluxe-edition",
@@ -1953,7 +2551,11 @@
     "discogsMasterId": 4122523,
     "artFilename": "joji-piss-in-the-wind-deluxe-edition.jpg",
     "quantity": 7500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20444"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20444",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "joni-mitchell-live-at-carnegie-hall-1972",
@@ -1994,7 +2596,11 @@
       "4. The Circle Game"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20302"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20302",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "julian-lage-featuring-jorge-roeder-joey-baron-the-reservoir-sessions",
@@ -2017,7 +2623,10 @@
       "3. The Star-Crossed Lovers"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20434"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20434",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "katseye-katseye-the-dance-breaks",
@@ -2038,7 +2647,11 @@
       "(Etched)"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20435"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20435",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "keshi-skeletons-bandaids-always-trilogy",
@@ -2068,7 +2681,10 @@
       "15. Us"
     ],
     "quantity": 10000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20379"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20379",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "king-crimson-1974-massey-hall-toronto",
@@ -2084,7 +2700,11 @@
       "Side A: Larks’ Tongues in Aspic: Part II; Lament; Exiles | Side B: Improv: The Golden Walnut; Fracture | Side C: Improv: Clueless and Slightly Slack; The Night Watch; Easy Money | Side D: Starless; 21st Century Schizoid Man"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20447"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20447",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "king-gizzard-the-lizard-wizard-expand-your-mind-songs-in-3d-deluxe-edition",
@@ -2100,7 +2720,26 @@
       "1. Dragon 2. Flamethrower 3. Witchcraft 4. Motor Spirit 5. Converge 6. Hot Wax 7. Venusian 2"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20343"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20343",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "knats-a-great-day-in-newcastle-live",
+    "artist": "Knats",
+    "title": "A Great Day In Newcastle (Live)",
+    "label": "Fontana",
+    "format": "12\"",
+    "category": "exclusive",
+    "description": "Live album not yet released. This is the follow up from their studio album released earlier this year. Alteration on the original artwork along with a coloured disc.",
+    "discogsMasterId": null,
+    "artFilename": "knats-a-great-day-in-newcastle-live.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/knats-a-great-day-in-newcastle-live",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "kreator-pleasure-to-kill-40th-anniversary",
@@ -2126,7 +2765,11 @@
       "9. Under the Guillotine"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20364"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20364",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "labi-siffre-remember-my-song",
@@ -2152,7 +2795,41 @@
       "Remember My Song"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20414"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20414",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "lafayette-afro-rock-band-darkest-light-hihache",
+    "artist": "Lafayette Afro-Rock Band",
+    "title": "Darkest Light / Hihache",
+    "label": "Strut Records",
+    "format": "7\"",
+    "category": "exclusive",
+    "description": "Two classic tracks from the inimitable Lafayette Afro-Rock Band, finally available on 7\" vinyl. Featuring the highly sampled Darkest Light, alongside the quintiessential Hihache.",
+    "discogsMasterId": null,
+    "artFilename": "lafayette-afro-rock-band-darkest-light-hihache.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/lafayette-afro-rock-band-darkest-light-hihache",
+    "regions": [
+      "uk"
+    ]
+  },
+  {
+    "id": "larry-coryell-victor-bailey-lenny-white-traffic",
+    "artist": "Larry Coryell, Victor Bailey & Lenny White",
+    "title": "Traffic",
+    "label": "Chesky Records",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "This is a limited-numbered, first-time LP release of Traffic, the high-octane collaboration between three of the most influential figures in jazz fusion: guitarist Larry Coryell, bassist Victor Bailey (Weather Report), and drummer Lenny White (Return to Forever). This 20th Anniversary edition is presented on a 180g One-Step Pressing transparent with blue and yellow splatter vinyl LP.\n\nThe album is a masterclass in interplay and virtuosity, featuring a legendary rhythm section that anchored some of the greatest fusion recordings of the '70s and '80s. Larry Coryell, often called the \"Godfather of Fusion\", is captured here at his most fluid, backed by Bailey's iconic fretless bass and White's powerhouse drumming.\n\nThe original CD version has been out of print for over a decade and this first-time vinyl pressing provides a long-overdue physical reissue for a landmark recording in the jazz-fusion canon.",
+    "discogsMasterId": 1086558,
+    "artFilename": "larry-coryell-victor-bailey-lenny-white-traffic.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/larry-coryell-traffic",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "lee-scratch-perry-wonderman-years-vol-1",
@@ -2168,7 +2845,11 @@
       "Big Youth - Moving Version (DJ Version) | Junior Byles - Beat Down Babylon | The Upsetters - Ital Version (aka Babylon Chapter 5) | Junior Byles & Jah T - Informer Men | Dennis Alcapone - Alpha and Omega | Maxie, Niney & Scratch - Babylose Burning (aka Babylon's Burning) | The Stingers - Give Me Power | Roy Lee & King Iwah, The 1st - Give Me Power (Version 2) | The Upsetters - Sunshine Showdown | The Upsetters - Tipper Special | Lloyd Parks - Mighty Clouds of Joy | Lloyd Parks - Professor Ironside The Upsetters - Iron Curtain | Junior Byles - Place Called Africa | Dennis Alcapone - Africa Stand (aka Place Called Africa Verse 5) | Winston Cool aka Dr. Alimantado - Chapter 3 Of Africa (aka Place Called Africa Verse 3) | Dennis Alcapone - Jah Rastafari (aka Place Called Africa Verse 6) (aka Wonder Man) | King Medious aka Milton Henry - This World | Junior Byles - Fever | Augustus Pablo - Hot & Cold | Jah T - Lick the Pipe Peter (Part 4) | The Stingers - Preacher Man | The Upsetters - Preacher Man (Version)"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20471"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20471",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "lettuce-lettuce-sing",
@@ -2203,7 +2884,10 @@
       "20. Rising to the Top"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20497"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20497",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "like-songs-made-while-high",
@@ -2232,7 +2916,10 @@
       "Miss Me With That"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20499"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20499",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "lil-wayne-no-ceilings",
@@ -2261,7 +2948,10 @@
       "12. Kobe Bryant"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20386"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20386",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "lindsey-buckingham-under-the-skin",
@@ -2289,7 +2979,41 @@
       "6. Juniper"
     ],
     "quantity": 3650,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20303"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20303",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "luiz-bonfa-non-stop-to-brazil",
+    "artist": "Luiz Bonfá",
+    "title": "Non-Stop To Brazil",
+    "label": "Chesky Records",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "This is a limited hand-numbered, first-time LP release by the legendary Luiz Bonfá, one of the primary architects of the bossa nova sound. This special edition is presented on a 180g One-Step Pressing yellow/green pinwheel vinyl LP that complements the album's floral-themed cover art.\n\nBest known as the composer of ‘Manhã de Carnaval’ from the film Black Orpheus, Bonfá is a global icon of Brazilian music. ‘Non-Stop to Brazil’ captures his virtuoso acoustic guitar work in an intimate, high-fidelity setting, showcasing the rhythmic sophistication and melodic grace that influenced generations of guitarists.\n\nThis release marks a significant archival event: the album has been completely out of print on physical media since its original CD release in 1989. For bossa nova enthusiasts and audiophile collectors, this first-ever vinyl pressing finally brings a long-unavailable masterpiece to the turntable after a 35+ year hiatus.",
+    "discogsMasterId": 649131,
+    "artFilename": "luiz-bonfa-non-stop-to-brazil.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/luiz-bonf-non-stop-to-brazil",
+    "regions": [
+      "uk"
+    ]
+  },
+  {
+    "id": "lutricia-mcneal-lutricia-mcneal",
+    "artist": "Lutricia McNeal",
+    "title": "Lutricia McNeal",
+    "label": "Back On Wax",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Lutricia McNeal’s classic self-titled album gets its first-ever vinyl pressing, featuring all her UK hits: “Ain’t That Just The Way”, “Stranded”, “Someone Loves You Honey” and “The Greatest Love You’ll Never Know”. Blending soulful vocals with timeless pop production, the album was a huge success in the UK, shifting over 100,000 copies and being certified Gold.\n\nCelebrating one of the most distinctive voices of the ‘90s, this special gold-colour record is limited to just 500 copies, each individually numbered.",
+    "discogsMasterId": null,
+    "artFilename": "lutricia-mcneal-lutricia-mcneal.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/lutricia-mcneal-lutricia-mcneal",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "lynn-blakey-dreams-are-lovers-a-retrospective",
@@ -2305,7 +3029,25 @@
       "1. Rest* 2. Heartbeat** 3. How We Breathe+ 4. Sweetwater** 5. Love Finds (Allumette) 6. Easy to Love 7. In the Shadow of the Moon+ 8. Dreams Are Lovers* 9. Room with a View (Live)++ 10. Faith* 11. Polaroid*"
     ],
     "quantity": 450,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20349"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20349",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "madness-how-the-west-was-one-hammersmith-odeon-23rd-december-1980",
+    "artist": "Madness",
+    "title": "How The West Was One: Hammersmith Odeon 23rd December 1980",
+    "label": "West Village Music Management",
+    "format": "2xLP",
+    "category": "exclusive",
+    "description": "2LP set of the full concert (Hammersmith Odeon, 23.12.80)\n\nAlthough previously released on CD and digitally, and currently unavailable, this is the first time the concert will be released on vinyl, and the first time anywhere for the full concert, including tracks not previously available commercially. It will be released on coloured vinyl and available worldwide.",
+    "discogsMasterId": null,
+    "artFilename": "madness-how-the-west-was-one-hammersmith-odeon-23rd-december-1980.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/madness-how-the-west-was-one-hammersmith-odeon-23rd-december-1980",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "marianne-faithfull-eye-communication-live-at-the-wax-museum",
@@ -2335,7 +3077,11 @@
       "Etched"
     ],
     "quantity": 1800,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20408"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20408",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "masayoshi-takanaka-super-selection",
@@ -2358,7 +3104,10 @@
       "B4: Ready To Fly"
     ],
     "quantity": 3500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20416"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20416",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "masayoshi-takanaka-super-takanaka-live",
@@ -2369,7 +3118,10 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": 602201,
-    "artFilename": "masayoshi-takanaka-super-takanaka-live.jpg"
+    "artFilename": "masayoshi-takanaka-super-takanaka-live.jpg",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "masayoshi-takanaka-takanaka",
@@ -2380,7 +3132,25 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": 469706,
-    "artFilename": "masayoshi-takanaka-takanaka.jpg"
+    "artFilename": "masayoshi-takanaka-takanaka.jpg",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "michael-raven-joan-mills-hymn-to-che-guevara",
+    "artist": "Michael Raven & Joan Mills",
+    "title": "Hymn to Che Guevara",
+    "label": "Bonfire",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Reissued for the first time the second album of the UK folk duo. Only 100 were pressed in 1974 on the pioneering Folk Heritage label.",
+    "discogsMasterId": 874471,
+    "artFilename": "michael-raven-joan-mills-hymn-to-che-guevara.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/michael-raven-joan-mills-hymn-to-che-guevara",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "miles-davis-copenhagen-live-1969",
@@ -2406,7 +3176,25 @@
       "It's About That Time/The Theme"
     ],
     "quantity": 4400,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20332"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20332",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "momoko-gill-bbc-maida-vale-sessions",
+    "artist": "Momoko Gill",
+    "title": "BBC Maida Vale Sessions",
+    "label": "Strut Records",
+    "format": "7\"",
+    "category": "exclusive",
+    "description": "Momoko Gill's inimitable session for the iconic BBC Maida Vale sessions, as heard on multiple shows across BBC 6Music, now finally available to stream. Featuring two of Momoko's most loved tracks performed by a collection of the London Jazz scenes finest, Momoko leans in to the intimate 2close2farr and the hypnotic Ineffably. Named by Gilles Peterson as 'one of the best Maida Vale sessions we've hosted'.",
+    "discogsMasterId": null,
+    "artFilename": "momoko-gill-bbc-maida-vale-sessions.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/momoko-gill-bbc-maida-vale-sessions",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "mood-mood",
@@ -2442,7 +3230,10 @@
       "Main Flow, Solomon, Crunch Ex & Piakhan – Big Ohio"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20487"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20487",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "motley-crue-decade-of-decadence-81-91",
@@ -2476,7 +3267,11 @@
       "15. Anarchy In The UK"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20365"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20365",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "motorhead-motorhead-lemmy-rsd",
@@ -2489,7 +3284,10 @@
     "discogsMasterId": null,
     "artFilename": "motorhead-motorhead-lemmy-rsd.jpg",
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20397"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20397",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "motorhead-the-lost-tapes-vol-8-live-at-margate",
@@ -2526,7 +3324,11 @@
       "18. Overkill (Live)"
     ],
     "quantity": 1800,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20366"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20366",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "nav-metro-boomin-perfect-timing",
@@ -2561,7 +3363,10 @@
       "16. Up"
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20387"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20387",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "new-edition-candy-girl",
@@ -2586,7 +3391,10 @@
       "B5. Jealous Girl"
     ],
     "quantity": 1200,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20325"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20325",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "noah-kahan-draw-you-out",
@@ -2605,7 +3413,10 @@
       "2. (TBD)"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20388"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20388",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "noah-kahan-the-last-of-the-bugs",
@@ -2626,7 +3437,11 @@
       "4. Orbiter"
     ],
     "quantity": 10000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20389"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20389",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "norah-jones-playing-along-volume-2",
@@ -2639,7 +3454,11 @@
     "discogsMasterId": null,
     "artFilename": "norah-jones-playing-along-volume-2.jpg",
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20436"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20436",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "nrbq-christmas-wish-fan-club-fun-version",
@@ -2677,7 +3496,10 @@
       "* First Time on Vinyl"
     ],
     "quantity": 1200,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20319"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20319",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "old-97s-alive-wired",
@@ -2698,7 +3520,11 @@
       "F1. Big Brown Eyes F2. Murder (Or A Heart Attack) F3. Smokers F4. Friends Forever F5. Time Bomb"
     ],
     "quantity": 1750,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20358"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20358",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "old-crow-medicine-show-union-made-overtime",
@@ -2715,7 +3541,11 @@
       "SIDE B American Girl - 03:57 City of New Orleans (Ft. Mickey Raphael)- 05:00 Orange Blossom Special (Ft. Trey Hensley) - 05:25 Cumberland Blues (Ft. Bob Weir) - 08:23"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20478"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20478",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "om-pilgrimage",
@@ -2734,7 +3564,10 @@
       "Pilgrimage (reprise)"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20341"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20341",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "oscar-rossignoli-mar-adentro",
@@ -2758,7 +3591,10 @@
       "Serpent"
     ],
     "quantity": 250,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20418"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20418",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "parker-mccollum-big-ole-fancy-house",
@@ -2777,7 +3613,10 @@
       "2. Big Ole Fancy House (Acoustic Version)"
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20390"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20390",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "partyof2-amerikas-next-top-party-extended-cut",
@@ -2798,7 +3637,10 @@
       "4. PLAN B"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20391"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20391",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "pat-metheny-is-this-america",
@@ -2809,7 +3651,11 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
-    "artFilename": "pat-metheny-is-this-america.jpg"
+    "artFilename": "pat-metheny-is-this-america.jpg",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "pat-metheny-is-this-america-2",
@@ -2828,7 +3674,11 @@
       "04. Peace Universal"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20426"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20426",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "pierre-bourne-the-life-of-pierre-4",
@@ -2861,7 +3711,10 @@
       "16. Speed Dial"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20437"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20437",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "playboi-carti-music-sorry-4-da-wait",
@@ -2914,7 +3767,26 @@
       "34. FOMDJ"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20438"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20438",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "poison-idea-pick-your-king",
+    "artist": "Poison Idea",
+    "title": "Pick Your King",
+    "label": "American Leather Records",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "1st in a series of Poison Idea reissues on picture disc. Limited to 1000 copies. Poison Idea's notoriously brief, punishing debut was released in 1983, a few years after the band formed in Portland, Oregon. Thirteen songs in sixteen minutes. Obviously, not a second wasted. At this juncture, the band consisted of founder and enormous frontman Jerry A., guitarist Tom Roberts – later to be rechristened Pig Champion, due to his porcine build – bassist Chris Tense, and drummer Dean Johnson. Already, Jerry A. sang like a man in the middle of a heart attack, bellowing furiously, frighteningly. In other words, the template was being created for albums to follow. With Pick Your King – a reference to Elvis and Jesus – Poison Idea helped establish the paradigm for aggressive American hardcore punk.",
+    "discogsMasterId": 49589,
+    "artFilename": "poison-idea-pick-your-king.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/poison-idea-pick-your-king",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "poppy-empty-hands",
@@ -2942,7 +3814,11 @@
       "13 Empty Hands"
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20403"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20403",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "power-trip-precinct-3",
@@ -2959,7 +3835,10 @@
       "Side B: Scavenger"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20342"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20342",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "prince-3121-las-vegas-live",
@@ -2970,7 +3849,11 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
-    "artFilename": "prince-3121-las-vegas-live.jpg"
+    "artFilename": "prince-3121-las-vegas-live.jpg",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "prince-3121-las-vegas-live-2",
@@ -2981,7 +3864,11 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
-    "artFilename": "prince-3121-las-vegas-live-2.jpg"
+    "artFilename": "prince-3121-las-vegas-live-2.jpg",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "r-l-burnside-jumper-on-the-line-live-on-r-l-s-farm",
@@ -2997,7 +3884,11 @@
       "A: Jumper on the Line B: On the Tractor"
     ],
     "quantity": 1450,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20316"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20316",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "rabbits-carrots-soul-latino-expanded-edition",
@@ -3010,7 +3901,11 @@
     "discogsMasterId": 331267,
     "artFilename": "rabbits-carrots-soul-latino-expanded-edition.jpg",
     "quantity": 800,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20422"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20422",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "rae-sremmurd-sremmlife2-10th-anniversary",
@@ -3045,7 +3940,10 @@
       "16. Pole Code"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20439"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20439",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "rainbow-rarities-75-76",
@@ -3076,7 +3974,11 @@
       "Starstruck - Stereo Edit"
     ],
     "quantity": 2200,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20411"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20411",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "rainbow-kitten-surprise-the-study-neon-cross-sessions",
@@ -3099,7 +4001,10 @@
       "Texas Hold 'Em (acoustic)"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20289"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20289",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "ramones-subterranean-jungle-demos",
@@ -3130,7 +4035,11 @@
       "7. EVERYTIME I EAT VEGETABLES IT MAKES ME THINK OF YOU"
     ],
     "quantity": 5500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20304"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20304",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "richard-linda-thompson-live-1982",
@@ -3161,7 +4070,11 @@
       "2. The Price of Love (Live version)"
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20305"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20305",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "robert-hunter-alligator-moon",
@@ -3186,7 +4099,26 @@
       "B5. New East St. Louis Blue"
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20306"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20306",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "rose-gray-club-to-your-arms-just-be-bodies",
+    "artist": "Rose Gray",
+    "title": "Club To Your Arms / Just Be Bodies",
+    "label": "Polydor",
+    "format": "7\"",
+    "category": "exclusive",
+    "description": "Two euphoric sides of Rose Gray’s new era come together on this special 7\" picture disc for Record Store Day Black Friday. Released digitally together in summer 2026 and now available for the first time on vinyl, “Club To Your Arms” channels the rush of racing home to someone you love after a night out, while its sister track “Just Be Bodies” captures the reflective morning after.\n\nFirst time on vinyl.",
+    "discogsMasterId": null,
+    "artFilename": "rose-gray-club-to-your-arms-just-be-bodies.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/rose-gray-club-to-your-arms-just-be-bodies",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "royel-otis-live-at-the-greek",
@@ -3215,7 +4147,11 @@
       "12. Oysters in My Pocket"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20440"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20440",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "ruben-blades-el-inicio",
@@ -3228,7 +4164,10 @@
     "discogsMasterId": null,
     "artFilename": "ruben-blades-el-inicio.jpg",
     "quantity": 3500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20415"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20415",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "said-the-sky-icarus-i-deluxe",
@@ -3273,7 +4212,10 @@
       "3. M.I.A."
     ],
     "quantity": 800,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20500"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20500",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "seaweed-spanaway-30th-anniversary",
@@ -3303,7 +4245,25 @@
       "13. Peppy's Bingo"
     ],
     "quantity": 6000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20376"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20376",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "shamek-farrah-first-impressions",
+    "artist": "Shamek Farrah",
+    "title": "First Impressions",
+    "label": "Stata East",
+    "format": "2xLP",
+    "category": "exclusive",
+    "description": "This RSD deluxe edition features 3 previously unreleased songs and includes a limited edition, numbered album cover lithograph exclusively available with Record Store Day Black Friday 2026. With audio cut directly from the original analogue tapes, mastered by Kevin Gray and pressed on 180-gram vinyl at RTI, all housed in a deluxe tip-on jacket package with never-before-seen photos and brand new liner notes from Shamek Farrah himself. Highly sought-after and collected as a masterpiece of early spiritual jazz, Shamek Farrah’s First Impressions has become the holy grail of spiritual jazz recordings for vinyl collectors, with mint condition original pressings fetching over $2,000, underscoring the significant impact it has had on generations of fans.",
+    "discogsMasterId": 185310,
+    "artFilename": "shamek-farrah-first-impressions.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/shamek-farrah-first-impressions",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "shawn-mendes-mtv-unplugged",
@@ -3316,7 +4276,11 @@
     "discogsMasterId": 1265240,
     "artFilename": "shawn-mendes-mtv-unplugged.jpg",
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20508"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20508",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "shwayze-and-cisco-adler-island-in-the-sun",
@@ -3342,7 +4306,10 @@
       "11. Keys to My Heart"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20498"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20498",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "skid-row-live-at-the-moscow-music-peace-festival",
@@ -3364,7 +4331,11 @@
       "5. Youth Gone Wild (Live at The Moscow Peace Festival)"
     ],
     "quantity": 2800,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20367"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20367",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "sombr-in-another-life",
@@ -3387,7 +4358,11 @@
       "8. weak"
     ],
     "quantity": 7500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20292"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20292",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "son-of-sam-songs-from-the-earth",
@@ -3414,7 +4389,11 @@
       "10. Invocation"
     ],
     "quantity": 1900,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20372"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20372",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "soul-jazz-records-presents-studio-one-djs-2",
@@ -3425,7 +4404,10 @@
     "category": "rsd-first",
     "description": "",
     "discogsMasterId": null,
-    "artFilename": "soul-jazz-records-presents-studio-one-djs-2.jpg"
+    "artFilename": "soul-jazz-records-presents-studio-one-djs-2.jpg",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "soul-jazz-records-presents-studio-one-dub-vol-2",
@@ -3444,7 +4426,10 @@
       "D1. Ital Sound – Welding D2. Dub Specialist – Dar Es Salaam D3. Dub Specialist – Always Dubbing D4. Dub Specialist – Mojo Papa"
     ],
     "quantity": 1300,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20360"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20360",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "sparta-threes-20th-anniversary",
@@ -3471,7 +4456,10 @@
       "12. Translations"
     ],
     "quantity": 4000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20429"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20429",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "staind-break-the-cycle-25th-anniversary-live",
@@ -3501,7 +4489,10 @@
       "13. Take It"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20368"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20368",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "stan-getz-the-sound-in-san-francisco-live-at-keystone-korner",
@@ -3514,7 +4505,11 @@
     "discogsMasterId": null,
     "artFilename": "stan-getz-the-sound-in-san-francisco-live-at-keystone-korner.jpg",
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20407"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20407",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "stan-getz-quartet-live-in-paris-85",
@@ -3530,7 +4525,10 @@
       "O Grande Amor | Blood Count | Airegin | Blue Skies | On The Up And Up | I Wanted To Say | Tempus Fugit"
     ],
     "quantity": 1700,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20472"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20472",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "stephen-sanchez-what-was-not-now-5th-anniversary-edition",
@@ -3554,7 +4552,10 @@
       "(Etched)"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20392"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20392",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "stevie-nicks-bella-donna",
@@ -3581,7 +4582,11 @@
       "5. The Highwayman"
     ],
     "quantity": 5500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20307"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20307",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "tangerine-dream-live-at-paramount-theatre-portland-or-1977",
@@ -3592,7 +4597,10 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
-    "artFilename": "tangerine-dream-live-at-paramount-theatre-portland-or-1977.jpg"
+    "artFilename": "tangerine-dream-live-at-paramount-theatre-portland-or-1977.jpg",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "tangerine-dream-live-at-paramount-theatre-portland-or-1977-2",
@@ -3603,7 +4611,10 @@
     "category": "small-run",
     "description": "",
     "discogsMasterId": null,
-    "artFilename": "tangerine-dream-live-at-paramount-theatre-portland-or-1977-2.jpg"
+    "artFilename": "tangerine-dream-live-at-paramount-theatre-portland-or-1977-2.jpg",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "the-international-noise-conspiracy-a-new-morning-changing-weather-25th-anniversary-edition",
@@ -3619,7 +4630,26 @@
       "1. A Northwest Passage 2. Up for Sale 3. Bigger Cages, Longer Chains 4. Breakout 2001 5. A Body Treatise 6. Born Into a Mess 7. New Empuire Blues 8. Capitalism Stole My Virginity 9. Last Century Promise 10. Dead Language of Love 11. A New Morning, Changing Weather"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20501"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20501",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "the-alan-parsons-project-eve-work-in-progress",
+    "artist": "The Alan Parsons Project",
+    "title": "Eve (Work In Progress)",
+    "label": "Cooking Vinyl",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "This 'Work In Progress' version of The Alan Parsons Project's critically acclaimed album Eve contains early rough, demo and alternative versions of the 9 tracks that appear on the album. All 9 tracks are previously unreleased and are making their first appearance on vinyl. Housed in a poly-lined inner sleeve with an accompanying 12” x 12” insert containing track-by-track sleevenotes by Alan Parsons, this 180 gm heavyweight green vinyl edition is strictly limited to 2500 copies. As with previous ‘Work In Progress’ releases, this is being released with the full involvement of Alan Parsons and Eric Woolfson's estate.",
+    "discogsMasterId": null,
+    "artFilename": "the-alan-parsons-project-eve-work-in-progress.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/alan-parsons-project-eve-work-in-progress",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "the-b-52s-meso-americans-live-1982",
@@ -3649,7 +4679,10 @@
       "15. PRIVATE IDAHO (LIVE AT THE ROSELAND BALLROOM, NEW YORK, NY, APRIL 19, 1982)"
     ],
     "quantity": 5000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20308"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20308",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "the-beatles-rubber-soul",
@@ -3662,7 +4695,11 @@
     "discogsMasterId": 45526,
     "artFilename": "the-beatles-rubber-soul.jpg",
     "quantity": 15000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20509"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20509",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "the-black-angels-passover-xx",
@@ -3675,7 +4712,11 @@
     "discogsMasterId": null,
     "artFilename": "the-black-angels-passover-xx.jpg",
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20340"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20340",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "the-brian-setzer-orchestra-christms-comes-alive",
@@ -3686,7 +4727,29 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
-    "artFilename": "the-brian-setzer-orchestra-christms-comes-alive.jpg"
+    "artFilename": "the-brian-setzer-orchestra-christms-comes-alive.jpg",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "the-cal-tjader-quintet-plays-afro-cuban",
+    "artist": "The Cal Tjader Quintet",
+    "title": "Plays Afro Cuban",
+    "label": "Poppydisc",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Translucent Yellow Colour vinyl, hype sticker. Landmark Latin-Jazz album from 1954. Cal Tjader helped popularize Latin and Afro-Cuban jazz in the United States during the 1950s. On this early recording, Tjader showcases his signature vibraphone style alongside traditional Afro-Cuban rhythms and percussion. The record laid the groundwork for his extensive exploration of Latin-infused jazz alongside legendary percussionists like Mongo Santamaría and Willie Bobo, launching a new mainstream/pop appreciation of the form.",
+    "discogsMasterId": null,
+    "artFilename": "the-cal-tjader-quintet-plays-afro-cuban.jpg",
+    "tracklist": [
+      "Goza, Panchero Mambero , Alegres Congas, Mambo Moderno , Afro Corolombo, Ritmo Caliente, Mambo Inn, Alegres Timbales, Mueve La Cintura, Bernie's Tune"
+    ],
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/cal-tjader-quintet-plays-afro-cuban",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "the-chemical-brothers-go",
@@ -3707,7 +4770,26 @@
       "4. Go [Special Request Warehouse Remix]"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20377"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20377",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "the-coral-butterfly-house-acoustic-version",
+    "artist": "The Coral",
+    "title": "Butterfly House (Acoustic Version)",
+    "label": "DELTASONIC",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Heayweight Black Vinyl in numbered Gatefold Sleeve, never before released on vinyl.",
+    "discogsMasterId": 263927,
+    "artFilename": "the-coral-butterfly-house-acoustic-version.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/coral-butterfly-house-acoustic-version",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "the-dead-milkmen-eat-your-paisley-40th-anniversary",
@@ -3737,7 +4819,11 @@
       "\"The Fez\""
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20323"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20323",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "the-doors-1966",
@@ -3782,7 +4868,41 @@
       "10. INDIAN SUMMER (Take 12)"
     ],
     "quantity": 7000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20309"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20309",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "the-feminine-complex-livin-love",
+    "artist": "The Feminine Complex",
+    "title": "Livin' Love",
+    "label": "Poppydisc",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Translucent Red colour vinyl , hype sticker.\n\nCult Garage all-girl Rock / Psych album from 1969 Nashville, 1966: five young girls teach themselves their instruments playing along to the radio. Initially named \"The Pivots\" and by the end of '67 christened as The Feminine Complex, they were playing out and developing a local following including radio and television appearances. They created their own versions of popular songs, a style that reflected their need to express their own experience of girlhood. Gender bending 'boys' songs' they simply changed the lyrics, modifying the major characters and pronouns creating a space for themselves inside the music where they were able to become the agents of their own wishes, needs and desires. Come '68, they appeared on NBC's nationally syndicated Showcase '68, hosted by Lloyd Thaxton paving way to their cult status. It is not allegorical to say that in some way, they widened the entrance to the historical vacuum that a generation later would come to be filled by Riot Grrrl and rock 'n' roll camps for girls. The Feminine Complex were not just a good band because they were girls, or because they were the first girls. They are a good band because they are.\n\nLucky for us, we have these recordings, so we can continue to hear why.",
+    "discogsMasterId": 329045,
+    "artFilename": "the-feminine-complex-livin-love.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/feminine-complex-livin-love",
+    "regions": [
+      "uk"
+    ]
+  },
+  {
+    "id": "the-fleshtones-solid-gold-sound-25th-anniversary",
+    "artist": "The Fleshtones",
+    "title": "Solid Gold Sound (25th Anniversary)",
+    "label": "Yep Roc Records",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "The immortal garage rock legends The Fleshtones are celebrating their 50th anniversary in 2026! To commemorate the occasion, Yep Roc Records is reissuing the album that capped off the first half of their career: 2001's Solid Gold Sound. It's a landmark record for a band that, unlike their contemporaries, have not dialled down the tempos to compensate for osteoporosis; they have not lost anything on their fastball and continue to throw it for strikes. Solid Gold Sound was released in a very limited quantity in 2001 and has grown to be quite pricey in recent years. Yep Roc is honoured to present this album in its highest quality for its 25th anniversary, fully remastered and pressed on gold vinyl. This pressing also includes previously unreleased bonus tracks from these Solid Gold sessions!",
+    "discogsMasterId": 386487,
+    "artFilename": "the-fleshtones-solid-gold-sound-25th-anniversary.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/fleshtones-solid-gold-sound-25th-anniversary",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "the-hunger-games-sunrise-on-the-reaping-the-hunger-games-sunrise-on-the-reaping-cruiser-record-player-with-exclusive-7-vinyl",
@@ -3795,7 +4915,25 @@
     "discogsMasterId": null,
     "artFilename": "the-hunger-games-sunrise-on-the-reaping-the-hunger-games-sunrise-on-the-reaping-cruiser-record-player-with-exclusive-7-vinyl.jpg",
     "quantity": 950,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20507"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20507",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "the-joe-harriott-quintet-senor-blues-soho-1959",
+    "artist": "The Joe Harriott Quintet",
+    "title": "Senor Blues: Soho, 1959",
+    "label": "Poppydisc",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Translucent Blue Colour vinyl, hype sticker. Two EPs, \"Blue Harriott\" and \"A Guy Called Joe\", from 1959-1960. The EPs Blue Harriott (1959) and A Guy Called Joe (1961) are pivotal, rare hard bop releases recorded right before the Jamaican-born alto saxophonist completely altered British jazz history with his groundbreaking free-form experiments.",
+    "discogsMasterId": null,
+    "artFilename": "the-joe-harriott-quintet-senor-blues-soho-1959.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/joe-harriott-quintet-senor-blues-soho-1959",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "the-knack-zoom-special-vinyl-edition",
@@ -3834,7 +4972,26 @@
       "6. Mister Magazine (Instrumental) [Bonus Track]"
     ],
     "quantity": 1400,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20320"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20320",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "the-lathums-how-beautiful-life-can-be-5th-anniversary",
+    "artist": "The Lathums",
+    "title": "How Beautiful Life Can Be (5th Anniversary)",
+    "label": "UMR/Island",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "The Lathums celebrate the fifth anniversary of their UK No. 1 album 'How Beautiful Life Can Be' with a new anniversary edition, exclusively for Record Store Day Black Friday. Pressed on limited edition coloured vinyl, accompanied with bonus tracks appearing on vinyl for the first time.",
+    "discogsMasterId": 2311807,
+    "artFilename": "the-lathums-how-beautiful-life-can-be-5th-anniversary.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/lathums-how-beautiful-life-can-be-5th-anniversary",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "the-monkees-the-monkees-sessions",
@@ -3869,7 +5026,11 @@
       "9. (I PRITHEE) DO NOT ASK FOR MY LOVE (STEREO REMIX OF DAVY’S VOCALS)"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20311"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20311",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "the-music-machine-the-sound-of-gloves",
@@ -3880,7 +5041,11 @@
     "category": "exclusive",
     "description": "",
     "discogsMasterId": null,
-    "artFilename": "the-music-machine-the-sound-of-gloves.jpg"
+    "artFilename": "the-music-machine-the-sound-of-gloves.jpg",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "the-music-machine-the-sound-of-gloves-2",
@@ -3924,7 +5089,10 @@
       "*Previously unissued"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20423"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20423",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "the-pandoras-stop-pretending-40th-anniversary-deluxe-edition",
@@ -3966,7 +5134,10 @@
       "The Hump (\"Stop Pretending\" B-Side)"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20351"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20351",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "the-rolling-stones-aftermath-us",
@@ -3994,7 +5165,11 @@
       "11. Going Home"
     ],
     "quantity": 6500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20361"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20361",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "the-runaways-and-now-the-runaways",
@@ -4010,7 +5185,11 @@
       "Saturday Night Special | Eight Days a Week | Mama Weer All Crazee Now | I'm a Million | Right Now | Take Over | My Buddy and Me | Little Lost Girls | Black Leather"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20474"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20474",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "the-runaways-and-now-the-runaways-2",
@@ -4026,7 +5205,10 @@
       "Saturday Night Special | Eight Days a Week | Mama Weer All Crazee Now | I'm a Million | Right Now | Take Over | My Buddy and Me | Little Lost Girls | Black Leather"
     ],
     "quantity": 500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20486"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20486",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "the-saddest-landscape-the-invisible-hurt-ep",
@@ -4045,7 +5227,10 @@
       "04. Silverfuck"
     ],
     "quantity": 500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20347"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20347",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "the-traveling-wilburys-the-traveling-wilburys-vol-3",
@@ -4073,7 +5258,55 @@
       "11. Wilbury Twist"
     ],
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20369"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20369",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "the-yardbirds-meet-the-yardbirds",
+    "artist": "The Yardbirds",
+    "title": "Meet The Yardbirds",
+    "label": "Charly | Gomelsky",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "The original debut recordings by Blues rock legends The Yardbirds. Recorded live at the iconic Crawdaddy Club, London, 8th December 1963, staged by club owner and band manager Giorgio Gomelsky and engineered by Keith Grant of the famed Olympic Studios. This unique set captures the raw and thrilling latent talent of the band that would go on to conquer the world. Featuring rock-god Eric Clapton and a special guest appearance from Sonny Boy Williamson who would perform later that night. Comes with a souvenir programme featuring Crawdaddy adverts, set lists, a Yardbirds rock family tree by Peter Frame and a commentary by Giorgio Gomelsky.",
+    "discogsMasterId": null,
+    "artFilename": "the-yardbirds-meet-the-yardbirds.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/yardbirds-meet-the-yardbirds",
+    "regions": [
+      "uk"
+    ]
+  },
+  {
+    "id": "them-belfast-gypsies",
+    "artist": "Them",
+    "title": "Belfast Gypsies",
+    "label": "Poppydisc",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Stone-cold classic of rabid British garage punk/R&B – on translucent red vinyl!\n\nThough it received little attention at the time of its Swedish/Netherlands-only release in 1967, the album Them: Belfast Gypsies has long since become established as a stone-cold classic of rabid British garage punk/R&B.\n\nThe album was recorded over four sessions in May and June 1966 in London and Copenhagen, where the band had relocated for several months. The recordings came a year or so after brothers Pat and Jackie McAuley had left Them and put together a new band under the same name.\n\nHowever, a court case meant the McAuley group could only use the name Them outside the UK, although they were allowed to call themselves \"The Other Them\" on home territory. As a flag of convenience, they were christened The Belfast Gypsies by their producer, Hollywood hustler Kim Fowley, although the band themselves never used the name.\n\nPrevious releases of this material have grappled with the lack of master tapes and solid information surrounding this most elusive of bands. However, the unexpected discovery of the master tapes for the London recordings – which make up seven of the album's twelve tracks – means this latest anthology offers a significant sonic upgrade on previous releases.",
+    "discogsMasterId": 240569,
+    "artFilename": "them-belfast-gypsies.jpg",
+    "tracklist": [
+      "1. GLORIA’S DREAM",
+      "2. THE CRAZY WORLD INSIDE ME",
+      "3. MIDNIGHT TRAIN",
+      "4. ARIA OF THE FALLEN ANGELS",
+      "5. IT’S ALL OVER NOW, BABY BLUE",
+      "6. PEOPLE LET’S FREAK OUT",
+      "7. BOOM BOOM",
+      "8. THE LAST WILL AND TESTAMENT",
+      "9. PORTLAND TOWN",
+      "10. HEY GYP (DIG THE SLOWNESS)",
+      "11. SUICIDE SONG",
+      "12. SECRET POLICE"
+    ],
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/them-belfast-gypsies",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "thenewno2-dhani-harrison-ep001-ep002",
@@ -4098,7 +5331,11 @@
       "8. Mr. President - feat. RZA (PhD 'One Nation' Remix)"
     ],
     "quantity": 900,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20419"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20419",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "they-might-be-giants-live-at-kexp-seattle",
@@ -4121,7 +5358,10 @@
       "Seven in the Morning with John Richards"
     ],
     "quantity": 1300,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20352"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20352",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "thrice-audiotree-from-nothing",
@@ -4142,7 +5382,10 @@
       "2. Gnash"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20476"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20476",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "tom-verlaine-live-in-nyc-1996-2006",
@@ -4161,7 +5404,11 @@
       "D1. Souvenir from a Dream D2. Clear It Away D3. Orbit D4. Earth Is the Sky"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20344"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20344",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "tori-amos-black-is-the-new-black",
@@ -4180,7 +5427,41 @@
       "(Etched)"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20506"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20506",
+    "regions": [
+      "us",
+      "uk"
+    ]
+  },
+  {
+    "id": "tropical-gothclub-city-killer",
+    "artist": "Tropical Gothclub",
+    "title": "City Killer",
+    "label": "Schnitzel",
+    "format": "LP",
+    "category": "exclusive",
+    "description": "Limited-edition Pink coloured vinyl LP in an extra-heavy sleeve – only 500 copies available.\n\nDean Fertita has been at the heart of American rock ‘n’ roll for almost two decades, from his role as an invaluable member of Queens of the Stone Age and The Dead Weather to touring keyboardist with The Raconteurs and backing musician on records by Jack White, Karen O, Iggy Pop, Brendan Benson, The Kills, Beck and more.\n\nWhile his own music had previously been the focus through his role as lead singer, guitarist and founder of The Waxwings, as well as recordings under the name Hello=Fire, Fertita began TROPICAL GOTHCLUB with no clear mission to make a solo album under his own name.\n\nIn 2022, TROPICAL GOTHCLUB released its self-titled debut album on Third Man Records. Now, the follow up album “City Killer” is ready to be released, including musical contributions from John Theodore (QOTSA), Grammy Winner producer Dave Feeny, Alison Mosshart (The Kills. The Dead Weather), Atom Willard (Social Distortion/ the Offspring/ Rocket from the Crypt).",
+    "discogsMasterId": null,
+    "artFilename": "tropical-gothclub-city-killer.jpg",
+    "tracklist": [
+      "Side A:",
+      "City Killer",
+      "Dangerous Territory",
+      "One Stone",
+      "Bad Engery",
+      "Walk In Circles",
+      "Side B:",
+      "Mirror Life",
+      "Dark Oxygen",
+      "Bleed Into Each Other",
+      "Defiant Love",
+      "Always The Way",
+      "Street Level"
+    ],
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/tropical-gothclub-city-killers",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "tv-girl-four-classic-albums",
@@ -4193,7 +5474,25 @@
     "discogsMasterId": null,
     "artFilename": "tv-girl-four-classic-albums.jpg",
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20326"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20326",
+    "regions": [
+      "us"
+    ]
+  },
+  {
+    "id": "tweedy-bird-loc-187-ride-by",
+    "artist": "Tweedy Bird Loc",
+    "title": "187 Ride By",
+    "label": "Charly | PAR Records",
+    "format": "2xLP",
+    "category": "exclusive",
+    "description": "Compton gangsta rap classic '187 Ride By' makes its vinyl debut after 30+ years. Tweedy Bird Loc’s legendary, Eazy-E-dissing masterpiece is lovingly reissued as a deluxe, 2-LP gatefold package. Before co-founding the infamous Bloods & Crips project with Ronnie Phillips, Compton Crip Richard Johnson—aka Tweedy Bird Loc—dropped a fierce, unapologetic bomb onto the gangsta rap scene. ‘187 Ride By’ remains a highly prized, unfiltered look into the Compton street landscape and the bitter rivalry between Tweedy and Eazy-E. This inaugural vinyl pressing is engineered across two slates—aptly titled ‘diss1’ and ‘diss 2’— cut loud to fully unleash Tweedy’s vicious, historic attacks on rival artists Eazy-E, Kokane, and MC Tim Dog. Housed in a striking, high-quality gatefold sleeve, complete with an exclusive pull-out poster and an insightful written appraisal of the album's legacy. Packed with guest appearances from Big D Mark, Notorious Joe, Nini X, The Underworld Connection, and Battlecat. Mastered in the Netherlands by The Source.",
+    "discogsMasterId": 371222,
+    "artFilename": "tweedy-bird-loc-187-ride-by.jpg",
+    "rsdUrl": "https://www.recordstoreday.co.uk/release/tweedy-bird-loc-187-ride-by",
+    "regions": [
+      "uk"
+    ]
   },
   {
     "id": "usa-for-africa-we-are-the-world-40th-anniversary-edition",
@@ -4210,7 +5509,10 @@
       "2) We Are The World"
     ],
     "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20346"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20346",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "various-artists-jazz-dispensary-cosmic-nuggets",
@@ -4223,7 +5525,11 @@
     "discogsMasterId": null,
     "artFilename": "various-artists-jazz-dispensary-cosmic-nuggets.jpg",
     "quantity": 2215,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20374"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20374",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "various-artists-kpop-demon-hunters-soundtrack-from-the-netflix-film",
@@ -4236,7 +5542,11 @@
     "discogsMasterId": null,
     "artFilename": "various-artists-kpop-demon-hunters-soundtrack-from-the-netflix-film.jpg",
     "quantity": 10000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20393"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20393",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "various-artists-mile-end-kicks-music-inspired-by-the-motion-picture",
@@ -4249,7 +5559,11 @@
     "discogsMasterId": null,
     "artFilename": "various-artists-mile-end-kicks-music-inspired-by-the-motion-picture.jpg",
     "quantity": 2500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20442"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20442",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "various-artists-who-is-he-and-what-is-he-to-you",
@@ -4284,7 +5598,10 @@
       "20. Tina Schlieske - Hope She'll Be Happier With Him"
     ],
     "quantity": 1200,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20477"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20477",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "various-artists-wicked-the-complete-soundtrack",
@@ -4331,7 +5648,10 @@
       "11. For Good – Cynthia Erivo & Ariana Grande"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20394"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20394",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "victoria-monet-life-after-love-part-1-act-2",
@@ -4347,7 +5667,11 @@
       "1. Intro|2. Wish I Never Met You|3. Freak|4. No Good|5. Water Fall Out of Love|6. Next Thing - Bet You Didn't Know|7. Ten New Friends|8. Let Her Go|9. Open Your Eyes (Interlude)|10. Ready|11. Ready (Skit)|12. Do You Like It|13. New Love|14. All You Need|15. Still Miss You|16. Love U Better|17. When You Say You Love Me"
     ],
     "quantity": 1500,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20479"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20479",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "vince-guaraldi-charlie-browns-all-stars",
@@ -4381,7 +5705,10 @@
       "10. Rain, Rain Go Away (Rain, Gentle Rain) [From \"It's Arbor Day, Charlie Brown\"]"
     ],
     "quantity": 4000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20317"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20317",
+    "regions": [
+      "us"
+    ]
   },
   {
     "id": "vince-guaraldi-trio-a-charlie-brown-christmas-advent-calendar-edition",
@@ -4394,7 +5721,11 @@
     "discogsMasterId": 3340036,
     "artFilename": "vince-guaraldi-trio-a-charlie-brown-christmas-advent-calendar-edition.jpg",
     "quantity": 8100,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20375"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20375",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "war-yes-its-christmas-summer",
@@ -4407,7 +5738,11 @@
     "discogsMasterId": null,
     "artFilename": "war-yes-its-christmas-summer.jpg",
     "quantity": 2550,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20312"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20312",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "ween-shinola-vol-2",
@@ -4444,7 +5779,11 @@
       "D7. THE BELVODINE"
     ],
     "quantity": 9200,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20313"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20313",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "xtc-besides",
@@ -4474,7 +5813,11 @@
       "Battery Brides (live from BBC)"
     ],
     "quantity": 2000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20446"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20446",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "yusuf-cat-stevens-majikat-earth-tour-1976",
@@ -4513,7 +5856,11 @@
       "20. Peace Train"
     ],
     "quantity": 1050,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20370"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20370",
+    "regions": [
+      "us",
+      "uk"
+    ]
   },
   {
     "id": "zayn-konnakol-deluxe-edition",
@@ -4550,6 +5897,9 @@
       "18. Raise the Dead"
     ],
     "quantity": 3000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20395"
+    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20395",
+    "regions": [
+      "us"
+    ]
   }
 ]
