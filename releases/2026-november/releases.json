@@ -1390,37 +1390,14 @@
     "title": "The Day of the Troll",
     "label": "Demon Records",
     "format": "2xLP",
-    "category": "exclusive",
+    "category": "small-run",
     "description": "Demon Records present an exclusive-to-audio adventure for the Tenth Doctor, written by Simon Messingham and read by David Tennant, accompanied by Murray Gold’s stirring arrangement of the familiar Doctor Who theme. This creepy story on 2LP Trollface coloured vinyl comes in a wide-spine sleeve with illustrated inner sleeves, exclusive to Record Store Day’s Black Friday event.",
     "discogsMasterId": null,
     "artFilename": "doctor-who-the-day-of-the-troll.jpg",
     "rsdUrl": "https://www.recordstoreday.co.uk/release/doctor-who-the-day-of-the-troll",
     "regions": [
+      "us",
       "uk"
-    ]
-  },
-  {
-    "id": "doctor-who-the-rising-night",
-    "artist": "Doctor Who",
-    "title": "The Rising Night",
-    "label": "Demon Records",
-    "format": "2xLP",
-    "category": "small-run",
-    "description": "Demon Records present an exclusive-to-audio adventure for the Tenth Doctor, written by Simon Messingham and read by David Tennant, accompanied by Murray Gold’s stirring arrangement of the familiar Doctor Who theme. This creepy story on 2LP Trollface colored vinyl comes in a widespine sleeve with illustrated inner sleeves, exclusive to RSD Black Friday 2026.",
-    "discogsMasterId": null,
-    "artFilename": "doctor-who-the-rising-night.jpg",
-    "tracklist": [
-      "LP1",
-      "The Day of the Troll",
-      "B. The Day of the Troll",
-      "LP2",
-      "A. The Day of the Troll",
-      "B. The Day of the Troll"
-    ],
-    "quantity": 1000,
-    "rsdUrl": "https://recordstoreday.com/SpecialRelease/20412",
-    "regions": [
-      "us"
     ]
   },
   {
